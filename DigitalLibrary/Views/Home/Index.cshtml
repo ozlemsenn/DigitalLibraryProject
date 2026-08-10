@@ -1,0 +1,170 @@
+﻿@using DigitalLibrary.Models
+@model IEnumerable<Categories>
+
+@{
+    ViewBag.Title = "Ana Sayfa";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<div class="container mt-4">
+    <div class="row">
+
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Kategoriler</h5>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+
+                        @foreach (var anaKategori in Model.Where(k => k.ParentID == null))
+                        {
+                            <li class="list-group-item bg-light font-weight-bold">
+                                <i class="fas fa-folder text-warning mr-2"></i> @anaKategori.Name
+
+                                @{
+                                    var altKategoriler = Model.Where(k => k.ParentID == anaKategori.ID).ToList();
+                                }
+
+                                @if (altKategoriler.Any())
+                                {
+                                    <ul class="list-group mt-2 mb-1">
+                                        @foreach (var altKategori in altKategoriler)
+                                        {
+                                            <li class="list-group-item py-1 border-0" style="padding-left: 30px; font-weight: normal;">
+                                                <i class="fas fa-file-alt text-secondary mr-2"></i> @altKategori.Name
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                            </li>
+                        }
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+
+            <div class="input-group mb-3 shadow-sm">
+                <input type="text" class="form-control border-right-0" id="searchInput" placeholder="Dokümanlarda ara...">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card mb-4 shadow-sm border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0"><i class="fas fa-upload mr-2"></i> Yeni Doküman Yükle</h6>
+                </div>
+                <div class="card-body">
+                    <form action="/Document/Upload" method="post" enctype="multipart/form-data">
+                        <div class="form-row">
+                            <div class="col-md-4 mb-2">
+                                <input type="text" name="Title" class="form-control" placeholder="Doküman Adı" required>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <select name="CategoryID" class="form-control" required>
+                                    <option value="">Kategori Seçin...</option>
+
+                                    @foreach (var kategori in Model)
+                                    {
+                                        <option value="@kategori.ID">@kategori.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <input type="file" name="uploadedFile" class="form-control-file mt-1" required>
+                            </div>
+                            <div class="col-md-1 mb-2">
+                                <button type="submit" class="btn btn-success w-100"><i class="fas fa-check"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Doküman Listesi</h5>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+
+                        @if (ViewBag.Documents != null)
+                        {
+                            foreach (var doc in (IEnumerable<DigitalLibrary.Models.Documents>)ViewBag.Documents)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        @if (doc.FileExtension == ".pdf")
+                                        {
+                                            <i class="fas fa-file-pdf text-danger fa-2x align-middle mr-3"></i>
+                                        }
+                                        else if (doc.FileExtension == ".docx")
+                                        {
+                                            <i class="fas fa-file-word text-primary fa-2x align-middle mr-3"></i>
+                                        }
+                                        else if (doc.FileExtension == ".xlsx")
+                                        {
+                                            <i class="fas fa-file-excel text-success fa-2x align-middle mr-3"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-file text-secondary fa-2x align-middle mr-3"></i>
+                                        }
+
+                                        <span class="font-weight-bold" style="font-size: 1.1rem;">@doc.Title</span>
+                                        <small class="text-muted d-block ml-5">
+                                            @(doc.UploadDate.HasValue ? doc.UploadDate.Value.ToString("dd.MM.yyyy HH:mm") : "")
+                                        </small>
+                                    </div>
+
+                                    <a href="/Document/Download/@doc.ID" class="btn btn-outline-info btn-sm">
+                                        <i class="fas fa-download"></i> İndir
+                                    </a>
+                                </li>
+                            }
+                        }
+
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    @if (TempData["Hata"] != null)
+    {
+        <text>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: '@Html.Raw(TempData["Hata"])',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'Tamam'
+        });
+        </text>
+    }
+
+    @if (TempData["Basari"] != null)
+    {
+        <text>
+        Swal.fire({
+            icon: 'success',
+            title: 'Başarılı!',
+            text: '@Html.Raw(TempData["Basari"])',
+            confirmButtonColor: '#28a745',
+            confirmButtonText: 'Harika'
+        });
+        </text>
+    }
+</script>
