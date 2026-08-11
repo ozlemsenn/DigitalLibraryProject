@@ -81,5 +81,33 @@ namespace DigitalLibrary.Controllers
 
             return File(filePath, "application/octet-stream", document.Title + document.FileExtension);
         }
+
+        [HttpGet]
+        public JsonResult Search(string kelime)
+        {
+            var query = db.Documents.AsQueryable();
+
+            if (!string.IsNullOrEmpty(kelime))
+            {
+                query = query.Where(d => d.Title.Contains(kelime));
+            }
+
+            var hamVeri = query.OrderByDescending(d => d.UploadDate)
+                               .Select(d => new {
+                                   d.ID,
+                                   d.Title,
+                                   d.FileExtension,
+                                   d.UploadDate 
+                               }).ToList();
+
+            var sonuclar = hamVeri.Select(d => new {
+                d.ID,
+                d.Title,
+                d.FileExtension,
+                UploadDateFormated = d.UploadDate.HasValue ? d.UploadDate.Value.ToString("dd.MM.yyyy HH:mm") : ""
+            }).ToList();
+
+            return Json(sonuclar, JsonRequestBehavior.AllowGet);
+        }
     }
 }
