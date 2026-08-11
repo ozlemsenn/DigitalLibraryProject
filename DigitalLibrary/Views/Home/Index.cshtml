@@ -8,41 +8,70 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+<style>
+    .btn-modern {
+        transition: all 0.3s ease;
+        border-radius: 50px !important; 
+    }
+
+        .btn-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
+        }
+    .btn-modern-info:hover {
+        background-color: #17a2b8;
+        color: white !important;
+    }
+    .btn-modern-danger:hover {
+        background-color: #dc3545;
+        color: white !important;
+    }
+</style>
+
 <div class="container mt-4">
     <div class="row">
 
         <div class="col-md-3">
             <div class="card">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Kategoriler</h5>B
+                    <h5 class="mb-0">Kategoriler</h5>
                 </div>
                 <div class="card-body p-0">
-                    <ul class="list-group list-group-flush">
+                    <div class="list-group list-group-flush">
 
                         @foreach (var anaKategori in Model.Where(k => k.ParentID == null))
                         {
-                            <li class="list-group-item bg-light font-weight-bold">
-                                <i class="fas fa-folder text-warning mr-2"></i> @anaKategori.Name
+                            var altKategoriler = Model.Where(k => k.ParentID == anaKategori.ID).ToList();
+                            var hedefId = "kategoriMenu_" + anaKategori.ID;
 
-                                @{
-                                    var altKategoriler = Model.Where(k => k.ParentID == anaKategori.ID).ToList();
-                                }
-
+                            <a class="list-group-item list-group-item-action font-weight-bold kategori-sec d-flex justify-content-between align-items-center"
+                               data-id="@anaKategori.ID"
+                               style="cursor: pointer;">
+                                <div>
+                                    <i class="fas fa-folder text-warning mr-2"></i> @anaKategori.Name
+                                </div>
                                 @if (altKategoriler.Any())
                                 {
-                                    <ul class="list-group mt-2 mb-1">
-                                        @foreach (var altKategori in altKategoriler)
-                                        {
-                                            <li class="list-group-item py-1 border-0" style="padding-left: 30px; font-weight: normal;">
-                                                <i class="fas fa-file-alt text-secondary mr-2"></i> @altKategori.Name
-                                            </li>
-                                        }
-                                    </ul>
+                                    <i class="fas fa-chevron-down text-muted ok-ikonsu" style="font-size: 0.75rem;"></i>
                                 }
-                            </li>
+                            </a>
+
+                            if (altKategoriler.Any())
+                            {//alt menüler
+                                <div id="@hedefId" class="bg-light border-bottom" style="display: none;">
+                                    @foreach (var altKategori in altKategoriler)
+                                    {
+                                        <a class="list-group-item list-group-item-action py-2 border-0 kategori-sec"
+                                           data-id="@altKategori.ID"
+                                           style="cursor: pointer; background: transparent; font-size: 0.95rem; padding-left: 2.5rem;">
+                                            <i class="fas fa-level-up-alt fa-rotate-90 text-secondary mr-2"></i> @altKategori.Name
+                                        </a>
+                                    }
+                                </div>
+                            }
                         }
 
-                    </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -124,9 +153,14 @@
                                         </small>
                                     </div>
 
-                                    <a href="/Document/Download/@doc.ID" class="btn btn-outline-info btn-sm">
-                                        <i class="fas fa-download"></i> İndir
-                                    </a>
+                                    <div class="d-flex align-items-center">
+                                        <a href="/Document/Download/@doc.ID" class="btn btn-sm btn-light text-info border-info shadow-sm px-3 mr-2 font-weight-bold btn-modern btn-modern-info">
+                                            <i class="fas fa-cloud-download-alt mr-1"></i> İndir
+                                        </a>
+                                        <button class="btn btn-sm btn-light text-danger border-danger shadow-sm px-3 btn-sil font-weight-bold btn-modern btn-modern-danger" data-id="@doc.ID">
+                                            <i class="fas fa-trash-alt mr-1"></i> Sil
+                                        </button>
+                                    </div>
                                 </li>
                             }
                         }
@@ -178,7 +212,6 @@
                     data: { kelime: arananKelime },
                     dataType: 'json',
                     success: function (gelenVeri) {
-
                         $("#documentList").empty();
 
                         if (gelenVeri.length === 0) {
@@ -199,9 +232,15 @@
                                         <span class="font-weight-bold" style="font-size: 1.1rem;">${doc.Title}</span>
                                         <small class="text-muted d-block ml-5">${doc.UploadDateFormated}</small>
                                     </div>
-                                    <a href="/Document/Download/${doc.ID}" class="btn btn-outline-info btn-sm">
-                                        <i class="fas fa-download"></i> İndir
-                                    </a>
+                                    <!-- AJAX ARAMA SONUCU İNDİR VE SİL BUTONLARI -->
+                                    <div class="btn-group">
+                                        <a href="/Document/Download/${doc.ID}" class="btn btn-outline-info btn-sm">
+                                            <i class="fas fa-download"></i> İndir
+                                        </a>
+                                        <button class="btn btn-outline-danger btn-sm btn-sil" data-id="${doc.ID}">
+                                            <i class="fas fa-trash"></i> Sil
+                                        </button>
+                                    </div>
                                 </li>
                             `;
                             $("#documentList").append(listeElemani);
@@ -209,6 +248,107 @@
                     },
                     error: function () {
                         console.log("AJAX isteğinde bir hata oluştu.");
+                    }
+                });
+            });
+
+            $(".kategori-sec").on("click", function () {
+                var tiklananKategoriId = $(this).data("id");
+
+                var altMenu = $("#kategoriMenu_" + tiklananKategoriId);
+                if (altMenu.length > 0) {
+                    altMenu.slideToggle(250);
+
+                    var okIkonu = $(this).find(".ok-ikonsu");
+                    if (okIkonu.hasClass("fa-chevron-down")) {
+                        okIkonu.removeClass("fa-chevron-down").addClass("fa-chevron-up");
+                    } else {
+                        okIkonu.removeClass("fa-chevron-up").addClass("fa-chevron-down");
+                    }
+                }
+
+                $(".kategori-sec").removeClass("list-group-item-secondary");
+                $(this).addClass("list-group-item-secondary");
+
+                $.ajax({
+                    url: '/Document/GetByCategory',
+                    type: 'GET',
+                    data: { id: tiklananKategoriId },
+                    dataType: 'json',
+                    success: function (gelenVeri) {
+                        $("#documentList").empty();
+
+                        if (gelenVeri.length === 0) {
+                            $("#documentList").append('<li class="list-group-item text-muted">Bu kategoride henüz doküman bulunmuyor.</li>');
+                            return;
+                        }
+
+                        $.each(gelenVeri, function (index, doc) {
+                            var iconHtml = '<i class="fas fa-file text-secondary fa-2x align-middle mr-3"></i>';
+                            if (doc.FileExtension === ".pdf") iconHtml = '<i class="fas fa-file-pdf text-danger fa-2x align-middle mr-3"></i>';
+                            else if (doc.FileExtension === ".docx") iconHtml = '<i class="fas fa-file-word text-primary fa-2x align-middle mr-3"></i>';
+                            else if (doc.FileExtension === ".xlsx") iconHtml = '<i class="fas fa-file-excel text-success fa-2x align-middle mr-3"></i>';
+
+                            var listeElemani = `
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        ${iconHtml}
+                                        <span class="font-weight-bold" style="font-size: 1.1rem;">${doc.Title}</span>
+                                        <small class="text-muted d-block ml-5">${doc.UploadDateFormated}</small>
+                                    </div>
+                                    <!-- AJAX KATEGORİ SONUCU İNDİR VE SİL BUTONLARI -->
+                                    <div class="btn-group">
+                                        <a href="/Document/Download/${doc.ID}" class="btn btn-outline-info btn-sm">
+                                            <i class="fas fa-download"></i> İndir
+                                        </a>
+                                        <button class="btn btn-outline-danger btn-sm btn-sil" data-id="${doc.ID}">
+                                            <i class="fas fa-trash"></i> Sil
+                                        </button>
+                                    </div>
+                                </li>
+                            `;
+                            $("#documentList").append(listeElemani);
+                        });
+                    },
+                    error: function () {
+                        console.log("Kategori filtreleme sırasında hata oluştu.");
+                    }
+                });
+            });
+
+            $(document).on("click", ".btn-sil", function () {
+                var silinecekId = $(this).data("id");
+                var silinecekSatir = $(this).closest("li"); 
+
+                Swal.fire({
+                    title: 'Emin misiniz?',
+                    text: "Bu doküman hem veritabanından hem de sunucudan kalıcı olarak silinecektir!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Evet, Sil!',
+                    cancelButtonText: 'Vazgeç'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        $.ajax({
+                            url: '/Document/Delete',
+                            type: 'POST',
+                            data: { id: silinecekId },
+                            success: function (response) {
+                                if (response.success) {
+                                    silinecekSatir.slideUp(300, function() { $(this).remove(); });
+
+                                    Swal.fire('Silindi!', response.message, 'success');
+                                } else {
+                                    Swal.fire('Hata!', response.message, 'error');
+                                }
+                            },
+                            error: function () {
+                                Swal.fire('Hata!', 'Sunucu ile iletişim kurulamadı.', 'error');
+                            }
+                        });
                     }
                 });
             });

@@ -109,5 +109,63 @@ namespace DigitalLibrary.Controllers
 
             return Json(sonuclar, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        public JsonResult GetByCategory(int id)
+        {
+            var kategoriIdListesi = db.Categories
+                                      .Where(k => k.ID == id || k.ParentID == id)
+                                      .Select(k => k.ID)
+                                      .ToList();
+
+            var query = db.Documents.Where(d => d.CategoryID.HasValue && kategoriIdListesi.Contains(d.CategoryID.Value));
+
+            var hamVeri = query.OrderByDescending(d => d.UploadDate)
+                               .Select(d => new {
+                                   d.ID,
+                                   d.Title,
+                                   d.FileExtension,
+                                   d.UploadDate
+                               }).ToList();
+
+            var sonuclar = hamVeri.Select(d => new {
+                d.ID,
+                d.Title,
+                d.FileExtension,
+                UploadDateFormated = d.UploadDate.HasValue ? d.UploadDate.Value.ToString("dd.MM.yyyy HH:mm") : ""
+            }).ToList();
+
+            return Json(sonuclar, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult Delete(int id)
+        {
+            try
+            {
+                var document = db.Documents.Find(id);
+
+                if (document == null)
+                {
+                    return Json(new { success = false, message = "Doküman veritabanında bulunamadı!" });
+                }
+
+                string filePath = Server.MapPath(document.FilePath);
+
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+
+                db.Documents.Remove(document);
+                db.SaveChanges();
+
+                return Json(new { success = true, message = "Doküman başarıyla silindi!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Silme sırasında hata oluştu: " + ex.Message });
+            }
+        }
     }
 }
