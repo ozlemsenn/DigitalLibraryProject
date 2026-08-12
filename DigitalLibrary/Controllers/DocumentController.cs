@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Management;
 using System.Web.Mvc;
 using DigitalLibrary.Models;
 
@@ -165,6 +166,51 @@ namespace DigitalLibrary.Controllers
             catch (Exception ex)
             {
                 return Json(new { success = false, message = "Silme sırasında hata oluştu: " + ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetDocument(int id)
+        {
+            var document = db.Documents.Find(id);
+
+            if(document == null)
+            {
+                return Json(new { success = false, message = "Döküman bulunamadı" }, JsonRequestBehavior.AllowGet);
+            }
+
+            var data = new
+            {
+                document.ID,
+                document.Title,
+                document.CategoryID
+            };
+
+            return Json(new { success = true, data = data }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult Update(int id, string title, int categoryId)
+        {
+            try
+            {
+                var document = db.Documents.Find(id);
+
+                if (document == null)
+                {
+                    return Json(new { success = false, message = "Güncellenecek doküman bulunamadı." });
+                }
+
+                document.Title = title;
+                document.CategoryID = categoryId;
+
+                db.SaveChanges();
+
+                return Json(new { success = true, message = "Doküman başarıyla güncellendi!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Güncelleme sırasında hata oluştu: " + ex.Message });
             }
         }
     }

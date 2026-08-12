@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - eLibrary Yönetim</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            overflow-x: hidden;
+            background-color: #F4EADD;
+            font-family: 'Segoe UI', sans-serif;
+            color: #3b2f2f;
+        }
+
+        #sidebar-wrapper {
+            min-height: 100vh;
+            width: 260px;
+            background-color: #3b2a22; 
+            box-shadow: 2px 0 15px rgba(92, 64, 51, 0.2);
+            z-index: 1000;
+        }
+
+        .sidebar-heading {
+            padding: 1.5rem 1.25rem;
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: #F4EADD;
+            border-bottom: 1px solid rgba(244, 234, 221, 0.1);
+        }
+
+        .list-group-item {
+            border: none;
+            padding: 15px 25px;
+            background-color: transparent;
+            color: #d1c4b7;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+            .list-group-item i {
+                width: 25px;
+            }
+
+            .list-group-item:hover, .list-group-item.active {
+                background-color: #291c16;
+                color: #D35400; 
+                border-left: 4px solid #D35400;
+            }
+
+        #page-content-wrapper {
+            width: 100%;
+        }
+
+        .top-navbar {
+            background: rgba(244, 234, 221, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(211, 84, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex" id="wrapper">
+
+        <div id="sidebar-wrapper">
+            <div class="sidebar-heading text-center">
+                <i class="fas fa-book-open mr-2" style="color: #D35400;"></i> eLibrary <span style="font-size: 0.8rem; display:block; color: #a89f91; font-weight: normal; margin-top: 5px;">YÖNETİM PANELİ</span>
+            </div>
+            <div class="list-group list-group-flush mt-3">
+                <a href="/Admin/Index" class="list-group-item list-group-item-action active">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a>
+                <a href="/Admin/Documents" class="list-group-item list-group-item-action">
+                    <i class="fas fa-file-alt"></i> Doküman Yönetimi
+                </a>
+                <a href="/Admin/Categories" class="list-group-item list-group-item-action">
+                    <i class="fas fa-folder-open"></i> Kategoriler
+                </a>
+
+                <a href="/Home/Index" class="list-group-item list-group-item-action mt-5" style="border-top: 1px solid rgba(244, 234, 221, 0.1); color: #dc3545;">
+                    <i class="fas fa-sign-out-alt"></i> Personel Ekranına Dön
+                </a>
+            </div>
+        </div>
+
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg top-navbar py-3 px-4 shadow-sm">
+                <h4 class="m-0 font-weight-bold" style="color: #5C4033;">@ViewBag.Title</h4>
+
+                <div class="ml-auto d-flex align-items-center">
+                    <div class="mr-3 text-right">
+                        <span class="d-block font-weight-bold" style="color: #5C4033; line-height: 1.2;">Sistem Yöneticisi</span>
+                        <small style="color: #8c7a6b;">Admin Yetkisi</small>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=Kütüphane+Admin&background=5C4033&color=F4EADD&bold=true" class="rounded-circle shadow-sm" width="45">
+                </div>
+            </nav>
+
+            <div class="container-fluid p-4">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

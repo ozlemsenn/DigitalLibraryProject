@@ -1,39 +1,167 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <title>@ViewBag.Title | eLibrary</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+
+        @@keyframes fadeAndSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        body {
+            background-color: #F4EADD; 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            padding-top: 90px;
+            color: #3b2f2f;
+        }
+
+        main {
+            animation: fadeAndSlideIn 0.6s ease-out;
+        }
+
+        .premium-navbar {
+            background: rgba(244, 234, 221, 0.95); 
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 4px 30px rgba(92, 64, 51, 0.08);
+            border-bottom: 1px solid rgba(211, 84, 0, 0.15);
+        }
+
+        .brand-elibrary {
+            font-weight: 900;
+            font-size: 1.7rem;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #5C4033 0%, #D35400 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: transform 0.3s ease;
+        }
+
+            .brand-elibrary:hover {
+                transform: scale(1.02);
+            }
+
+        .nav-link {
+            font-weight: 600;
+            color: #5C4033 !important;
+            padding: 0.5rem 1.2rem !important;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+            .nav-link:hover {
+                background-color: rgba(211, 84, 0, 0.08);
+                color: #D35400 !important;
+            }
+
+        .dropdown-menu {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(92, 64, 51, 0.1);
+            animation: fadeAndSlideIn 0.3s ease;
+            padding: 10px;
+            background-color: #fff;
+        }
+
+        .dropdown-item {
+            font-weight: 500;
+            color: #5C4033;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+            .dropdown-item:hover {
+                background-color: #F4EADD;
+                color: #D35400;
+            }
+
+        .premium-footer {
+            background: linear-gradient(to right, #F4EADD, #ebdcc9, #F4EADD);
+            border-top: 1px solid #eaddd3;
+            padding: 30px 0;
+            margin-top: 60px;
+            color: #8c7a6b !important;
+        }
+    </style>
 </head>
-<body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
+<body class="d-flex flex-column min-vh-100">
+
+    <nav class="navbar navbar-expand-lg premium-navbar fixed-top py-2">
         <div class="container">
-            @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+
+            <a class="navbar-brand d-flex flex-column" href="/Home/Index" style="line-height: 1; text-decoration: none;">
+                <div class="brand-elibrary">
+                    <i class="fas fa-book-open mr-2" style="background: linear-gradient(135deg, #5C4033, #D35400); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>eLibrary
+                </div>
+                <span style="font-size: 0.65rem; color: #8c7a6b; font-weight: 700; letter-spacing: 0.8px; padding-left: 38px; margin-top: 2px;">
+                    KURUMSAL DİJİTAL KÜTÜPHANE SİSTEMİ
+                </span>
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#personelMenu">
+                <span style="color: #D35400;"><i class="fas fa-bars fa-lg"></i></span>
             </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+
+            <div class="collapse navbar-collapse" id="personelMenu">
+
+                <ul class="navbar-nav ml-auto align-items-center mt-3 mt-lg-0">
+                    <li class="nav-item mr-1">
+                        <a class="nav-link" href="/Home/Index"><i class="fas fa-compass mr-1"></i> Keşfet</a>
+                    </li>
+                    <li class="nav-item mr-3">
+                        <a class="nav-link" href="#"><i class="fas fa-scroll mr-1"></i> Hakkımızda</a>
+                    </li>
+
+                    <li class="d-none d-lg-block mr-3" style="border-left: 2px solid #eaddd3; height: 35px;"></li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center p-1 pr-3 bg-white shadow-sm" href="#" id="userDropdown" role="button" data-toggle="dropdown" style="border: 1px solid #eaddd3; border-radius: 50px;">
+                            <img src="https://ui-avatars.com/api/?name=Personel&background=D35400&color=fff&rounded=true&bold=true" width="35" class="mr-2">
+                            <span class="font-weight-bold" style="color: #5C4033;">Standart Personel</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right mt-2">
+                            <a class="dropdown-item" href="#"><i class="fas fa-user-cog mr-2" style="color: #8c7a6b;"></i> Profil Ayarları</a>
+                            <div class="dropdown-divider my-2" style="border-color: #eaddd3;"></div>
+                            <a class="dropdown-item font-weight-bold" href="#" style="color: #dc3545;">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Çıkış Yap
+                            </a>
+                        </div>
+                    </li>
                 </ul>
+
             </div>
         </div>
     </nav>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    <main class="flex-grow-1">
+        @RenderBody()
+    </main>
+
+    <footer class="premium-footer text-center mt-auto">
+        <div class="container">
+            <small class="font-weight-bold">&copy; @DateTime.Now.Year - eLibrary Kurumsal Doküman Yönetim Sistemi | Tüm Hakları Saklıdır.</small>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
     @RenderSection("scripts", required: false)
 </body>
 </html>
