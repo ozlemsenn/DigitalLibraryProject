@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|c:\\users\\pc\\onedrive\\desktop\\staj2\\digitallibrary\\digitallibrary\\views\\shared\\_adminlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|solutionrelative:digitallibrary\\views\\shared\\_adminlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|c:\\users\\pc\\onedrive\\desktop\\staj2\\digitallibrary\\digitallibrary\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\digitallibrary\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|solutionrelative:digitallibrary\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|c:\\users\\pc\\onedrive\\desktop\\staj2\\digitallibrary\\digitallibrary\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|solutionrelative:digitallibrary\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\digitallibrary\\views\\shared\\_adminlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|solutionrelative:digitallibrary\\views\\shared\\_adminlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\digitallibrary\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|c:\\users\\pc\\onedrive\\desktop\\staj2\\digitallibrary\\digitallibrary\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|solutionrelative:digitallibrary\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\digitallibrary\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|solutionrelative:digitallibrary\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,33 +26,20 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Home\\Index.cshtml",
               "RelativeDocumentMoniker": "DigitalLibrary\\Views\\Home\\Index.cshtml",
               "ToolTip": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Home\\Index.cshtml",
               "RelativeToolTip": "DigitalLibrary\\Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAANUAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAJYAAAAAAAAAAAAAAM0AAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-08-07T13:07:15.129Z",
               "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "_AdminLayout.cshtml",
-              "DocumentMoniker": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Shared\\_AdminLayout.cshtml",
-              "RelativeDocumentMoniker": "DigitalLibrary\\Views\\Shared\\_AdminLayout.cshtml",
-              "ToolTip": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Shared\\_AdminLayout.cshtml",
-              "RelativeToolTip": "DigitalLibrary\\Views\\Shared\\_AdminLayout.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-08-12T15:17:11.644Z",
               "EditorCaption": ""
             },
             {
@@ -69,26 +56,39 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
+              "Title": "_AdminLayout.cshtml",
+              "DocumentMoniker": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Shared\\_AdminLayout.cshtml",
+              "RelativeDocumentMoniker": "DigitalLibrary\\Views\\Shared\\_AdminLayout.cshtml",
+              "ToolTip": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Shared\\_AdminLayout.cshtml",
+              "RelativeToolTip": "DigitalLibrary\\Views\\Shared\\_AdminLayout.cshtml",
+              "ViewState": "AgIAAN4AAAAAAAAAAAAAANoAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-12T15:17:11.644Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Admin\\Index.cshtml",
               "RelativeDocumentMoniker": "DigitalLibrary\\Views\\Admin\\Index.cshtml",
               "ToolTip": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Admin\\Index.cshtml",
               "RelativeToolTip": "DigitalLibrary\\Views\\Admin\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADQAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-08-12T15:13:22.356Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "DigitalLibrary\\Views\\Shared\\_Layout.cshtml",
               "ToolTip": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Shared\\_Layout.cshtml",
               "RelativeToolTip": "DigitalLibrary\\Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAADAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAPYAAAAAAAAAAAAAAAwBAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-08-12T15:02:45.226Z",
               "EditorCaption": ""

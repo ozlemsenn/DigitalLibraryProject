@@ -27,6 +27,8 @@
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="DigitalLibraryDBModel.Users">
         <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Email" ColumnName="Email" />

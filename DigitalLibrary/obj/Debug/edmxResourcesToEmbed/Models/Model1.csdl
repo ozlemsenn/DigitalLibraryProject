@@ -35,6 +35,8 @@
     <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="Role" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="Documents" Relationship="Self.FK__Documents__Uploa__4E88ABD4" FromRole="Users" ToRole="Documents" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IsActive" Type="Boolean" />
   </EntityType>
   <Association Name="FK__Categorie__Paren__49C3F6B7">
     <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />

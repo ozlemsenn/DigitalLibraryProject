@@ -9,32 +9,67 @@
 
 <style>
     body {
-        background-color: #f8f9fa;
+        background-color: #FCF9F5 !important;
+    }
+
+    .text-dark-wood {
+        color: #2C1E16 !important;
+    }
+    .text-rust {
+        color: #C0392B !important;
+    }
+    .text-muted-warm {
+        color: #7F736A !important;
+    }
+    .text-gold {
+        color: #D48900 !important;
+    }
+
+    .premium-card {
+        border-radius: 12px;
+        border: 1px solid rgba(0,0,0,0.03);
+        background-color: #FFFFFF;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.03) !important;
+    }
+
+    .premium-card-header {
+        border-radius: 12px 12px 0 0 !important;
+        border-bottom: 1px solid #F0EAE1;
+        background-color: transparent;
     }
 
     .btn-modern {
         transition: all 0.3s ease;
-        border-radius: 50px !important;
+        border-radius: 8px !important; 
+        font-size: 0.95rem;
     }
 
-        .btn-modern:hover {
+    .btn-modern-download {
+        background-color: #FDFCFB;
+        color: #C0392B;
+        border: 1px solid #EAE3D9;
+    }
+
+        .btn-modern-download:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
+            background-color: #C0392B;
+            color: white !important;
+            border-color: #C0392B;
+            box-shadow: 0 4px 12px rgba(192, 57, 43, 0.2);
         }
 
-    .btn-modern-info:hover {
-        background-color: #17a2b8;
-        color: white !important;
+    .kategori-sec {
+        transition: 0.2s ease;
+        border-left: 3px solid transparent;
     }
 
-    .premium-card {
-        border-radius: 15px;
-        border: none;
-    }
+        .kategori-sec:hover {
+            background-color: #FDFCFB !important;
+            color: #C0392B !important;
+        }
 
-    .premium-card-header {
-        border-radius: 15px 15px 0 0 !important;
-        border-bottom: 1px solid #f0f0f0;
+    .list-group-item {
+        border-color: #F0EAE1;
     }
 </style>
 
@@ -42,41 +77,41 @@
 
     <div class="row mb-4">
         <div class="col-12 text-center">
-            <h2 class="font-weight-bold text-dark mb-3"><i class="fas fa-search text-primary mr-2"></i> Doküman Merkezi</h2>
-            <p class="text-muted">Aradığınız şirket içi form, prosedür veya dokümana anında ulaşın.</p>
+            <h2 class="font-weight-bold text-dark-wood mb-3"><i class="fas fa-search text-rust mr-2"></i> Doküman Merkezi</h2>
+            <p class="text-muted-warm">Aradığınız şirket içi form, prosedür veya dokümana anında ulaşın.</p>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-3">
-            <div class="card premium-card shadow-sm mb-4">
-                <div class="card-header bg-white premium-card-header py-3">
-                    <h6 class="mb-0 font-weight-bold text-dark"><i class="fas fa-folder-tree text-primary mr-2"></i> Kategoriler</h6>
+            <div class="card premium-card mb-4">
+                <div class="card-header premium-card-header py-3">
+                    <h6 class="mb-0 font-weight-bold text-dark-wood"><i class="fas fa-folder-tree text-rust mr-2"></i> Kategoriler</h6>
                 </div>
                 <div class="card-body p-0">
-                    <div class="list-group list-group-flush" style="border-radius: 0 0 15px 15px; overflow: hidden;">
+                    <div class="list-group list-group-flush" style="border-radius: 0 0 12px 12px; overflow: hidden;">
                         @foreach (var anaKategori in Model.Where(k => k.ParentID == null))
                         {
                             var altKategoriler = Model.Where(k => k.ParentID == anaKategori.ID).ToList();
                             var hedefId = "kategoriMenu_" + anaKategori.ID;
 
                             <a class="list-group-item list-group-item-action font-weight-bold kategori-sec d-flex justify-content-between align-items-center"
-                               data-id="@anaKategori.ID" style="cursor: pointer; border-left: 3px solid transparent;">
-                                <div><i class="fas fa-folder text-warning mr-2"></i> @anaKategori.Name</div>
+                               data-id="@anaKategori.ID" style="cursor: pointer; color: #2C1E16;">
+                                <div><i class="fas fa-folder text-gold mr-2"></i> @anaKategori.Name</div>
                                 @if (altKategoriler.Any())
                                 {
-                                    <i class="fas fa-chevron-down text-muted ok-ikonsu" style="font-size: 0.75rem;"></i>
+                                    <i class="fas fa-chevron-down text-muted-warm ok-ikonsu" style="font-size: 0.75rem;"></i>
                                 }
                             </a>
 
                             if (altKategoriler.Any())
                             {
-                                <div id="@hedefId" class="bg-light border-bottom" style="display: none;">
+                                <div id="@hedefId" class="bg-light border-bottom" style="display: none; background-color: #FDFCFB !important;">
                                     @foreach (var altKategori in altKategoriler)
                                     {
                                         <a class="list-group-item list-group-item-action py-2 border-0 kategori-sec" data-id="@altKategori.ID"
-                                           style="cursor: pointer; background: transparent; font-size: 0.95rem; padding-left: 2.5rem;">
-                                            <i class="fas fa-file-alt text-secondary mr-2"></i> @altKategori.Name
+                                           style="cursor: pointer; background: transparent; font-size: 0.95rem; padding-left: 2.5rem; color: #7F736A;">
+                                            <i class="fas fa-file-alt text-rust mr-2" style="opacity: 0.7;"></i> @altKategori.Name
                                         </a>
                                     }
                                 </div>
@@ -89,16 +124,16 @@
 
         <div class="col-md-9">
 
-            <div class="input-group mb-4 shadow-sm" style="border-radius: 50px; overflow: hidden; background: white;">
+            <div class="input-group mb-4 shadow-sm" style="border-radius: 12px; overflow: hidden; background: white; border: 1px solid #F0EAE1;">
                 <div class="input-group-prepend">
-                    <span class="input-group-text bg-transparent border-0 text-primary pl-4 pt-3"><i class="fas fa-search fa-lg"></i></span>
+                    <span class="input-group-text bg-transparent border-0 text-rust pl-4 pt-3"><i class="fas fa-search fa-lg"></i></span>
                 </div>
-                <input type="text" class="form-control border-0 py-4 font-weight-bold" id="searchInput" placeholder="Doküman adı ile arama yapın..." style="box-shadow: none; font-size: 1.1rem;">
+                <input type="text" class="form-control border-0 py-4 font-weight-bold text-dark-wood" id="searchInput" placeholder="Doküman adı ile arama yapın..." style="box-shadow: none; font-size: 1.1rem;">
             </div>
 
-            <div class="card premium-card shadow-sm">
+            <div class="card premium-card">
                 <div class="card-body p-0">
-                    <ul class="list-group list-group-flush" id="documentList" style="border-radius: 15px; overflow: hidden;">
+                    <ul class="list-group list-group-flush" id="documentList" style="border-radius: 12px; overflow: hidden;">
                         @if (ViewBag.Documents != null)
                         {
                             foreach (var doc in (IEnumerable<DigitalLibrary.Models.Documents>)ViewBag.Documents)
@@ -112,15 +147,15 @@
                                         else if (doc.FileExtension == ".xlsx")
                                         { <i class="fas fa-file-excel text-success fa-2x mr-3"></i> }
                                         else
-                                        { <i class="fas fa-file text-secondary fa-2x mr-3"></i>}
+                                        { <i class="fas fa-file text-muted-warm fa-2x mr-3"></i>}
 
                                         <div>
-                                            <span class="font-weight-bold text-dark" style="font-size: 1.1rem;">@doc.Title</span>
-                                            <small class="text-muted d-block mt-1"><i class="fas fa-calendar-alt mr-1"></i> @(doc.UploadDate.HasValue ? doc.UploadDate.Value.ToString("dd.MM.yyyy") : "")</small>
+                                            <span class="font-weight-bold text-dark-wood" style="font-size: 1.1rem;">@doc.Title</span>
+                                            <small class="d-block mt-1 text-muted-warm"><i class="fas fa-calendar-alt mr-1"></i> @(doc.UploadDate.HasValue ? doc.UploadDate.Value.ToString("dd.MM.yyyy") : "")</small>
                                         </div>
                                     </div>
 
-                                    <a href="/Document/Download/@doc.ID" class="btn btn-light text-info border-info shadow-sm px-4 py-2 font-weight-bold btn-modern btn-modern-info">
+                                    <a href="/Document/Download/@doc.ID" class="btn px-4 py-2 font-weight-bold btn-modern btn-modern-download">
                                         <i class="fas fa-cloud-download-alt mr-2"></i> İndir
                                     </a>
                                 </li>
@@ -149,30 +184,30 @@
                     success: function (gelenVeri) {
                         $("#documentList").empty();
                         if (gelenVeri.length === 0) {
-                            $("#documentList").append('<li class="list-group-item text-muted py-5 text-center"><i class="fas fa-search-minus fa-3x mb-3 d-block text-secondary opacity-50"></i>Kritere uygun doküman bulunamadı.</li>');
+                            $("#documentList").append('<li class="list-group-item py-5 text-center text-muted-warm"><i class="fas fa-search-minus fa-3x mb-3 d-block text-rust opacity-50"></i>Kritere uygun doküman bulunamadı.</li>');
                             return;
                         }
 
                         $.each(gelenVeri, function (index, doc) {
-                            var iconHtml = '<i class="fas fa-file text-secondary fa-2x mr-3"></i>';
+                            var iconHtml = '<i class="fas fa-file text-muted-warm fa-2x mr-3"></i>';
                             if (doc.FileExtension === ".pdf") iconHtml = '<i class="fas fa-file-pdf text-danger fa-2x mr-3"></i>';
                             else if (doc.FileExtension === ".docx") iconHtml = '<i class="fas fa-file-word text-primary fa-2x mr-3"></i>';
                             else if (doc.FileExtension === ".xlsx") iconHtml = '<i class="fas fa-file-excel text-success fa-2x mr-3"></i>';
 
                             var listeElemani = `
-                                    <li class="list-group-item d-flex justify-content-between align-items-center py-4">
-                                        <div class="d-flex align-items-center">
-                                            ${iconHtml}
-                                            <div>
-                                                <span class="font-weight-bold text-dark" style="font-size: 1.1rem;">${doc.Title}</span>
-                                                <small class="text-muted d-block mt-1"><i class="fas fa-calendar-alt mr-1"></i> ${doc.UploadDateFormated}</small>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center py-4">
+                                            <div class="d-flex align-items-center">
+                                                ${iconHtml}
+                                                <div>
+                                                    <span class="font-weight-bold text-dark-wood" style="font-size: 1.1rem;">${doc.Title}</span>
+                                                    <small class="d-block mt-1 text-muted-warm"><i class="fas fa-calendar-alt mr-1"></i> ${doc.UploadDateFormated}</small>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <a href="/Document/Download/${doc.ID}" class="btn btn-light text-info border-info shadow-sm px-4 py-2 font-weight-bold btn-modern btn-modern-info">
-                                            <i class="fas fa-cloud-download-alt mr-2"></i> İndir
-                                        </a>
-                                    </li>
-                                `;
+                                            <a href="/Document/Download/${doc.ID}" class="btn px-4 py-2 font-weight-bold btn-modern btn-modern-download">
+                                                <i class="fas fa-cloud-download-alt mr-2"></i> İndir
+                                            </a>
+                                        </li>
+                                    `;
                             $("#documentList").append(listeElemani);
                         });
                     }
@@ -190,8 +225,8 @@
                     else { okIkonu.removeClass("fa-chevron-up").addClass("fa-chevron-down"); }
                 }
 
-                $(".kategori-sec").css("border-left-color", "transparent").removeClass("bg-light text-primary");
-                $(this).css("border-left-color", "#007bff").addClass("bg-light text-primary");
+                $(".kategori-sec").css("border-left-color", "transparent").removeClass("text-rust").css("background-color", "transparent");
+                $(this).css("border-left-color", "#C0392B").addClass("text-rust").css("background-color", "#FDFCFB");
 
                 $.ajax({
                     url: '/Document/GetByCategory',
@@ -201,30 +236,30 @@
                     success: function (gelenVeri) {
                         $("#documentList").empty();
                         if (gelenVeri.length === 0) {
-                            $("#documentList").append('<li class="list-group-item text-muted py-5 text-center"><i class="fas fa-folder-open fa-3x mb-3 d-block text-secondary opacity-50"></i>Bu kategoride henüz doküman bulunmuyor.</li>');
+                            $("#documentList").append('<li class="list-group-item py-5 text-center text-muted-warm"><i class="fas fa-folder-open fa-3x mb-3 d-block text-rust opacity-50"></i>Bu kategoride henüz doküman bulunmuyor.</li>');
                             return;
                         }
 
                         $.each(gelenVeri, function (index, doc) {
-                            var iconHtml = '<i class="fas fa-file text-secondary fa-2x mr-3"></i>';
+                            var iconHtml = '<i class="fas fa-file text-muted-warm fa-2x mr-3"></i>';
                             if (doc.FileExtension === ".pdf") iconHtml = '<i class="fas fa-file-pdf text-danger fa-2x mr-3"></i>';
                             else if (doc.FileExtension === ".docx") iconHtml = '<i class="fas fa-file-word text-primary fa-2x mr-3"></i>';
                             else if (doc.FileExtension === ".xlsx") iconHtml = '<i class="fas fa-file-excel text-success fa-2x mr-3"></i>';
 
                             var listeElemani = `
-                                    <li class="list-group-item d-flex justify-content-between align-items-center py-4">
-                                        <div class="d-flex align-items-center">
-                                            ${iconHtml}
-                                            <div>
-                                                <span class="font-weight-bold text-dark" style="font-size: 1.1rem;">${doc.Title}</span>
-                                                <small class="text-muted d-block mt-1"><i class="fas fa-calendar-alt mr-1"></i> ${doc.UploadDateFormated}</small>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center py-4">
+                                            <div class="d-flex align-items-center">
+                                                ${iconHtml}
+                                                <div>
+                                                    <span class="font-weight-bold text-dark-wood" style="font-size: 1.1rem;">${doc.Title}</span>
+                                                    <small class="d-block mt-1 text-muted-warm"><i class="fas fa-calendar-alt mr-1"></i> ${doc.UploadDateFormated}</small>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <a href="/Document/Download/${doc.ID}" class="btn btn-light text-info border-info shadow-sm px-4 py-2 font-weight-bold btn-modern btn-modern-info">
-                                            <i class="fas fa-cloud-download-alt mr-2"></i> İndir
-                                        </a>
-                                    </li>
-                                `;
+                                            <a href="/Document/Download/${doc.ID}" class="btn px-4 py-2 font-weight-bold btn-modern btn-modern-download">
+                                                <i class="fas fa-cloud-download-alt mr-2"></i> İndir
+                                            </a>
+                                        </li>
+                                    `;
                             $("#documentList").append(listeElemani);
                         });
                     }
