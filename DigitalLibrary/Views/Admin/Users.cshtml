@@ -1,0 +1,436 @@
+﻿@using DigitalLibrary.Models
+@model IEnumerable<Users>
+
+@{
+    ViewBag.Title = "Kullanıcı Yönetimi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .premium-card {
+        border-radius: 12px;
+        border: 1px solid #F0EAE1;
+        background-color: #FFFFFF;
+        box-shadow: 0 4px 15px rgba(92, 64, 51, 0.03);
+    }
+
+    .modern-table th {
+        border-top: none;
+        border-bottom: 2px solid #F0EAE1;
+        color: #7F736A;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .modern-table td {
+        vertical-align: middle;
+        border-bottom: 1px solid #F0EAE1;
+        color: #2C1E16;
+        font-weight: 500;
+    }
+
+    .modern-table tr:hover td {
+        background-color: #FDFCFB;
+    }
+
+    .badge-admin {
+        background-color: #C0392B;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 6px;
+    }
+
+    .badge-personel {
+        background-color: #F0EAE1;
+        color: #5C4033;
+        padding: 5px 10px;
+        border-radius: 6px;
+    }
+
+    .status-active {
+        color: #27ae60;
+        font-weight: 600;
+    }
+
+    .status-passive {
+        color: #e74c3c;
+        font-weight: 600;
+    }
+
+    .btn-action {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        transition: 0.2s;
+        border: none;
+    }
+
+    .btn-action-edit {
+        background-color: #F0EAE1;
+        color: #5C4033;
+    }
+
+        .btn-action-edit:hover {
+            background-color: #5C4033;
+            color: white;
+        }
+
+    .btn-action-delete {
+        background-color: #FDF3F2;
+        color: #C0392B;
+    }
+
+        .btn-action-delete:hover {
+            background-color: #C0392B;
+            color: white;
+        }
+</style>
+
+<!--ekle buton-->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="font-weight-bold mb-1" style="color: #2C1E16;">Sistem Kullanıcıları</h4>
+    </div>
+    <button class="btn font-weight-bold shadow-sm" data-toggle="modal" data-target="#userModal" style="background-color: #C0392B; color: white; border-radius: 8px; padding: 10px 20px;">
+        <i class="fas fa-user-plus mr-2"></i> Yeni Personel Ekle
+    </button>
+</div>
+
+<!--tablo-->
+<div class="card premium-card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table modern-table mb-0">
+                <thead>
+                    <tr>
+                        <th class="pl-4">Ad Soyad</th>
+                        <th>Email Adresi</th>
+                        <th>Rol (Yetki)</th>
+                        <th>Durum</th>
+                        <th class="text-right pr-4">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var user in Model)
+                        {
+                            <tr>
+                                <td class="pl-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="mr-3" style="width: 40px; height: 40px; border-radius: 50%; background: #F0EAE1; display: flex; align-items: center; justify-content: center; color: #5C4033; font-weight: bold;">
+                                            @user.Name.Substring(0, 1).ToUpper()
+                                        </div>
+                                        <span>@user.Name</span>
+                                    </div>
+                                </td>
+                                <td>@user.Email</td>
+                                <td>
+                                    @if (user.Role == "Admin")
+                                    {
+                                        <span class="badge-admin"><i class="fas fa-crown mr-1"></i> Yönetici</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge-personel"><i class="fas fa-user mr-1"></i> Personel</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (user.IsActive)
+                                    {
+                                        <span class="status-active"><i class="fas fa-check-circle mr-1"></i> Aktif</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="status-passive"><i class="fas fa-minus-circle mr-1"></i> Pasif</span>
+                                    }
+                                </td>
+                                <td class="text-right pr-4">
+                                    <button class="btn-action btn-action-edit mr-1" title="Düzenle" data-id="@user.ID"><i class="fas fa-pen"></i></button>
+
+                                    @if (user.IsActive)
+                                    {
+                                        <button class="btn-action btn-action-toggle mr-1" title="Pasife Al (Erişimi Kes)" data-id="@user.ID" data-status="false" style="background-color: #FDF3F2; color: #D35400;">
+                                            <i class="fas fa-user-slash"></i>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn-action btn-action-toggle mr-1" title="Aktifleştir (Erişim Ver)" data-id="@user.ID" data-status="true" style="background-color: #e8f8f5; color: #27ae60;">
+                                            <i class="fas fa-user-check"></i>
+                                        </button>
+                                    }
+                                    <button class="btn-action btn-action-delete" title="Kalıcı Sil" data-id="@user.ID"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td class="pl-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="mr-3" style="width: 40px; height: 40px; border-radius: 50%; background: #FDF3F2; display: flex; align-items: center; justify-content: center; color: #C0392B; font-weight: bold;">A</div>
+                                    <span>Ahmet Yılmaz</span>
+                                </div>
+                            </td>
+                            <td>ahmet@sirket.com</td>
+                            <td><span class="badge-admin"><i class="fas fa-crown mr-1"></i> Yönetici</span></td>
+                            <td><span class="status-active"><i class="fas fa-check-circle mr-1"></i> Aktif</span></td>
+                            <td class="text-right pr-4">
+                                <button class="btn-action btn-action-edit mr-1"><i class="fas fa-pen"></i></button>
+                                <button class="btn-action btn-action-delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="pl-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="mr-3" style="width: 40px; height: 40px; border-radius: 50%; background: #F0EAE1; display: flex; align-items: center; justify-content: center; color: #5C4033; font-weight: bold;">A</div>
+                                    <span>Ayşe Demir</span>
+                                </div>
+                            </td>
+                            <td>ayse@sirket.com</td>
+                            <td><span class="badge-personel"><i class="fas fa-user mr-1"></i> Personel</span></td>
+                            <td><span class="status-active"><i class="fas fa-check-circle mr-1"></i> Aktif</span></td>
+                            <td class="text-right pr-4">
+                                <button class="btn-action btn-action-edit mr-1"><i class="fas fa-pen"></i></button>
+                                <button class="btn-action btn-action-delete"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- kullanıcı düzenle modalı-->
+<div class="modal fade" id="userModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
+            <div class="modal-header" style="background-color: #FCF9F5; border-bottom: 1px solid #F0EAE1; border-radius: 15px 15px 0 0;">
+                <h5 class="modal-title font-weight-bold" style="color: #2C1E16;"><i class="fas fa-user-plus mr-2" style="color: #C0392B;"></i> Personel Bilgileri</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="userForm">
+                    <input type="hidden" id="UserID" value="" />
+
+                    <div class="form-group">
+                        <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Ad Soyad</label>
+                        <input type="text" id="Name" class="form-control" placeholder="Örn: Mehmet Yılmaz" style="border-radius: 8px; border: 1px solid #F0EAE1;">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Email Adresi</label>
+                        <input type="email" id="Email" class="form-control" placeholder="ornek@sirket.com" style="border-radius: 8px; border: 1px solid #F0EAE1;">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Şifre (Geçici)</label>
+                            <input type="password" id="Password" class="form-control" placeholder="******" style="border-radius: 8px; border: 1px solid #F0EAE1;">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Sistem Rolü</label>
+                            <select id="Role" class="form-control" style="border-radius: 8px; border: 1px solid #F0EAE1;">
+                                <option value="Personel">Standart Personel</option>
+                                <option value="Admin">Yönetici (Admin)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-3" id="pasifNedeniAlani" style="display: none;">
+                        <label class="font-weight-bold" style="color: #C0392B; font-size: 0.9rem;">
+                            <i class="fas fa-exclamation-circle mr-1"></i> Pasife Alınma Nedeni
+                        </label>
+                        <textarea id="DeactivationReasonDisplay" class="form-control" readonly rows="2" style="border-radius: 8px; border: 1px solid #FDF3F2; background-color: #FDF3F2; color: #C0392B;"></textarea>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-light font-weight-bold" data-dismiss="modal" style="border-radius: 8px;">İptal</button>
+                <button type="button" id="btnKaydet" class="btn font-weight-bold shadow-sm" style="background-color: #C0392B; color: white; border-radius: 8px;">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+
+            $("[data-target='#userModal']").click(function () {
+                $("#userForm")[0].reset();
+                $("#UserID").val("");
+                $("#pasifNedeniAlani").hide(); 
+                $(".modal-title").html('<i class="fas fa-user-plus mr-2" style="color: #C0392B;"></i> Personel Bilgileri');
+            });
+
+            $(".btn-action-toggle").click(function () {
+                var userId = $(this).data("id");
+                var isAktiflesecek = $(this).data("status");
+
+                if (!isAktiflesecek) {
+                    Swal.fire({
+                        title: 'Pasife Alma Nedeni',
+                        text: "Lütfen bu personeli neden pasife aldığınızı belirtin:",
+                        input: 'textarea',
+                        inputPlaceholder: 'Örn: İşten ayrıldı, departman değiştirdi...',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#D35400',
+                        cancelButtonColor: '#7F736A',
+                        confirmButtonText: 'Evet, Pasife Al',
+                        cancelButtonText: 'İptal',
+                        inputValidator: (value) => {
+                            if (!value) {
+                                return 'Sistem logları için bir neden girmek zorunludur!'
+                            }
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: '/Admin/ToggleUserStatus',
+                                type: 'POST',
+                                data: { id: userId, reason: result.value }, 
+                                success: function (gelenCevap) {
+                                    if (gelenCevap.success) {
+                                        Swal.fire('Başarılı!', gelenCevap.message, 'success').then(() => location.reload());
+                                    } else {
+                                        Swal.fire('Hata!', gelenCevap.message, 'error');
+                                    }
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Emin misiniz?',
+                        text: "Bu personelin hesabını tekrar aktif hale getirmek istiyor musunuz?",
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#27ae60',
+                        cancelButtonColor: '#7F736A',
+                        confirmButtonText: 'Evet, Aktifleştir',
+                        cancelButtonText: 'İptal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: '/Admin/ToggleUserStatus',
+                                type: 'POST',
+                                data: { id: userId, reason: "" }, 
+                                success: function (gelenCevap) {
+                                    if (gelenCevap.success) {
+                                        Swal.fire('Başarılı!', gelenCevap.message, 'success').then(() => location.reload());
+                                    } else {
+                                        Swal.fire('Hata!', gelenCevap.message, 'error');
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+            $(".btn-action-delete").click(function () {
+                var userId = $(this).data("id");
+
+                Swal.fire({
+                    title: 'Emin misiniz?',
+                    text: "Bu personeli sistemden kalıcı olarak silmek üzeresiniz!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#C0392B',
+                    cancelButtonColor: '#7F736A',
+                    confirmButtonText: 'Evet, Sil!',
+                    cancelButtonText: 'İptal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/Admin/DeleteUser/' + userId,
+                            type: 'POST',
+                            success: function (gelenCevap) {
+                                if (gelenCevap.success) {
+                                    Swal.fire('Silindi!', gelenCevap.message, 'success').then(() => location.reload());
+                                } else {
+                                    Swal.fire('Hata!', gelenCevap.message, 'error');
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            $(".btn-action-edit").click(function () {
+                var userId = $(this).data("id");
+
+                $.ajax({
+                    url: '/Admin/GetUser/' + userId,
+                    type: 'GET',
+                    success: function (user) {
+                        $("#UserID").val(user.ID);
+                        $("#Name").val(user.Name);
+                        $("#Email").val(user.Email);
+                        $("#Password").val(user.Password);
+                        $("#Role").val(user.Role);
+
+                        if (user.DeactivationReason) {
+                            $("#DeactivationReasonDisplay").val(user.DeactivationReason);
+                            $("#pasifNedeniAlani").slideDown();
+                        } else {
+                            $("#DeactivationReasonDisplay").val("");
+                            $("#pasifNedeniAlani").hide();
+                        }
+
+                        $(".modal-title").html('<i class="fas fa-user-edit mr-2" style="color: #C0392B;"></i> Personel Düzenle');
+                        $("#userModal").modal('show');
+                    }
+                });
+            });
+
+            $("#btnKaydet").click(function () {
+                var userId = $("#UserID").val();
+
+                var kullaniciVerisi = {
+                    Name: $("#Name").val(),
+                    Email: $("#Email").val(),
+                    Password: $("#Password").val(),
+                    Role: $("#Role").val()
+                };
+
+                var islemUrl = (!userId) ? '/Admin/AddUser' : '/Admin/EditUser';
+
+                if (userId) {
+                    kullaniciVerisi.ID = userId;
+                }
+
+                $.ajax({
+                    url: islemUrl,
+                    type: 'POST',
+                    data: kullaniciVerisi,
+                    success: function (gelenCevap) {
+                        if (gelenCevap.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Başarılı!',
+                                text: gelenCevap.message,
+                                confirmButtonColor: '#27ae60'
+                            }).then(() => location.reload());
+                        } else {
+                            Swal.fire('Hata!', gelenCevap.message, 'error');
+                        }
+                    },
+                    error: function () {
+                        Swal.fire('Bağlantı Hatası!', 'Sunucuya ulaşılamadı.', 'error');
+                    }
+                });
+            });
+
+        });
+    </script>
+}

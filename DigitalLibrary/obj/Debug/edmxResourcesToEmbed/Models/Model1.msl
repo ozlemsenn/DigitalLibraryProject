@@ -27,6 +27,7 @@
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="DigitalLibraryDBModel.Users">
         <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="DeactivationReason" ColumnName="DeactivationReason" />
           <ScalarProperty Name="IsActive" ColumnName="IsActive" />
           <ScalarProperty Name="Password" ColumnName="Password" />
           <ScalarProperty Name="ID" ColumnName="ID" />
