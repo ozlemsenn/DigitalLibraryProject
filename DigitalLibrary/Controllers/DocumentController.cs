@@ -19,7 +19,7 @@ namespace DigitalLibrary.Controllers
             {
                 string[] allowedExtensions = { ".pdf", ".docx", ".xlsx" };
                 string fileExtension = Path.GetExtension(uploadedFile.FileName).ToLower();
-                
+
                 if (!allowedExtensions.Contains(fileExtension) || fileExtension == ".exe")
                 {
                     TempData["Hata"] = "Sadece .pdf, .docx veya .xlsx uzantılı dosyalar yükleyebilirsiniz!";
@@ -52,7 +52,15 @@ namespace DigitalLibrary.Controllers
                 newDoc.UploadDate = DateTime.Now;
 
                 db.Documents.Add(newDoc);
-                db.SaveChanges();
+
+                Logs docLog = new Logs();
+                docLog.ActionType = "Yeni Doküman Yüklendi";
+                docLog.Description = "'" + Title + "' isimli belge sisteme eklendi.";
+                docLog.IconClass = "fa-file-upload";
+                docLog.CreatedAt = DateTime.Now;
+                db.Logs.Add(docLog);
+
+                db.SaveChanges(); 
 
                 TempData["Basari"] = "Doküman başarıyla yüklendi!";
             }
@@ -98,7 +106,7 @@ namespace DigitalLibrary.Controllers
                                    d.ID,
                                    d.Title,
                                    d.FileExtension,
-                                   d.UploadDate 
+                                   d.UploadDate
                                }).ToList();
 
             var sonuclar = hamVeri.Select(d => new {
@@ -151,6 +159,7 @@ namespace DigitalLibrary.Controllers
                     return Json(new { success = false, message = "Doküman veritabanında bulunamadı!" });
                 }
 
+                string silinenDokumanAdi = document.Title;
                 string filePath = Server.MapPath(document.FilePath);
 
                 if (System.IO.File.Exists(filePath))
@@ -159,6 +168,14 @@ namespace DigitalLibrary.Controllers
                 }
 
                 db.Documents.Remove(document);
+
+                Logs deleteLog = new Logs();
+                deleteLog.ActionType = "Doküman Silindi";
+                deleteLog.Description = "'" + silinenDokumanAdi + "' isimli belge arşivden çıkarıldı.";
+                deleteLog.IconClass = "fa-trash";
+                deleteLog.CreatedAt = DateTime.Now;
+                db.Logs.Add(deleteLog);
+
                 db.SaveChanges();
 
                 return Json(new { success = true, message = "Doküman başarıyla silindi!" });
@@ -174,7 +191,7 @@ namespace DigitalLibrary.Controllers
         {
             var document = db.Documents.Find(id);
 
-            if(document == null)
+            if (document == null)
             {
                 return Json(new { success = false, message = "Döküman bulunamadı" }, JsonRequestBehavior.AllowGet);
             }
@@ -203,6 +220,13 @@ namespace DigitalLibrary.Controllers
 
                 document.Title = title;
                 document.CategoryID = categoryId;
+
+                Logs updateLog = new Logs();
+                updateLog.ActionType = "Doküman Güncellendi";
+                updateLog.Description = "'" + title + "' isimli belgenin bilgileri güncellendi.";
+                updateLog.IconClass = "fa-file-signature"; 
+                updateLog.CreatedAt = DateTime.Now;
+                db.Logs.Add(updateLog);
 
                 db.SaveChanges();
 
