@@ -177,16 +177,23 @@
             <i class="fas fa-book-open mr-2" style="color: #C0392B;"></i> eLibrary
         </div>
 
-        <p style="font-size: 0.75rem; color: #a89f91; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; padding-left: 10px;">YÖNETİM PANeli</p>
+        @{ 
+            var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+        }
 
-        <a href="/Admin/Index" class="nav-item-custom active">
+        <p style="font-size: 0.75rem; color: #a89f91; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; padding-left: 10px;">YÖNETİM PANELİ</p>
+
+        <a href="/Admin/Index" class="nav-item-custom @(currentAction == "Index" ? "active" : "")">
             <i class="fas fa-chart-line"></i> Dashboard
         </a>
-        <a href="/Admin/Documents" class="nav-item-custom">
+        <a href="/Admin/Documents" class="nav-item-custom @(currentAction == "Documents" ? "active" : "")">
             <i class="fas fa-file-alt"></i> Dokümanlar
         </a>
-        <a href="/Admin/Categories" class="nav-item-custom">
+        <a href="/Admin/Categories" class="nav-item-custom @(currentAction == "Categories" ? "active" : "")">
             <i class="fas fa-folder-open"></i> Kategoriler
+        </a>
+        <a href="/Admin/Users" class="nav-item-custom @(currentAction == "Users" ? "active" : "")">
+            <i class="fas fa-users"></i> Kullanıcılar
         </a>
 
         <p style="font-size: 0.75rem; color: #a89f91; font-weight: 700; letter-spacing: 1px; margin-top: 40px; margin-bottom: 10px; padding-left: 10px;">GÜVENLİK</p>

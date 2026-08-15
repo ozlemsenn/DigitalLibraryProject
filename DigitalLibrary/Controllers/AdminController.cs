@@ -10,7 +10,20 @@ namespace DigitalLibrary.Controllers
         DigitalLibraryDBEntities1 db = new DigitalLibraryDBEntities1();
         public ActionResult Index()
         {
-            return View();
+            ViewBag.TotalDocuments = db.Documents.Count();
+
+            ViewBag.TotalCategories = db.Categories.Count();
+
+            var sonDokuman = db.Documents.OrderByDescending(d => d.ID).FirstOrDefault();
+            if(sonDokuman != null)
+            {
+                ViewBag.LastDocument = sonDokuman.Title;
+            }
+            else
+            {
+                ViewBag.LastDocument = "Henüz döküman yok.";
+            }
+                return View();
         }
 
         public ActionResult Users()

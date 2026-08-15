@@ -12,6 +12,39 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(92, 64, 51, 0.15) !important;
         }
+
+    .timeline {
+        border-left: 2px solid #F0EAE1;
+        padding-left: 30px; 
+        margin-left: 15px; 
+        list-style: none;
+        margin-bottom: 0;
+        position: relative;
+    }
+
+    .timeline-item {
+        position: relative;
+        margin-bottom: 1.8rem;
+    }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+    .timeline-icon {
+        position: absolute;
+        left: -43px; 
+        background: #fff;
+        border: 2px solid #D35400; 
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.65rem;
+        color: #D35400; 
+    }
 </style>
 
 <div class="row">
@@ -27,38 +60,132 @@
 </div>
 
 <div class="row mt-4">
-    <div class="col-md-4">
+    <div class="col-md-4 mb-3">
         <div class="card text-white shadow-sm border-0 premium-hover" style="border-radius: 15px; background: linear-gradient(135deg, #5C4033, #3b2a22);">
             <div class="card-body p-4 d-flex justify-content-between align-items-center">
                 <div>
                     <h6 class="text-uppercase mb-1" style="opacity: 0.8; letter-spacing: 1px;">Toplam Doküman</h6>
-                    <h2 class="mb-0 font-weight-bold">0</h2>
+                    <h2 class="mb-0 font-weight-bold">@ViewBag.TotalDocuments</h2>
                 </div>
                 <i class="fas fa-file-alt fa-3x" style="opacity: 0.2;"></i>
             </div>
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-4 mb-3">
         <div class="card text-white shadow-sm border-0 premium-hover" style="border-radius: 15px; background: linear-gradient(135deg, #D35400, #a84300);">
             <div class="card-body p-4 d-flex justify-content-between align-items-center">
                 <div>
                     <h6 class="text-uppercase mb-1" style="opacity: 0.8; letter-spacing: 1px;">Sistem Kategorileri</h6>
-                    <h2 class="mb-0 font-weight-bold">0</h2>
+                    <h2 class="mb-0 font-weight-bold">@ViewBag.TotalCategories</h2>
                 </div>
                 <i class="fas fa-folder-open fa-3x" style="opacity: 0.2;"></i>
             </div>
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-4 mb-3">
         <div class="card text-white shadow-sm border-0 premium-hover" style="border-radius: 15px; background: linear-gradient(135deg, #8c7a6b, #6b5a4d);">
             <div class="card-body p-4 d-flex justify-content-between align-items-center">
                 <div>
                     <h6 class="text-uppercase mb-1" style="opacity: 0.8; letter-spacing: 1px;">Son Yüklenen</h6>
-                    <h4 class="mb-0 font-weight-bold">Hazırlanıyor...</h4>
+                    <h4 class="mb-0 font-weight-bold" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;">
+                        @ViewBag.LastDocument
+                    </h4>
                 </div>
                 <i class="fas fa-clock fa-3x" style="opacity: 0.2;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row align-items-stretch mt-5 pt-3 mb-5">
+
+    <div class="col-lg-5 col-md-12 mb-4 mb-lg-0 d-flex flex-column">
+
+        <!--depolama durumu-->
+        <div class="card border-0 shadow-sm premium-card mb-4 flex-grow-1 d-flex flex-column justify-content-center">
+            <div class="card-body p-4">
+                <h6 class="font-weight-bold mb-3" style="color: #5C4033;"><i class="fas fa-server mr-2" style="color: #D35400;"></i> Sunucu Depolama Durumu</h6>
+                <p class="text-muted small mb-4">Sisteme yüklenen PDF, Word ve Excel dosyalarının kapladığı tahmini alan. Loglara göre kapasite dengede.</p>
+
+                <div class="d-flex justify-content-between small mb-1 font-weight-bold" style="color: #7F736A;">
+                    <span>Kullanılan: 12.4 GB</span>
+                    <span>Kapasite: 50.0 GB</span>
+                </div>
+                <div class="progress mb-2" style="height: 10px; border-radius: 10px; background-color: #F0EAE1;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 25%; background-color: #D35400; border-radius: 10px;"></div>
+                </div>
+                <p class="text-right small mb-0" style="color: #27ae60; font-weight: 600;">Durum: Stabil (Kapasitenin %25'i dolu)</p>
+            </div>
+        </div>
+
+        <!--hızlı işlemler-->
+        <div class="card border-0 shadow-sm premium-card">
+            <div class="card-body p-4">
+                <h6 class="font-weight-bold mb-3" style="color: #5C4033;"><i class="fas fa-bolt mr-2" style="color: #f1c40f;"></i> Hızlı İşlemler</h6>
+                <div class="row">
+                    <div class="col-6">
+                        <a href="/Admin/Documents" class="btn btn-block font-weight-bold premium-hover py-2" style="background-color: #FDF3F2; color: #D35400; border: 1px solid #fae3db; border-radius: 8px;">
+                            <i class="fas fa-upload mb-1 d-block" style="font-size: 1.2rem;"></i> Yükle
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="/Admin/Users" class="btn btn-block font-weight-bold premium-hover py-2" style="background-color: #F0EAE1; color: #5C4033; border: 1px solid #e3dbce; border-radius: 8px;">
+                            <i class="fas fa-user-plus mb-1 d-block" style="font-size: 1.2rem;"></i> Personel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!--sistem hareketleri-->
+    <div class="col-lg-7 col-md-12 d-flex flex-column">
+        <div class="card border-0 shadow-sm premium-card flex-grow-1">
+            <div class="card-body p-4 d-flex flex-column">
+                <h6 class="font-weight-bold mb-4" style="color: #5C4033;"><i class="fas fa-stream mr-2" style="color: #D35400;"></i> Son Sistem Hareketleri</h6>
+
+                <!--log listesi -->
+                <ul class="timeline mt-2 flex-grow-1">
+                    <li class="timeline-item">
+                        <div class="timeline-icon"><i class="fas fa-file-upload"></i></div>
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="small font-weight-bold" style="color: #2C1E16;">Yeni Doküman Yüklendi</span>
+                            <span class="text-muted" style="font-size: 0.75rem;"><i class="far fa-clock mr-1"></i> 10 dk önce</span>
+                        </div>
+                        <div class="text-muted" style="font-size: 0.85rem;">'2026_IK_Proseduru.pdf' isimli belge sisteme eklendi.</div>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="timeline-icon"><i class="fas fa-user-slash"></i></div>
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="small font-weight-bold" style="color: #2C1E16;">Personel Pasife Alındı</span>
+                            <span class="text-muted" style="font-size: 0.75rem;"><i class="far fa-clock mr-1"></i> 1 saat önce</span>
+                        </div>
+                        <div class="text-muted" style="font-size: 0.85rem;">'Ahmet Yılmaz' kullanıcısının sistem erişimi kesildi.</div>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="timeline-icon"><i class="fas fa-folder-plus"></i></div>
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="small font-weight-bold" style="color: #2C1E16;">Kategori Oluşturuldu</span>
+                            <span class="text-muted" style="font-size: 0.75rem;"><i class="far fa-clock mr-1"></i> 3 saat önce</span>
+                        </div>
+                        <div class="text-muted" style="font-size: 0.85rem;">'Finans Raporları' kategorisi arşive eklendi.</div>
+                    </li>
+                    <li class="timeline-item">
+                        <div class="timeline-icon"><i class="fas fa-user-check"></i></div>
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="small font-weight-bold" style="color: #2C1E16;">Personel Aktifleştirildi</span>
+                            <span class="text-muted" style="font-size: 0.75rem;"><i class="far fa-clock mr-1"></i> 5 saat önce</span>
+                        </div>
+                        <div class="text-muted" style="font-size: 0.85rem;">'Ayşe Demir' kullanıcısı tekrar aktif edildi.</div>
+                    </li>
+                </ul>
+
+                <button class="btn btn-sm btn-block font-weight-bold mt-4" style="background-color: #FDFCFB; color: #7F736A; border: 1px solid #F0EAE1; padding: 10px;">
+                    Tüm Logları Görüntüle
+                </button>
             </div>
         </div>
     </div>
