@@ -1,0 +1,366 @@
+﻿@using DigitalLibrary.Models
+@model IEnumerable<Categories>
+
+@{
+    ViewBag.Title = "Kategori Yönetimi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .premium-card {
+        border-radius: 12px;
+        border: 1px solid #F0EAE1;
+        background-color: #FFFFFF;
+        box-shadow: 0 4px 15px rgba(92, 64, 51, 0.03);
+    }
+
+    .modern-table th {
+        border-top: none;
+        border-bottom: 2px solid #F0EAE1;
+        color: #7F736A;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+    }
+
+    .modern-table td {
+        vertical-align: middle;
+        border-bottom: 1px solid #F0EAE1;
+        color: #2C1E16;
+        font-weight: 500;
+    }
+
+    .btn-action {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        transition: 0.2s;
+        border: none;
+    }
+
+    .btn-action-edit {
+        background-color: #F0EAE1;
+        color: #5C4033;
+    }
+
+        .btn-action-edit:hover {
+            background-color: #5C4033;
+            color: white;
+        }
+
+    .btn-action-delete {
+        background-color: #FDF3F2;
+        color: #C0392B;
+    }
+
+        .btn-action-delete:hover {
+            background-color: #C0392B;
+            color: white;
+        }
+
+    .category-row:hover {
+        background-color: #FDFCFB !important;
+    }
+
+    .sub-category-row {
+        background-color: #FCF9F5;
+    }
+
+    .caret-icon {
+        transition: transform 0.3s ease;
+    }
+    .actions-column {
+        position: relative;
+        z-index: 2;
+    }
+</style>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="font-weight-bold mb-1" style="color: #2C1E16;">Kategoriler</h4>
+        <p class="mb-0" style="color: #7F736A;">Ana klasörleri ve alt klasör hiyerarşisini buradan yönetin.</p>
+    </div>
+    <div class="d-flex align-items-center">
+        <div class="input-group shadow-sm mr-3" style="width: 250px; border-radius: 8px; overflow: hidden;">
+            <div class="input-group-prepend">
+                <span class="input-group-text bg-white border-0" style="color: #D35400;"><i class="fas fa-search"></i></span>
+            </div>
+            <input type="text" id="categorySearch" class="form-control border-0" placeholder="Kategori Ara..." style="box-shadow: none;">
+        </div>
+
+        <button class="btn font-weight-bold shadow-sm" data-toggle="modal" data-target="#categoryModal" style="background-color: #D35400; color: white; border-radius: 8px; padding: 10px 20px;">
+            <i class="fas fa-folder-plus mr-2"></i> Yeni Kategori
+        </button>
+    </div>
+</div>
+
+<div class="card premium-card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table modern-table mb-0" id="categoryTable">
+                <thead>
+                    <tr>
+                        <th class="pl-4 text-center" style="width: 60px;">#</th>
+                        <th>Kategori Adı</th>
+                        <th class="text-right pr-4" style="width: 150px;">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        int sira = 1;
+                        var anaKategoriler = Model.Where(k => k.ParentID == null).ToList();
+
+                        foreach (var ana in anaKategoriler)
+                        {
+                            var altKategoriler = Model.Where(k => k.ParentID == ana.ID).ToList();
+                            bool altVarMi = altKategoriler.Any();
+
+                            <tr class="category-row" style="background-color: #fff; cursor: @(altVarMi ? "pointer" : "default");"
+                                @(altVarMi ? "data-toggle=collapse data-target=.sub-of-" + ana.ID : "")>
+
+                                <td class="pl-4 text-center font-weight-bold text-muted">@sira</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        @if (altVarMi)
+                                        {
+                                            <i class="fas fa-chevron-right mr-3 text-muted caret-icon" style="font-size: 0.85rem;"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-minus mr-3" style="color: #E5DCD3; font-size: 0.85rem;"></i>
+                                        }
+
+                                        <i class="fas fa-folder mr-3" style="color: #D35400; font-size: 1.2rem;"></i>
+                                        <span class="font-weight-bold" style="font-size: 1.05rem; color: #2C1E16;">@ana.Name</span>
+
+                                        @if (altVarMi)
+                                        {
+                                            <span class="badge badge-pill badge-light ml-2 text-muted" style="font-size: 0.7rem; border: 1px solid #F0EAE1;">@altKategoriler.Count Alt Klasör</span>
+                                        }
+                                    </div>
+                                </td>
+                                <td class="text-right pr-4 actions-column">
+                                    <button class="btn-action btn-action-edit mr-1 btn-edit-trigger" title="Düzenle" data-id="@ana.ID"><i class="fas fa-pen"></i></button>
+                                    <button class="btn-action btn-action-delete btn-delete-trigger" title="Sil" data-id="@ana.ID"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+
+                            if (altVarMi)
+                            {
+                                foreach (var alt in altKategoriler)
+                                {
+                                    <tr class="collapse sub-category-row sub-of-@ana.ID">
+                                        <td class="pl-4 text-center"></td> 
+                                        <td>
+                                            <div class="d-flex align-items-center ml-5 pl-2" style="border-left: 2px dashed #E5DCD3; padding-top: 5px; padding-bottom: 5px;">
+                                                <i class="fas fa-level-up-alt fa-rotate-90 mr-3 ml-2" style="color: #bdc3c7; font-size: 1.1rem;"></i>
+                                                <i class="fas fa-folder-open mr-2" style="color: #f39c12; opacity: 0.8; font-size: 0.95rem;"></i>
+                                                <span class="font-weight-bold" style="color: #5C4033; font-size: 0.95rem;">@alt.Name</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-right pr-4 actions-column">
+                                            <button class="btn-action btn-action-edit mr-1 btn-edit-trigger" title="Düzenle" data-id="@alt.ID" style="width: 28px; height: 28px;"><i class="fas fa-pen" style="font-size: 0.75rem;"></i></button>
+                                            <button class="btn-action btn-action-delete btn-delete-trigger" title="Sil" data-id="@alt.ID" style="width: 28px; height: 28px;"><i class="fas fa-trash" style="font-size: 0.75rem;"></i></button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
+                            sira++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center py-4 text-muted">
+                                <i class="fas fa-folder-open fa-3x mb-3" style="color: #F0EAE1;"></i>
+                                <p>Sistemde henüz bir kategori bulunmuyor.</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="categoryModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
+            <div class="modal-header" style="background-color: #FCF9F5; border-bottom: 1px solid #F0EAE1; border-radius: 15px 15px 0 0;">
+                <h5 class="modal-title font-weight-bold" style="color: #2C1E16;"><i class="fas fa-folder mr-2" style="color: #D35400;"></i> Kategori Bilgileri</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="categoryForm">
+                    <input type="hidden" id="CategoryID" value="" />
+
+                    <div class="form-group">
+                        <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Bağlı Olduğu Üst Kategori</label>
+                        <select id="ParentID" class="form-control" style="border-radius: 8px; border: 1px solid #F0EAE1;">
+                            <option value="">-- Bağımsız Ana Kategori --</option>
+                            @if (ViewBag.AnaKategoriler != null)
+                            {
+                                foreach (var ana in ViewBag.AnaKategoriler)
+                                {
+                                    <option value="@ana.ID">@ana.Name</option>
+                                }
+                            }
+                        </select>
+                        <small class="text-muted mt-1 d-block">Eğer bu bir alt kategoriyse, ait olduğu ana klasörü seçin.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Kategori Adı</label>
+                        <input type="text" id="Name" class="form-control" placeholder="Örn: Yazılım, Donanım..." style="border-radius: 8px; border: 1px solid #F0EAE1;">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-light font-weight-bold" data-dismiss="modal" style="border-radius: 8px;">İptal</button>
+                <button type="button" id="btnKaydet" class="btn font-weight-bold shadow-sm" style="background-color: #D35400; color: white; border-radius: 8px;">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+
+            $("#categorySearch").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+
+                if (value === "") {
+                    $(".category-row").show();
+                    $(".sub-category-row").removeClass("show").hide();
+                    $(".caret-icon").removeClass("fa-chevron-down").addClass("fa-chevron-right");
+                    return;
+                }
+
+                $(".category-row, .sub-category-row").hide();
+
+                $("table tbody tr").each(function () {
+                    var metin = $(this).find("span.font-weight-bold").text().toLowerCase();
+
+                    if (metin.indexOf(value) > -1) {
+
+                        if ($(this).hasClass("category-row")) {
+                            $(this).show(); 
+                            var parentId = $(this).find(".btn-edit-trigger").data("id");
+                            $(".sub-of-" + parentId).show().addClass("show");
+                            $(this).find(".caret-icon").removeClass("fa-chevron-right").addClass("fa-chevron-down");
+                        }
+                        else if ($(this).hasClass("sub-category-row")) {
+                            $(this).show(); 
+                            var classList = $(this).attr('class').split(/\s+/);
+                            var parentClass = classList.find(c => c.startsWith('sub-of-'));
+                            if (parentClass) {
+                                var parentId = parentClass.split('-')[2];
+                                var parentRow = $(".btn-edit-trigger[data-id='" + parentId + "']").closest("tr.category-row");
+                                parentRow.show();
+                                parentRow.find(".caret-icon").removeClass("fa-chevron-right").addClass("fa-chevron-down");
+                            }
+                        }
+                    }
+                });
+            });
+
+            $('.category-row').click(function (e) {
+                if ($(e.target).closest('.btn-action').length > 0) return;
+
+                var icon = $(this).find('.caret-icon');
+                if (icon.hasClass('fa-chevron-right')) {
+                    icon.removeClass('fa-chevron-right').addClass('fa-chevron-down');
+                } else {
+                    icon.removeClass('fa-chevron-down').addClass('fa-chevron-right');
+                }
+            });
+
+            $("[data-target='#categoryModal']").click(function () {
+                $("#categoryForm")[0].reset();
+                $("#CategoryID").val("");
+                $(".modal-title").html('<i class="fas fa-folder-plus mr-2" style="color: #D35400;"></i> Yeni Kategori Ekle');
+            });
+
+            $("#btnKaydet").click(function () {
+                var catId = $("#CategoryID").val();
+                var parentId = $("#ParentID").val();
+
+                var veriler = {
+                    Name: $("#Name").val(),
+                    ParentID: parentId ? parentId : null
+                };
+
+                var islemUrl = (!catId) ? '/Admin/AddCategory' : '/Admin/EditCategory';
+                if (catId) veriler.ID = catId;
+
+                $.ajax({
+                    url: islemUrl,
+                    type: 'POST',
+                    data: veriler,
+                    success: function (cevap) {
+                        if (cevap.success) {
+                            Swal.fire('Başarılı!', cevap.message, 'success').then(() => location.reload());
+                        } else {
+                            Swal.fire('Hata!', cevap.message, 'error');
+                        }
+                    }
+                });
+            });
+
+            $(".btn-edit-trigger").click(function (e) {
+                e.stopPropagation(); 
+                var id = $(this).data("id");
+                $.ajax({
+                    url: '/Admin/GetCategory/' + id,
+                    type: 'GET',
+                    success: function (data) {
+                        $("#CategoryID").val(data.ID);
+                        $("#Name").val(data.Name);
+                        if (data.ParentID) {
+                            $("#ParentID").val(data.ParentID);
+                        } else {
+                            $("#ParentID").val("");
+                        }
+                        $(".modal-title").html('<i class="fas fa-edit mr-2" style="color: #D35400;"></i> Kategori Düzenle');
+                        $("#categoryModal").modal('show');
+                    }
+                });
+            });
+
+            $(".btn-delete-trigger").click(function (e) {
+                e.stopPropagation(); 
+                var id = $(this).data("id");
+                Swal.fire({
+                    title: 'Emin misiniz?',
+                    text: "Bu kategoriyi sildiğinizde sistemdeki dokümanlar etkilenebilir!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#C0392B',
+                    confirmButtonText: 'Evet, Sil!',
+                    cancelButtonText: 'İptal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/Admin/DeleteCategory/' + id,
+                            type: 'POST',
+                            success: function (cevap) {
+                                if (cevap.success) {
+                                    Swal.fire('Silindi!', cevap.message, 'success').then(() => location.reload());
+                                } else {
+                                    Swal.fire('Hata!', cevap.message, 'error');
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+        });
+    </script>
+}

@@ -209,5 +209,128 @@ namespace DigitalLibrary.Controllers
                 return Json(new { success = false, message = "Sistemsel bir hata oluştu: " + ex.Message });
             }
         }
+
+        public ActionResult Documents()
+        {
+            ViewBag.Categories = db.Categories.ToList();
+
+            var dokumanlar = db.Documents.OrderByDescending(d => d.ID).ToList();
+            return View(dokumanlar);
+        }
+
+        public ActionResult Categories()
+        {
+            ViewBag.AnaKategoriler = db.Categories.Where(k => k.ParentID == null).ToList();
+
+            var kategoriler = db.Categories
+                                .OrderBy(k => k.ParentID == null ? k.ID : k.ParentID)
+                                .ThenBy(k => k.ID)
+                                .ToList();
+
+            return View(kategoriler);
+        }
+
+        [HttpPost]
+        public ActionResult AddCategory(string Name, int? ParentID)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(Name))
+                {
+                    return Json(new { success = false, message = "Kategori adı boş bırakılamaz!" });
+                }
+
+                Categories yeniKategori = new Categories();
+                yeniKategori.Name = Name;
+                yeniKategori.ParentID = ParentID; 
+
+                db.Categories.Add(yeniKategori);
+
+                Logs log = new Logs();
+                log.ActionType = ParentID == null ? "Yeni Ana Kategori Eklendi" : "Yeni Alt Kategori Eklendi";
+                log.Description = "'" + Name + "' isimli kategori arşive eklendi.";
+                log.IconClass = ParentID == null ? "fa-folder-plus" : "fa-code-branch";
+                log.CreatedAt = DateTime.Now;
+                db.Logs.Add(log);
+
+                db.SaveChanges();
+
+                return Json(new { success = true, message = "Kategori başarıyla oluşturuldu." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Sistemsel hata: " + ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DeleteCategory(int id)
+        {
+            try
+            {
+                var kategori = db.Categories.Find(id);
+                if (kategori != null)
+                {
+                    string silinenAd = kategori.Name;
+                    db.Categories.Remove(kategori);
+
+                    Logs log = new Logs();
+                    log.ActionType = "Kategori Silindi";
+                    log.Description = "'" + silinenAd + "' kategorisi sistemden kaldırıldı.";
+                    log.IconClass = "fa-folder-minus";
+                    log.CreatedAt = DateTime.Now;
+                    db.Logs.Add(log);
+
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Kategori başarıyla silindi." });
+                }
+                return Json(new { success = false, message = "Kategori bulunamadı." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "İşlem sırasında hata: " + ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public ActionResult GetCategory(int id)
+        {
+            var kategori = db.Categories.Find(id);
+            if (kategori != null)
+            {
+                return Json(new { ID = kategori.ID, Name = kategori.Name, ParentID = kategori.ParentID }, JsonRequestBehavior.AllowGet);
+            }
+            return HttpNotFound();
+        }
+
+        [HttpPost]
+        public ActionResult EditCategory(int ID, string Name, int? ParentID)
+        {
+            try
+            {
+                var kategori = db.Categories.Find(ID);
+                if (kategori != null)
+                {
+                    string eskiAd = kategori.Name;
+                    kategori.Name = Name;
+                    kategori.ParentID = ParentID;
+
+                    Logs log = new Logs();
+                    log.ActionType = "Kategori Güncellendi";
+                    log.Description = "'" + eskiAd + "' kategorisi güncellendi.";
+                    log.IconClass = "fa-edit";
+                    log.CreatedAt = DateTime.Now;
+                    db.Logs.Add(log);
+
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Kategori başarıyla güncellendi." });
+                }
+                return Json(new { success = false, message = "Kategori bulunamadı." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Hata: " + ex.Message });
+            }
+        }
     }
 }

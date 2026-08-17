@@ -1,0 +1,377 @@
+﻿@using DigitalLibrary.Models
+@model IEnumerable<Documents>
+
+@{
+    ViewBag.Title = "Doküman Yönetimi";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var kategoriler = ViewBag.Categories as IEnumerable<Categories>;
+}
+
+<link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+
+<style>
+    .premium-card {
+        border-radius: 12px;
+        border: 1px solid #F0EAE1;
+        background-color: #FFFFFF;
+        box-shadow: 0 4px 15px rgba(92, 64, 51, 0.03);
+    }
+
+    .modern-table th {
+        border-top: none;
+        border-bottom: 2px solid #F0EAE1;
+        color: #7F736A;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+    }
+
+    .modern-table td {
+        vertical-align: middle;
+        border-bottom: 1px solid #F0EAE1;
+        color: #2C1E16;
+        font-weight: 500;
+    }
+
+    .modern-table tr:hover td {
+        background-color: #FDFCFB;
+    }
+
+    .btn-action {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        transition: 0.2s;
+        border: none;
+    }
+
+    .btn-action-edit {
+        background-color: #F0EAE1;
+        color: #5C4033;
+    }
+
+        .btn-action-edit:hover {
+            background-color: #5C4033;
+            color: white;
+        }
+
+    .btn-action-delete {
+        background-color: #FDF3F2;
+        color: #C0392B;
+    }
+
+        .btn-action-delete:hover {
+            background-color: #C0392B;
+            color: white;
+        }
+
+    .btn-action-download {
+        background-color: #e8f8f5;
+        color: #27ae60;
+    }
+
+        .btn-action-download:hover {
+            background-color: #27ae60;
+            color: white;
+        }
+
+    div.dataTables_wrapper div.dataTables_filter {
+        text-align: left !important;
+    }
+
+        div.dataTables_wrapper div.dataTables_filter input {
+            border-radius: 8px;
+            border: 1px solid #F0EAE1;
+            padding: 5px 15px;
+            box-shadow: none;
+            outline: none;
+            width: 250px;
+        }
+
+            div.dataTables_wrapper div.dataTables_filter input:focus {
+                border-color: #C0392B;
+            }
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            color: #7F736A;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+    .page-item.active .page-link {
+        background-color: #C0392B !important;
+        border-color: #C0392B !important;
+        color: white !important;
+    }
+
+    .page-link {
+        color: #5C4033;
+        border-color: #F0EAE1;
+    }
+
+        .page-link:hover {
+            background-color: #FDF3F2;
+            color: #C0392B;
+        }
+</style>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="font-weight-bold mb-1" style="color: #2C1E16;">Doküman Yönetimi</h4>
+        <p class="mb-0" style="color: #7F736A;">Sistemdeki tüm belgeleri inceleyin, güncelleyin veya yeni belge yükleyin.</p>
+    </div>
+    <button class="btn font-weight-bold shadow-sm" data-toggle="modal" data-target="#uploadModal" style="background-color: #C0392B; color: white; border-radius: 8px; padding: 10px 20px;">
+        <i class="fas fa-cloud-upload-alt mr-2"></i> Yeni Doküman Yükle
+    </button>
+</div>
+
+<div class="card premium-card">
+    <div class="card-body p-4">
+        <div class="table-responsive">
+            <table class="table modern-table mb-0 w-100" id="documentsTable">
+                <thead>
+                    <tr>
+                        <th class="pl-4">Doküman Adı</th>
+                        <th>Kategori</th>
+                        <th>Yüklenme Tarihi</th>
+                        <th>Boyut / Tip</th>
+                        <th class="text-right pr-4">İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var doc in Model)
+                        {
+                            string kategoriAdi = "Kategorisiz";
+                            if (doc.CategoryID != null && kategoriler != null)
+                            {
+                                var kat = kategoriler.FirstOrDefault(k => k.ID == doc.CategoryID);
+                                if (kat != null) { kategoriAdi = kat.Name; }
+                            }
+
+                            <tr>
+                                <td class="pl-4">
+                                    <div class="d-flex align-items-center">
+                                        @if (doc.FileExtension == ".pdf")
+                                        {<i class="fas fa-file-pdf fa-2x mr-3" style="color: #e74c3c;"></i> }
+                                        else if (doc.FileExtension == ".docx")
+                                        { <i class="fas fa-file-word fa-2x mr-3" style="color: #2980b9;"></i> }
+                                        else if (doc.FileExtension == ".xlsx")
+                                        { <i class="fas fa-file-excel fa-2x mr-3" style="color: #27ae60;"></i> }
+                                        else
+                                        { <i class="fas fa-file fa-2x mr-3" style="color: #7F736A;"></i>}
+
+                                        <span class="font-weight-bold" style="font-size: 1.05rem;">@doc.Title</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge badge-light" style="color: #5C4033; border: 1px solid #F0EAE1; padding: 5px 10px; border-radius: 6px;">
+                                        <i class="fas fa-folder-open mr-1" style="color: #D48900;"></i> @kategoriAdi
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="text-muted"><i class="far fa-calendar-alt mr-1"></i> @(doc.UploadDate.HasValue ? doc.UploadDate.Value.ToString("dd.MM.yyyy") : "-")</span>
+                                </td>
+                                <td>
+                                    <span class="font-weight-bold text-uppercase" style="color: #7F736A;">@doc.FileExtension</span>
+                                </td>
+                                <td class="text-right pr-4">
+                                    <a href="/Document/Download/@doc.ID" class="btn-action btn-action-download mr-1" title="İndir"><i class="fas fa-download"></i></a>
+                                    <button class="btn-action btn-action-edit mr-1 btn-edit-trigger" title="Düzenle" data-id="@doc.ID"><i class="fas fa-pen"></i></button>
+                                    <button class="btn-action btn-action-delete btn-delete-trigger" title="Sil" data-id="@doc.ID"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="uploadModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
+            <div class="modal-header" style="background-color: #FCF9F5; border-bottom: 1px solid #F0EAE1; border-radius: 15px 15px 0 0;">
+                <h5 class="modal-title font-weight-bold" style="color: #2C1E16;"><i class="fas fa-cloud-upload-alt mr-2" style="color: #C0392B;"></i> Yeni Doküman Yükle</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <form action="/Document/Upload" method="POST" enctype="multipart/form-data">
+                <div class="modal-body p-4">
+                    <div class="form-group">
+                        <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Doküman Adı (Başlık)</label>
+                        <input type="text" name="Title" class="form-control" required placeholder="Örn: 2026 Yıllık Raporu" style="border-radius: 8px; border: 1px solid #F0EAE1;">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Kategori Seçimi</label>
+                        <select name="CategoryID" class="form-control" required style="border-radius: 8px; border: 1px solid #F0EAE1;">
+                            <option value="">-- Kategori Seçin --</option>
+                            @if (kategoriler != null)
+                            {
+                                foreach (var kat in kategoriler)
+                                {
+                                    <option value="@kat.ID">@kat.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Dosya Seçin (PDF, DOCX, XLSX)</label>
+                        <input type="file" name="uploadedFile" class="form-control-file" required accept=".pdf,.docx,.xlsx" style="padding: 10px; border: 1px dashed #C0392B; border-radius: 8px; background: #FDF3F2;">
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-light font-weight-bold" data-dismiss="modal" style="border-radius: 8px;">İptal</button>
+                    <button type="submit" class="btn font-weight-bold shadow-sm" style="background-color: #C0392B; color: white; border-radius: 8px;">Yükle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
+            <div class="modal-header" style="background-color: #FCF9F5; border-bottom: 1px solid #F0EAE1; border-radius: 15px 15px 0 0;">
+                <h5 class="modal-title font-weight-bold" style="color: #2C1E16;"><i class="fas fa-pen mr-2" style="color: #C0392B;"></i> Doküman Bilgilerini Düzenle</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="editForm">
+                    <input type="hidden" id="EditDocID" />
+                    <div class="form-group">
+                        <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Doküman Adı (Başlık)</label>
+                        <input type="text" id="EditTitle" class="form-control" required style="border-radius: 8px; border: 1px solid #F0EAE1;">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Kategori</label>
+                        <select id="EditCategoryID" class="form-control" required style="border-radius: 8px; border: 1px solid #F0EAE1;">
+                            <option value="">-- Kategori Seçin --</option>
+                            @if (kategoriler != null)
+                            {
+                                foreach (var kat in kategoriler)
+                                {
+                                    <option value="@kat.ID">@kat.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-light font-weight-bold" data-dismiss="modal" style="border-radius: 8px;">İptal</button>
+                <button type="button" id="btnUpdate" class="btn font-weight-bold shadow-sm" style="background-color: #C0392B; color: white; border-radius: 8px;">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            var table = $('#documentsTable').DataTable({
+                "dom": "<'row mb-3'<'col-md-12'f>>" +
+                       "<'row'<'col-sm-12'tr>>" +
+                       "<'row mt-3'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/tr.json"
+                },
+                "pageLength": 10,
+                "lengthChange": false,
+                "ordering": true,
+                "order": [[2, "desc"]], 
+                "columnDefs": [
+                    { "orderable": false, "targets": 4 } 
+                ]
+            });
+
+            $('#documentsTable tbody').on('click', '.btn-delete-trigger', function () {
+                var docId = $(this).data("id");
+
+                Swal.fire({
+                    title: 'Emin misiniz?',
+                    text: "Bu dokümanı sildiğinizde fiziksel dosya da sunucudan silinecektir!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#C0392B',
+                    cancelButtonColor: '#7F736A',
+                    confirmButtonText: 'Evet, Sil!',
+                    cancelButtonText: 'İptal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/Document/Delete/' + docId,
+                            type: 'POST',
+                            success: function (cevap) {
+                                if (cevap.success) {
+                                    Swal.fire('Silindi!', cevap.message, 'success').then(() => location.reload());
+                                } else {
+                                    Swal.fire('Hata!', cevap.message, 'error');
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('#documentsTable tbody').on('click', '.btn-edit-trigger', function () {
+                var docId = $(this).data("id");
+
+                $.ajax({
+                    url: '/Document/GetDocument/' + docId,
+                    type: 'GET',
+                    success: function (cevap) {
+                        if(cevap.success) {
+                            $("#EditDocID").val(cevap.data.ID);
+                            $("#EditTitle").val(cevap.data.Title);
+                            $("#EditCategoryID").val(cevap.data.CategoryID);
+                            $("#editModal").modal('show');
+                        } else {
+                            Swal.fire('Hata!', cevap.message, 'error');
+                        }
+                    }
+                });
+            });
+
+            $("#btnUpdate").click(function () {
+                var veri = {
+                    id: $("#EditDocID").val(),
+                    title: $("#EditTitle").val(),
+                    categoryId: $("#EditCategoryID").val()
+                };
+
+                $.ajax({
+                    url: '/Document/Update',
+                    type: 'POST',
+                    data: veri,
+                    success: function (cevap) {
+                        if (cevap.success) {
+                            Swal.fire('Başarılı!', cevap.message, 'success').then(() => location.reload());
+                        } else {
+                            Swal.fire('Hata!', cevap.message, 'error');
+                        }
+                    }
+                });
+            });
+
+            @if(TempData["Basari"] != null) {
+                <text>Swal.fire('Başarılı!', '@TempData["Basari"]', 'success');</text>
+            }
+            @if(TempData["Hata"] != null) {
+                <text>Swal.fire('Hata!', '@TempData["Hata"]', 'error');</text>
+            }
+        });
+    </script>
+}

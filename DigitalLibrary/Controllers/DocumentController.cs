@@ -69,7 +69,7 @@ namespace DigitalLibrary.Controllers
                 TempData["Hata"] = "Lütfen yüklemek için bir dosya seçin!";
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Documents", "Admin");
         }
 
         public ActionResult Download(int id)

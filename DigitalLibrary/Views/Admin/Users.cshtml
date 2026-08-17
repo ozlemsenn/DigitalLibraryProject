@@ -6,6 +6,8 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+
 <style>
     .premium-card {
         border-radius: 12px;
@@ -14,25 +16,42 @@
         box-shadow: 0 4px 15px rgba(92, 64, 51, 0.03);
     }
 
-    .modern-table th {
-        border-top: none;
-        border-bottom: 2px solid #F0EAE1;
-        color: #7F736A;
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.85rem;
-        letter-spacing: 0.5px;
+    .modern-table {
+        table-layout: auto;
     }
 
-    .modern-table td {
-        vertical-align: middle;
-        border-bottom: 1px solid #F0EAE1;
-        color: #2C1E16;
-        font-weight: 500;
-    }
+        .modern-table th {
+            border-top: none;
+            border-bottom: 2px solid #F0EAE1;
+            color: #7F736A;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
 
-    .modern-table tr:hover td {
-        background-color: #FDFCFB;
+        .modern-table td {
+            vertical-align: middle;
+            border-bottom: 1px solid #F0EAE1;
+            color: #2C1E16;
+            font-weight: 500;
+        }
+
+        .modern-table tr:hover td {
+            background-color: #FDFCFB;
+        }
+
+        .modern-table th:last-child,
+        .modern-table td:last-child {
+            white-space: nowrap;
+            min-width: 150px;
+        }
+
+    .actions-wrapper {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
     }
 
     .badge-admin {
@@ -40,6 +59,7 @@
         color: white;
         padding: 5px 10px;
         border-radius: 6px;
+        white-space: nowrap;
     }
 
     .badge-personel {
@@ -47,21 +67,25 @@
         color: #5C4033;
         padding: 5px 10px;
         border-radius: 6px;
+        white-space: nowrap;
     }
 
     .status-active {
         color: #27ae60;
         font-weight: 600;
+        white-space: nowrap;
     }
 
     .status-passive {
         color: #e74c3c;
         font-weight: 600;
+        white-space: nowrap;
     }
 
     .btn-action {
         width: 32px;
         height: 32px;
+        flex: 0 0 auto;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -89,6 +113,77 @@
             background-color: #C0392B;
             color: white;
         }
+
+
+    .dataTables_wrapper {
+        padding-top: 2px;
+    }
+
+    div.dataTables_wrapper div.dataTables_filter {
+        margin-bottom: 22px;
+        text-align: right;
+    }
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            display: inline-flex;
+            align-items: center;
+            color: #7F736A;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter input {
+            border-radius: 50px;
+            border: 1px solid #F0EAE1;
+            background-color: #FCFAF7;
+            padding: 8px 16px 8px 38px;
+            margin-left: 10px;
+            min-width: 240px;
+            font-size: 0.9rem;
+            color: #2C1E16;
+            box-shadow: none;
+            outline: none;
+            transition: 0.2s ease;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%237F736A' viewBox='0 0 16 16'><path d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/></svg>");
+            background-repeat: no-repeat;
+            background-position: 14px center;
+            background-size: 14px;
+        }
+
+            div.dataTables_wrapper div.dataTables_filter input:focus {
+                border-color: #C0392B;
+                background-color: #FFFFFF;
+                box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.08);
+            }
+
+            div.dataTables_wrapper div.dataTables_filter input::placeholder {
+                color: #B9AFA6;
+            }
+
+    div.dataTables_wrapper div.dataTables_info {
+        color: #7F736A;
+        font-size: 0.85rem;
+        padding-top: 12px;
+    }
+
+    .page-item.active .page-link {
+        background-color: #C0392B !important;
+        border-color: #C0392B !important;
+        color: white !important;
+    }
+
+    .page-link {
+        color: #5C4033;
+        border-color: #F0EAE1;
+        border-radius: 6px !important;
+        margin: 0 2px;
+    }
+
+        .page-link:hover {
+            background-color: #FDF3F2;
+            color: #C0392B;
+        }
 </style>
 
 <!--ekle buton-->
@@ -101,11 +196,10 @@
     </button>
 </div>
 
-<!--tablo-->
 <div class="card premium-card">
-    <div class="card-body p-0">
+    <div class="card-body p-4">
         <div class="table-responsive">
-            <table class="table modern-table mb-0">
+            <table class="table modern-table mb-0 w-100" id="usersTable">
                 <thead>
                     <tr>
                         <th class="pl-4">Ad Soyad</th>
@@ -123,10 +217,10 @@
                             <tr>
                                 <td class="pl-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="mr-3" style="width: 40px; height: 40px; border-radius: 50%; background: #F0EAE1; display: flex; align-items: center; justify-content: center; color: #5C4033; font-weight: bold;">
+                                        <div class="mr-3" style="width: 40px; height: 40px; border-radius: 50%; background: #F0EAE1; display: flex; align-items: center; justify-content: center; color: #5C4033; font-weight: bold; flex: 0 0 auto;">
                                             @user.Name.Substring(0, 1).ToUpper()
                                         </div>
-                                        <span>@user.Name</span>
+                                        <span class="font-weight-bold">@user.Name</span>
                                     </div>
                                 </td>
                                 <td>@user.Email</td>
@@ -151,57 +245,26 @@
                                     }
                                 </td>
                                 <td class="text-right pr-4">
-                                    <button class="btn-action btn-action-edit mr-1" title="Düzenle" data-id="@user.ID"><i class="fas fa-pen"></i></button>
+                                    <div class="actions-wrapper">
+                                        <button class="btn-action btn-action-edit" title="Düzenle" data-id="@user.ID"><i class="fas fa-pen"></i></button>
 
-                                    @if (user.IsActive)
-                                    {
-                                        <button class="btn-action btn-action-toggle mr-1" title="Pasife Al (Erişimi Kes)" data-id="@user.ID" data-status="false" style="background-color: #FDF3F2; color: #D35400;">
-                                            <i class="fas fa-user-slash"></i>
-                                        </button>
-                                    }
-                                    else
-                                    {
-                                        <button class="btn-action btn-action-toggle mr-1" title="Aktifleştir (Erişim Ver)" data-id="@user.ID" data-status="true" style="background-color: #e8f8f5; color: #27ae60;">
-                                            <i class="fas fa-user-check"></i>
-                                        </button>
-                                    }
-                                    <button class="btn-action btn-action-delete" title="Kalıcı Sil" data-id="@user.ID"><i class="fas fa-trash"></i></button>
+                                        @if (user.IsActive)
+                                        {
+                                            <button class="btn-action btn-action-toggle" title="Pasife Al (Erişimi Kes)" data-id="@user.ID" data-status="false" style="background-color: #FDF3F2; color: #C0392B;">
+                                                <i class="fas fa-user-slash"></i>
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn-action btn-action-toggle" title="Aktifleştir (Erişim Ver)" data-id="@user.ID" data-status="true" style="background-color: #e8f8f5; color: #27ae60;">
+                                                <i class="fas fa-user-check"></i>
+                                            </button>
+                                        }
+                                        <button class="btn-action btn-action-delete" title="Kalıcı Sil" data-id="@user.ID"><i class="fas fa-trash"></i></button>
+                                    </div>
                                 </td>
                             </tr>
                         }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td class="pl-4">
-                                <div class="d-flex align-items-center">
-                                    <div class="mr-3" style="width: 40px; height: 40px; border-radius: 50%; background: #FDF3F2; display: flex; align-items: center; justify-content: center; color: #C0392B; font-weight: bold;">A</div>
-                                    <span>Ahmet Yılmaz</span>
-                                </div>
-                            </td>
-                            <td>ahmet@sirket.com</td>
-                            <td><span class="badge-admin"><i class="fas fa-crown mr-1"></i> Yönetici</span></td>
-                            <td><span class="status-active"><i class="fas fa-check-circle mr-1"></i> Aktif</span></td>
-                            <td class="text-right pr-4">
-                                <button class="btn-action btn-action-edit mr-1"><i class="fas fa-pen"></i></button>
-                                <button class="btn-action btn-action-delete"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="pl-4">
-                                <div class="d-flex align-items-center">
-                                    <div class="mr-3" style="width: 40px; height: 40px; border-radius: 50%; background: #F0EAE1; display: flex; align-items: center; justify-content: center; color: #5C4033; font-weight: bold;">A</div>
-                                    <span>Ayşe Demir</span>
-                                </div>
-                            </td>
-                            <td>ayse@sirket.com</td>
-                            <td><span class="badge-personel"><i class="fas fa-user mr-1"></i> Personel</span></td>
-                            <td><span class="status-active"><i class="fas fa-check-circle mr-1"></i> Aktif</span></td>
-                            <td class="text-right pr-4">
-                                <button class="btn-action btn-action-edit mr-1"><i class="fas fa-pen"></i></button>
-                                <button class="btn-action btn-action-delete"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
                     }
                 </tbody>
             </table>
@@ -261,17 +324,34 @@
 </div>
 
 @section scripts {
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+
     <script>
         $(document).ready(function () {
+
+            $('#usersTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/tr.json"
+                },
+                "pageLength": 10,
+                "lengthChange": false,
+                "ordering": true,
+                "info": true,
+                "columnDefs": [
+                    { "orderable": false, "targets": 4 }, 
+                    { "width": "150px", "targets": 4 }
+                ]
+            });
 
             $("[data-target='#userModal']").click(function () {
                 $("#userForm")[0].reset();
                 $("#UserID").val("");
-                $("#pasifNedeniAlani").hide(); 
+                $("#pasifNedeniAlani").hide();
                 $(".modal-title").html('<i class="fas fa-user-plus mr-2" style="color: #C0392B;"></i> Personel Bilgileri');
             });
 
-            $(".btn-action-toggle").click(function () {
+            $('#usersTable tbody').on('click', '.btn-action-toggle', function () {
                 var userId = $(this).data("id");
                 var isAktiflesecek = $(this).data("status");
 
@@ -283,7 +363,7 @@
                         inputPlaceholder: 'Örn: İşten ayrıldı, departman değiştirdi...',
                         icon: 'warning',
                         showCancelButton: true,
-                        confirmButtonColor: '#D35400',
+                        confirmButtonColor: '#C0392B',
                         cancelButtonColor: '#7F736A',
                         confirmButtonText: 'Evet, Pasife Al',
                         cancelButtonText: 'İptal',
@@ -297,7 +377,7 @@
                             $.ajax({
                                 url: '/Admin/ToggleUserStatus',
                                 type: 'POST',
-                                data: { id: userId, reason: result.value }, 
+                                data: { id: userId, reason: result.value },
                                 success: function (gelenCevap) {
                                     if (gelenCevap.success) {
                                         Swal.fire('Başarılı!', gelenCevap.message, 'success').then(() => location.reload());
@@ -323,7 +403,7 @@
                             $.ajax({
                                 url: '/Admin/ToggleUserStatus',
                                 type: 'POST',
-                                data: { id: userId, reason: "" }, 
+                                data: { id: userId, reason: "" },
                                 success: function (gelenCevap) {
                                     if (gelenCevap.success) {
                                         Swal.fire('Başarılı!', gelenCevap.message, 'success').then(() => location.reload());
@@ -337,7 +417,7 @@
                 }
             });
 
-            $(".btn-action-delete").click(function () {
+            $('#usersTable tbody').on('click', '.btn-action-delete', function () {
                 var userId = $(this).data("id");
 
                 Swal.fire({
@@ -366,7 +446,7 @@
                 });
             });
 
-            $(".btn-action-edit").click(function () {
+            $('#usersTable tbody').on('click', '.btn-action-edit', function () {
                 var userId = $(this).data("id");
 
                 $.ajax({
