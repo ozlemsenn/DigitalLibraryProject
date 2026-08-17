@@ -92,6 +92,7 @@
       <End Role="Documents" EntitySet="Documents" />
     </AssociationSet>
     <EntitySet Name="Logs" EntityType="DigitalLibraryDBModel.Logs" />
+    <EntitySet Name="SystemSettings" EntityType="DigitalLibraryDBModel.SystemSettings" />
   </EntityContainer>
   <EntityType Name="Logs">
     <Key>
@@ -102,5 +103,14 @@
     <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
     <Property Name="IconClass" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="SystemSettings">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CompanyName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="MaxUploadSizeMB" Type="Int32" />
+    <Property Name="IsMaintenanceMode" Type="Boolean" />
   </EntityType>
 </Schema>

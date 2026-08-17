@@ -1,0 +1,189 @@
+﻿@using DigitalLibrary.Models
+@model SystemSettings
+
+@{
+    ViewBag.Title = "Sistem Ayarları";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    .premium-card {
+        border-radius: 12px;
+        border: 1px solid #F0EAE1;
+        background-color: #FFFFFF;
+        box-shadow: 0 4px 15px rgba(92, 64, 51, 0.03);
+    }
+
+    .setting-group {
+        border-bottom: 1px dashed #F0EAE1;
+        padding-bottom: 25px;
+        margin-bottom: 25px;
+    }
+
+        .setting-group:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+    .custom-switch .custom-control-label::before {
+        height: 1.5rem;
+        width: 3rem;
+        border-radius: 2rem;
+        background-color: #E5DCD3;
+        border: none;
+    }
+
+    .custom-switch .custom-control-label::after {
+        width: 1.2rem;
+        height: 1.2rem;
+        border-radius: 50%;
+        background-color: #FFF;
+        transform: translateX(0.1rem) translateY(0.15rem);
+    }
+
+    .custom-switch .custom-control-input:checked ~ .custom-control-label::before {
+        background-color: #C0392B; 
+    }
+
+    .custom-switch .custom-control-input:checked ~ .custom-control-label::after {
+        transform: translateX(1.6rem) translateY(0.15rem);
+    }
+
+    .custom-control-label {
+        padding-left: 1.5rem;
+        padding-top: 0.15rem;
+        font-weight: bold;
+        color: #2C1E16;
+    }
+</style>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="font-weight-bold mb-1" style="color: #2C1E16;">Sistem Ayarları</h4>
+        <p class="mb-0" style="color: #7F736A;">Sistemin temel çalışma kurallarını, isimlerini ve limitlerini buradan yapılandırın.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card premium-card">
+            <div class="card-body p-5">
+
+                <form id="settingsForm">
+                    <input type="hidden" id="SettingID" value="@Model.ID" />
+
+                    <div class="setting-group row align-items-center">
+                        <div class="col-md-5">
+                            <h6 class="font-weight-bold" style="color: #5C4033;"><i class="fas fa-building mr-2 text-muted"></i> Kurum / Sistem Adı</h6>
+                            <small class="text-muted">Arayüzde ve giriş ekranlarında personellerin göreceği başlık.</small>
+                        </div>
+                        <div class="col-md-7">
+                            <input type="text" id="CompanyName" class="form-control font-weight-bold" value="@Model.CompanyName" style="border-radius: 8px; border: 1px solid #F0EAE1; color: #2C1E16;">
+                        </div>
+                    </div>
+
+                    <div class="setting-group row align-items-center">
+                        <div class="col-md-5">
+                            <h6 class="font-weight-bold" style="color: #5C4033;"><i class="fas fa-hdd mr-2 text-muted"></i> Maksimum Dosya Boyutu</h6>
+                            <small class="text-muted">Doküman yüklemelerinde izin verilen en yüksek boyut (MB).</small>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="input-group">
+                                <input type="number" id="MaxUploadSizeMB" class="form-control font-weight-bold" value="@Model.MaxUploadSizeMB" min="1" max="100" style="border-radius: 8px 0 0 8px; border: 1px solid #F0EAE1; color: #2C1E16;">
+                                <div class="input-group-append">
+                                    <span class="input-group-text bg-light font-weight-bold text-muted" style="border-radius: 0 8px 8px 0; border: 1px solid #F0EAE1; border-left: none;">MB</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-group row align-items-center bg-light p-4" style="border-radius: 12px; border-bottom: none;">
+                        <div class="col-md-8">
+                            <h6 class="font-weight-bold" style="color: #C0392B;"><i class="fas fa-exclamation-triangle mr-2"></i> Sistem Bakım Modu</h6>
+                            <small class="text-muted d-block">Aktif edildiğinde standart personellerin sisteme girişi engellenir. Sadece Yöneticiler (Admin) giriş yapabilir.</small>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <div class="custom-control custom-switch d-inline-block">
+                                <input type="checkbox" class="custom-control-input" id="IsMaintenanceMode" @(Model.IsMaintenanceMode == true ? "checked" : "")>
+                                <label class="custom-control-label" for="IsMaintenanceMode" id="maintenanceLabel">
+                                    @(Model.IsMaintenanceMode == true ? "Aktif" : "Pasif")
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-right mt-5">
+                        <button type="button" id="btnSaveSettings" class="btn font-weight-bold px-5 py-2 shadow-sm" style="background-color: #27ae60; color: white; border-radius: 8px;">
+                            <i class="fas fa-save mr-2"></i> Ayarları Kaydet
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 mt-4 mt-lg-0">
+        <div class="card premium-card" style="background: linear-gradient(135deg, #5C4033, #3b2a22); color: white;">
+            <div class="card-body p-4">
+                <i class="fas fa-shield-alt fa-3x mb-3" style="color: rgba(255,255,255,0.2);"></i>
+                <h5 class="font-weight-bold mb-3">Güvenlik Uyarısı</h5>
+                <p style="font-size: 0.9rem; opacity: 0.9; line-height: 1.6;">
+                    Bu alandaki konfigürasyonlar sistemin omurgasını oluşturur.
+                </p>
+                <ul class="pl-3 mt-3 mb-0" style="font-size: 0.85rem; opacity: 0.9; line-height: 1.6;">
+                    <li class="mb-2"><strong>Maksimum Dosya Boyutu:</strong> Sunucu maliyetlerini artırmamak için 20MB üzerinde tutulması önerilmez.</li>
+                    <li><strong>Bakım Modu:</strong> Acil bir siber güncelleme sırasında personeli anında devre dışı bırakmak için kullanılır.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+
+            $("#IsMaintenanceMode").change(function() {
+                if(this.checked) {
+                    $("#maintenanceLabel").text("Aktif").css("color", "#C0392B");
+                } else {
+                    $("#maintenanceLabel").text("Pasif").css("color", "#2C1E16");
+                }
+            });
+
+            $("#btnSaveSettings").click(function () {
+                var btn = $(this);
+                btn.html('<i class="fas fa-spinner fa-spin mr-2"></i> Kaydediliyor...');
+
+                var veriler = {
+                    ID: $("#SettingID").val(),
+                    CompanyName: $("#CompanyName").val(),
+                    MaxUploadSizeMB: $("#MaxUploadSizeMB").val(),
+                    IsMaintenanceMode: $("#IsMaintenanceMode").is(":checked")
+                };
+
+                $.ajax({
+                    url: '/Admin/UpdateSettings',
+                    type: 'POST',
+                    data: veriler,
+                    success: function (cevap) {
+                        btn.html('<i class="fas fa-save mr-2"></i> Ayarları Kaydet');
+
+                        if (cevap.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Kayıt Başarılı!',
+                                text: cevap.message,
+                                confirmButtonColor: '#27ae60'
+                            });
+                        } else {
+                            Swal.fire('Hata!', cevap.message, 'error');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

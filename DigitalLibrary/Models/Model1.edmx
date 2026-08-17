@@ -36,6 +36,15 @@
           <Property Name="IconClass" Type="nvarchar" MaxLength="50" />
           <Property Name="CreatedAt" Type="datetime" />
         </EntityType>
+        <EntityType Name="SystemSettings">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="100" />
+          <Property Name="MaxUploadSizeMB" Type="int" />
+          <Property Name="IsMaintenanceMode" Type="bit" />
+        </EntityType>
         <EntityType Name="Users">
           <Key>
             <PropertyRef Name="ID" />
@@ -88,6 +97,7 @@
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Documents" EntityType="Self.Documents" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Logs" EntityType="Self.Logs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SystemSettings" EntityType="Self.SystemSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK__Categorie__Paren__49C3F6B7" Association="Self.FK__Categorie__Paren__49C3F6B7">
             <End Role="Categories" EntitySet="Categories" />
@@ -198,6 +208,7 @@
             <End Role="Documents" EntitySet="Documents" />
           </AssociationSet>
           <EntitySet Name="Logs" EntityType="DigitalLibraryDBModel.Logs" />
+          <EntitySet Name="SystemSettings" EntityType="DigitalLibraryDBModel.SystemSettings" />
         </EntityContainer>
         <EntityType Name="Logs">
           <Key>
@@ -208,6 +219,15 @@
           <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="IconClass" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="SystemSettings">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MaxUploadSizeMB" Type="Int32" />
+          <Property Name="IsMaintenanceMode" Type="Boolean" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -258,6 +278,16 @@
                 <ScalarProperty Name="IconClass" ColumnName="IconClass" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="ActionType" ColumnName="ActionType" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SystemSettings">
+            <EntityTypeMapping TypeName="DigitalLibraryDBModel.SystemSettings">
+              <MappingFragment StoreEntitySet="SystemSettings">
+                <ScalarProperty Name="IsMaintenanceMode" ColumnName="IsMaintenanceMode" />
+                <ScalarProperty Name="MaxUploadSizeMB" ColumnName="MaxUploadSizeMB" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

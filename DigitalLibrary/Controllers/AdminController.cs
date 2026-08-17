@@ -332,5 +332,55 @@ namespace DigitalLibrary.Controllers
                 return Json(new { success = false, message = "Hata: " + ex.Message });
             }
         }
+
+        [HttpGet]
+        public ActionResult Settings()
+        {
+            var ayarlar = db.SystemSettings.FirstOrDefault();
+
+            if (ayarlar == null)
+            {
+                ayarlar = new SystemSettings();
+                ayarlar.CompanyName = "Kurumsal Doküman Merkezi";
+                ayarlar.MaxUploadSizeMB = 5;
+                ayarlar.IsMaintenanceMode = false;
+
+                db.SystemSettings.Add(ayarlar);
+                db.SaveChanges();
+            }
+
+            return View(ayarlar);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateSettings(int ID, string CompanyName, int MaxUploadSizeMB, bool IsMaintenanceMode)
+        {
+            try
+            {
+                var ayar = db.SystemSettings.Find(ID);
+                if (ayar != null)
+                {
+                    ayar.CompanyName = CompanyName;
+                    ayar.MaxUploadSizeMB = MaxUploadSizeMB;
+                    ayar.IsMaintenanceMode = IsMaintenanceMode;
+
+                    Logs log = new Logs();
+                    log.ActionType = "Sistem Ayarları Güncellendi";
+                    log.Description = "Sistem yapılandırma konfigürasyonları yönetici tarafından değiştirildi.";
+                    log.IconClass = "fa-cogs"; 
+                    log.CreatedAt = DateTime.Now;
+                    db.Logs.Add(log);
+
+                    db.SaveChanges();
+
+                    return Json(new { success = true, message = "Sistem ayarları başarıyla güncellendi." });
+                }
+                return Json(new { success = false, message = "Ayar kaydı bulunamadı." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Hata: " + ex.Message });
+            }
+        }
     }
 }

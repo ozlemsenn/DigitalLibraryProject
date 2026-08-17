@@ -26,10 +26,15 @@ namespace DigitalLibrary.Controllers
                     return RedirectToAction("Index", "Home");
                 }
 
-                if (uploadedFile.ContentLength > 5 * 1024 * 1024)
+                var ayarlar = db.SystemSettings.FirstOrDefault();
+
+                int limitMB = (ayarlar != null && ayarlar.MaxUploadSizeMB > 0) ? ayarlar.MaxUploadSizeMB.Value : 5;
+                long limitByte = limitMB * 1024 * 1024;
+
+                if (uploadedFile.ContentLength > limitByte)
                 {
-                    TempData["Hata"] = "Dosya boyutu 5 MB'tan büyük olamaz!";
-                    return RedirectToAction("Index", "Home");
+                    TempData["Hata"] = "Dosya boyutu " + limitMB + " MB sınırını aşıyor! Limitleri 'Sistem Ayarları'ndan yükseltebilirsiniz.";
+                    return RedirectToAction("Documents", "Admin");
                 }
 
                 string uniqueFileName = Guid.NewGuid().ToString() + fileExtension;

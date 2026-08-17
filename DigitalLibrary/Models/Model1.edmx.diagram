@@ -12,6 +12,7 @@
         <AssociationConnector Association="DigitalLibraryDBModel.FK__Documents__Categ__4D94879B" ManuallyRouted="false" />
         <AssociationConnector Association="DigitalLibraryDBModel.FK__Documents__Uploa__4E88ABD4" ManuallyRouted="false" />
         <EntityTypeShape EntityType="DigitalLibraryDBModel.Logs" Width="1.5" PointX="4" PointY="3.5" />
+        <EntityTypeShape EntityType="DigitalLibraryDBModel.SystemSettings" Width="1.5" PointX="1.625" PointY="3.5" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
