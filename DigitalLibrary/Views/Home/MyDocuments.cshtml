@@ -1,0 +1,152 @@
+﻿@using DigitalLibrary.Models
+@model IEnumerable<Documents>
+
+@{
+    ViewBag.Title = "Yüklediğim Belgeler";
+    var kategoriler = ViewBag.Categories as IEnumerable<Categories>;
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h3 class="font-weight-bold mb-1" style="color: #2C1E16;"><i class="fas fa-cloud-upload-alt mr-2" style="color: #C0392B;"></i> Yüklediğim Belgeler</h3>
+        <p style="color: #7F736A;">Sisteme yüklediğiniz belgeleri buradan yönetebilir, güncelleyebilir veya silebilirsiniz.</p>
+    </div>
+</div>
+
+<div class="card premium-card">
+    <div class="card-body p-0">
+        <ul class="list-group list-group-flush" style="border-radius: 12px; overflow: hidden;">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var doc in Model)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-4">
+                        <div class="d-flex align-items-center">
+                            @if (doc.FileExtension == ".pdf")
+                            {<i class="fas fa-file-pdf text-danger fa-2x mr-3"></i> }
+                            else if (doc.FileExtension == ".docx")
+                            { <i class="fas fa-file-word text-primary fa-2x mr-3"></i> }
+                            else if (doc.FileExtension == ".xlsx")
+                            { <i class="fas fa-file-excel text-success fa-2x mr-3"></i> }
+                            else
+                            { <i class="fas fa-file text-muted-warm fa-2x mr-3"></i>}
+
+                            <div>
+                                <span class="font-weight-bold text-dark-wood" style="font-size: 1.1rem;">@doc.Title</span>
+                                <small class="d-block mt-1 text-muted-warm">
+                                    <i class="fas fa-calendar-alt mr-1"></i> @(doc.UploadDate.HasValue ? doc.UploadDate.Value.ToString("dd.MM.yyyy") : "-")
+                                </small>
+                            </div>
+                        </div>
+
+                        <div>
+                            <a href="/Document/Download/@doc.ID" class="btn btn-sm btn-light font-weight-bold mr-1" title="İndir" style="color: #27ae60; border: 1px solid #F0EAE1;">
+                                <i class="fas fa-download"></i>
+                            </a>
+                            <button class="btn btn-sm btn-light font-weight-bold btn-edit-trigger mr-1" data-id="@doc.ID" title="Düzenle" style="color: #D48900; border: 1px solid #F0EAE1;">
+                                <i class="fas fa-pen"></i>
+                            </button>
+                            <button class="btn btn-sm btn-light font-weight-bold btn-delete-trigger" data-id="@doc.ID" title="Sil" style="color: #C0392B; border: 1px solid #F0EAE1;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </li>
+                }
+            }
+            else
+            {
+                <li class="list-group-item py-5 text-center text-muted-warm">
+                    <i class="fas fa-box-open fa-3x mb-3 d-block" style="color: #EAE3D9;"></i>Henüz sisteme bir doküman yüklemediniz.
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
+            <div class="modal-header" style="background-color: #FCF9F5; border-bottom: 1px solid #F0EAE1;">
+                <h5 class="modal-title font-weight-bold"><i class="fas fa-pen mr-2" style="color: #D48900;"></i> Belgeyi Düzenle</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="editForm">
+                    <input type="hidden" id="EditDocID" />
+                    <div class="form-group">
+                        <label class="font-weight-bold" style="color: #7F736A;">Yeni Başlık</label>
+                        <input type="text" id="EditTitle" class="form-control" style="border-radius: 8px;">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold" style="color: #7F736A;">Klasör Değiştir</label>
+                        <select id="EditCategoryID" class="form-control" style="border-radius: 8px;">
+                            @if (kategoriler != null)
+                            {
+                                foreach (var kat in kategoriler.Where(k => k.ParentID != null))
+                                {
+                                    <option value="@kat.ID">@kat.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-light" data-dismiss="modal">İptal</button>
+                <button type="button" id="btnUpdate" class="btn text-white" style="background-color: #D48900; border-radius: 8px;">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('.btn-delete-trigger').click(function () {
+                var docId = $(this).data("id");
+                Swal.fire({
+                    title: 'Emin misiniz?',
+                    text: "Kendi yüklediğiniz bu belgeyi silmek üzeresiniz!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#C0392B',
+                    cancelButtonColor: '#7F736A',
+                    confirmButtonText: 'Evet, Sil!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({ url: '/Document/Delete/' + docId, type: 'POST',
+                            success: function (c) {
+                                if (c.success) Swal.fire('Silindi!', c.message, 'success').then(() => location.reload());
+                                else Swal.fire('Hata!', c.message, 'error');
+                            }
+                        });
+                    }
+                });
+            });
+
+            $('.btn-edit-trigger').click(function () {
+                var docId = $(this).data("id");
+                $.ajax({ url: '/Document/GetDocument/' + docId, type: 'GET',
+                    success: function (c) {
+                        if(c.success) {
+                            $("#EditDocID").val(c.data.ID);
+                            $("#EditTitle").val(c.data.Title);
+                            $("#EditCategoryID").val(c.data.CategoryID);
+                            $("#editModal").modal('show');
+                        }
+                    }
+                });
+            });
+
+            $("#btnUpdate").click(function () {
+                var veri = { id: $("#EditDocID").val(), title: $("#EditTitle").val(), categoryId: $("#EditCategoryID").val() };
+                $.ajax({ url: '/Document/Update', type: 'POST', data: veri,
+                    success: function (c) {
+                        if (c.success) Swal.fire('Başarılı!', c.message, 'success').then(() => location.reload());
+                        else Swal.fire('Hata!', c.message, 'error');
+                    }
+                });
+            });
+        });
+    </script>
+}

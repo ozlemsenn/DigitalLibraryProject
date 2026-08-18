@@ -1,0 +1,88 @@
+﻿@using DigitalLibrary.Models
+@model Users
+
+@{
+    ViewBag.Title = "Profil Ayarları";
+}
+
+<div class="row mb-5">
+    <div class="col-12">
+        <h3 class="font-weight-bold mb-1" style="color: #2C1E16;"><i class="fas fa-user-cog mr-2" style="color: #D48900;"></i> Profil Ayarları</h3>
+        <p style="color: #7F736A;">Hesap bilgilerinizi, iletişim tercihlerinizi ve şifrenizi buradan yönetebilirsiniz.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card premium-card text-center p-4">
+            <div class="profile-img-ring mx-auto mb-3" style="width: 120px; height: 120px; border-width: 4px;">
+                <img src="https://ui-avatars.com/api/?name=@(Model != null ? Model.Name : "User")&background=D35400&color=fff&bold=true&size=120" alt="Profile Avatar">
+            </div>
+            <h4 class="font-weight-bold" style="color: #2C1E16;">@(Model != null ? Model.Name : "Bilinmeyen Kullanıcı")</h4>
+            <p class="text-muted mb-4">@(Model != null ? Model.Role : "Rol Belirsiz")</p>
+
+            <div class="text-left mt-2">
+                <hr style="border-color: #F0EAE1;">
+                <p class="mb-2" style="color: #7F736A; font-size: 0.9rem;"><i class="fas fa-envelope mr-2" style="color: #C0392B;"></i> @(Model != null ? Model.Email : "-")</p>
+                <p class="mb-0" style="color: #7F736A; font-size: 0.9rem;"><i class="fas fa-shield-alt mr-2" style="color: #D48900;"></i> Güvenli Bağlantı</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card premium-card">
+            <div class="card-header border-0 bg-transparent pt-4 pb-0 pl-4">
+                <h5 class="font-weight-bold" style="color: #5C4033;">Hesap Bilgileri</h5>
+            </div>
+            <div class="card-body p-4">
+                <form action="/Home/UpdateProfile" method="POST">
+                    <input type="hidden" name="ID" value="@(Model != null ? Model.ID : 0)" />
+
+                    <div class="row">
+                        <div class="col-md-6 form-group mb-4">
+                            <label class="font-weight-bold" style="color: #7F736A;">Ad Soyad</label>
+                            <input type="text" name="Name" class="form-control" value="@(Model != null ? Model.Name : "")" required style="border-radius: 8px; border: 1px solid #F0EAE1; padding: 10px 15px;">
+                        </div>
+                        <div class="col-md-6 form-group mb-4">
+                            <label class="font-weight-bold" style="color: #7F736A;">E-Posta Adresi</label>
+                            <input type="email" name="Email" class="form-control" value="@(Model != null ? Model.Email : "")" required style="border-radius: 8px; border: 1px solid #F0EAE1; padding: 10px 15px;">
+                        </div>
+                    </div>
+
+                    <hr style="border-color: #F0EAE1; margin: 20px 0 30px 0;">
+                    <h5 class="font-weight-bold mb-4" style="color: #5C4033;"><i class="fas fa-lock mr-2 text-muted"></i> Şifre Değiştirme (İsteğe Bağlı)</h5>
+
+                    <div class="row">
+                        <div class="col-md-6 form-group mb-4">
+                            <label class="font-weight-bold" style="color: #7F736A;">Mevcut Şifreniz</label>
+                            <input type="password" name="OldPassword" class="form-control" placeholder="Değiştirmeyecekseniz boş bırakın" style="border-radius: 8px; border: 1px solid #F0EAE1; padding: 10px 15px;">
+                        </div>
+                        <div class="col-md-6 form-group mb-4">
+                            <label class="font-weight-bold" style="color: #7F736A;">Yeni Şifreniz</label>
+                            <input type="password" name="NewPassword" class="form-control" placeholder="Yeni şifrenizi girin" style="border-radius: 8px; border: 1px solid #F0EAE1; padding: 10px 15px;">
+                        </div>
+                    </div>
+
+                    <div class="text-right mt-3">
+                        <button type="submit" class="btn font-weight-bold shadow-sm px-5 py-2" style="background-color: #C0392B; color: white; border-radius: 8px;">
+                            <i class="fas fa-save mr-2"></i> Değişiklikleri Kaydet
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            @if(TempData["Basari"] != null) {
+                <text>Swal.fire('Harika!', '@TempData["Basari"]', 'success');</text>
+            }
+            @if(TempData["Hata"] != null) {
+                <text>Swal.fire('Hata!', '@TempData["Hata"]', 'error');</text>
+            }
+        });
+    </script>
+}

@@ -10,14 +10,13 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
-
         :root {
-            --wood-dark: #2C1E16; 
-            --wood-medium: #5C4033; 
-            --rust: #C0392B; 
-            --rust-light: #FDF3F2; 
-            --bg-ivory: #FCF9F5; 
-            --gold: #D48900; 
+            --wood-dark: #2C1E16;
+            --wood-medium: #5C4033;
+            --rust: #C0392B;
+            --rust-light: #FDF3F2;
+            --bg-ivory: #FCF9F5;
+            --gold: #D48900;
         }
 
         body {
@@ -96,26 +95,6 @@
             min-height: 100vh;
         }
 
-        .top-search-bar {
-            background: #FFFFFF;
-            border-radius: 50px;
-            padding: 12px 25px;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(92, 64, 51, 0.03);
-            margin-bottom: 30px;
-            border: 1px solid #F0EAE1;
-        }
-
-            .top-search-bar input {
-                border: none;
-                outline: none;
-                width: 100%;
-                margin-left: 15px;
-                font-size: 0.95rem;
-                color: var(--wood-dark);
-            }
-
         .right-panel {
             width: 320px;
             height: 100vh;
@@ -138,7 +117,7 @@
             width: 90px;
             height: 90px;
             border-radius: 50%;
-            border: 3px solid var(--gold); 
+            border: 3px solid var(--gold);
             padding: 4px;
             margin: 0 auto 15px auto;
         }
@@ -188,34 +167,29 @@
         </div>
         <span class="brand-slogan">DİJİTAL KÜTÜPHANE</span>
 
-        <p style="font-size: 0.75rem; color: #a89f91; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; padding-left: 10px;">MENÜ</p>
+        <p style="font-size: 0.75rem; color: #a89f91; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; padding-left: 10px;">DOKÜMANLAR</p>
 
-        <a href="/Home/Index" class="nav-item-custom active">
-            <i class="fas fa-compass"></i> Keşfet
+        <a href="/Home/Index" class="nav-item-custom">
+            <i class="fas fa-folder-tree"></i> Kütüphane
         </a>
-        <a href="#" class="nav-item-custom">
-            <i class="fas fa-scroll"></i> Hakkımızda
+        <a href="/Home/MyDocuments" class="nav-item-custom">
+            <i class="fas fa-cloud-upload-alt"></i> Yüklediğim Belgeler
         </a>
-        <a href="#" class="nav-item-custom">
-            <i class="fas fa-bookmark"></i> Favorilerim
+        <a href="/Home/MyHistory" class="nav-item-custom">
+            <i class="fas fa-history"></i> İşlem Geçmişim
         </a>
 
         <p style="font-size: 0.75rem; color: #a89f91; font-weight: 700; letter-spacing: 1px; margin-top: 40px; margin-bottom: 10px; padding-left: 10px;">HESAP</p>
 
-        <a href="#" class="nav-item-custom">
+        <a href="/Home/ProfileSettings" class="nav-item-custom">
             <i class="fas fa-user-cog"></i> Profil Ayarları
         </a>
         <a href="#" class="nav-item-custom text-danger mt-5">
-            <i class="fas fa-sign-out-alt"></i> Çıkış Yap
+            <i class="fas fa-sign-out-alt"></i> Güvenli Çıkış
         </a>
     </div>
 
     <div class="main-content">
-        <div class="top-search-bar">
-            <i class="fas fa-search" style="color: var(--rust);"></i>
-            <input type="text" placeholder="Kütüphanede hızlı arama yapın...">
-        </div>
-
         @RenderBody()
     </div>
 
@@ -252,10 +226,10 @@
         </div>
 
         <div class="mini-stat-card">
-            <div class="mini-stat-icon"><i class="fas fa-check-circle"></i></div>
+            <div class="mini-stat-icon"><i class="fas fa-shield-alt"></i></div>
             <div>
-                <h6 class="mb-0 font-weight-bold" style="color: var(--wood-dark);">Sistem Erişimi</h6>
-                <small class="font-weight-bold" style="color: #D48900;">Tam Yetki</small>
+                <h6 class="mb-0 font-weight-bold" style="color: var(--wood-dark);">Erişim Yetkisi</h6>
+                <small class="font-weight-bold" style="color: #D48900;">Personel</small>
             </div>
         </div>
 

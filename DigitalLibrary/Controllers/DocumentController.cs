@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -13,42 +14,64 @@ namespace DigitalLibrary.Controllers
         DigitalLibraryDBEntities1 db = new DigitalLibraryDBEntities1();
 
         [HttpPost]
-        public ActionResult Upload(string Title, int CategoryID, HttpPostedFileBase uploadedFile)
+        public ActionResult Upload(string Title, int CategoryID, HttpPostedFileBase uploadedFile, string Source = "")
         {
+            // 0. KESİN TESPİT: Kullanıcı Nereden Geldi?
+            if (string.IsNullOrEmpty(Source))
+            {
+                Source = Request.Form["Source"];
+            }
+
+            // Hala bulamadıysa tarayıcı URL'sine bak
+            if (string.IsNullOrEmpty(Source) && Request.UrlReferrer != null)
+            {
+                string geldigiLink = Request.UrlReferrer.ToString().ToLower();
+                if (geldigiLink.Contains("/home") || geldigiLink.EndsWith("/"))
+                {
+                    Source = "Personel"; // İngilizce olan kısmı düzelttik
+                }
+            }
+
             if (uploadedFile != null && uploadedFile.ContentLength > 0)
             {
                 string[] allowedExtensions = { ".pdf", ".docx", ".xlsx" };
                 string fileExtension = Path.GetExtension(uploadedFile.FileName).ToLower();
 
+                // 1. UZANTI KONTROLÜ
                 if (!allowedExtensions.Contains(fileExtension) || fileExtension == ".exe")
                 {
                     TempData["Hata"] = "Sadece .pdf, .docx veya .xlsx uzantılı dosyalar yükleyebilirsiniz!";
-                    return RedirectToAction("Index", "Home");
+
+                    if (Source == "Personel") return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Documents", "Admin");
                 }
 
+                // 2. BOYUT KONTROLÜ
                 var ayarlar = db.SystemSettings.FirstOrDefault();
-
                 int limitMB = (ayarlar != null && ayarlar.MaxUploadSizeMB > 0) ? ayarlar.MaxUploadSizeMB.Value : 5;
                 long limitByte = limitMB * 1024 * 1024;
 
                 if (uploadedFile.ContentLength > limitByte)
                 {
                     TempData["Hata"] = "Dosya boyutu " + limitMB + " MB sınırını aşıyor! Limitleri 'Sistem Ayarları'ndan yükseltebilirsiniz.";
+
+                    if (Source == "Personel") return RedirectToAction("Index", "Home");
                     return RedirectToAction("Documents", "Admin");
                 }
 
+                // 3. DOSYAYI SUNUCUYA KAYDETME
                 string uniqueFileName = Guid.NewGuid().ToString() + fileExtension;
-
                 string uploadFolderPath = Server.MapPath("~/App_Data/Uploads/");
+
                 if (!Directory.Exists(uploadFolderPath))
                 {
                     Directory.CreateDirectory(uploadFolderPath);
                 }
 
                 string savePath = Path.Combine(uploadFolderPath, uniqueFileName);
-
                 uploadedFile.SaveAs(savePath);
 
+                // 4. VERİTABANINA DOKÜMAN EKLEME
                 Documents newDoc = new Documents();
                 newDoc.Title = Title;
                 newDoc.FilePath = "/App_Data/Uploads/" + uniqueFileName;
@@ -58,6 +81,7 @@ namespace DigitalLibrary.Controllers
 
                 db.Documents.Add(newDoc);
 
+                // 5. LOGLAMA
                 Logs docLog = new Logs();
                 docLog.ActionType = "Yeni Doküman Yüklendi";
                 docLog.Description = "'" + Title + "' isimli belge sisteme eklendi.";
@@ -65,7 +89,7 @@ namespace DigitalLibrary.Controllers
                 docLog.CreatedAt = DateTime.Now;
                 db.Logs.Add(docLog);
 
-                db.SaveChanges(); 
+                db.SaveChanges();
 
                 TempData["Basari"] = "Doküman başarıyla yüklendi!";
             }
@@ -74,7 +98,13 @@ namespace DigitalLibrary.Controllers
                 TempData["Hata"] = "Lütfen yüklemek için bir dosya seçin!";
             }
 
-            return RedirectToAction("Documents", "Admin");
+            // 6. SONUÇ YÖNLENDİRMESİ
+            if (Source == "Personel")
+            {
+                return RedirectToAction("Index", "Home"); // Personelse kendi sayfasına dönsün
+            }
+
+            return RedirectToAction("Documents", "Admin"); // Admin ise panele dönsün
         }
 
         public ActionResult Download(int id)
