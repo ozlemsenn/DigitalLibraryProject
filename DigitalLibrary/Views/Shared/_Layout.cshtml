@@ -1,12 +1,18 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string userName = Session["UserName"] != null ? Session["UserName"].ToString() : "Değerli Personelimiz";
+    string role = Session["Role"] != null ? Session["Role"].ToString() : "Şirket Çalışanı";
+}
+
+<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - eLibrary</title>
+    <title>@ViewBag.Title - eLibrary Workspace</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
@@ -21,9 +27,10 @@
 
         body {
             background-color: var(--bg-ivory);
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
             color: var(--wood-dark);
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
         .left-sidebar {
@@ -33,28 +40,39 @@
             top: 0;
             left: 0;
             background-color: #FFFFFF;
-            border-right: 1px solid #F0EAE1;
+            border-right: 1px solid rgba(0,0,0,0.05);
             padding: 20px;
             z-index: 1000;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.01);
         }
 
         .brand-logo {
-            font-size: 1.5rem;
+            font-size: 2.2rem;
             font-weight: 900;
-            background: linear-gradient(135deg, var(--wood-medium), var(--rust));
+            letter-spacing: -1.5px;
+            background: linear-gradient(to right, var(--wood-dark) 20%, var(--rust) 40%, var(--gold) 60%, var(--wood-dark) 80%);
+            background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: shine 4s linear infinite; 
             display: flex;
             align-items: center;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
+            filter: drop-shadow(0px 4px 6px rgba(192,57,43,0.15)); 
+        }
+
+        @@keyframes shine {
+            to {
+                background-position: 200% center;
+            }
         }
 
         .brand-slogan {
             font-size: 0.65rem;
             color: #7F736A;
             font-weight: 700;
-            letter-spacing: 0.8px;
-            padding-left: 32px;
+            letter-spacing: 1.2px;
+            padding-left: 45px;
             margin-bottom: 40px;
             display: block;
         }
@@ -65,7 +83,7 @@
             border-radius: 12px;
             color: #7F736A;
             font-weight: 600;
-            transition: 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             text-decoration: none;
@@ -74,18 +92,21 @@
             .nav-item-custom i {
                 width: 25px;
                 font-size: 1.1rem;
+                transition: transform 0.3s ease;
             }
 
             .nav-item-custom:hover {
                 background-color: var(--rust-light);
                 color: var(--rust);
                 text-decoration: none;
+                transform: translateX(4px);
             }
 
             .nav-item-custom.active {
                 background-color: var(--rust-light);
                 color: var(--rust);
                 border-left: 4px solid var(--rust);
+                font-weight: 700;
             }
 
         .main-content {
@@ -95,6 +116,15 @@
             min-height: 100vh;
         }
 
+        .top-greeting-bar {
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
         .right-panel {
             width: 320px;
             height: 100vh;
@@ -102,10 +132,11 @@
             top: 0;
             right: 0;
             background-color: #FFFFFF;
-            border-left: 1px solid #F0EAE1;
+            border-left: 1px solid rgba(0,0,0,0.05);
             padding: 30px 20px;
             z-index: 1000;
             overflow-y: auto;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.01);
         }
 
         .profile-section {
@@ -117,9 +148,13 @@
             width: 90px;
             height: 90px;
             border-radius: 50%;
-            border: 3px solid var(--gold);
+            border: 3px solid transparent;
+            background-image: linear-gradient(white, white), linear-gradient(135deg, var(--gold), var(--rust));
+            background-origin: border-box;
+            background-clip: content-box, border-box;
             padding: 4px;
             margin: 0 auto 15px auto;
+            box-shadow: 0 8px 20px rgba(192, 57, 43, 0.15);
         }
 
             .profile-img-ring img {
@@ -130,32 +165,34 @@
 
         .mini-stat-card {
             background: var(--bg-ivory);
-            border: 1px solid #F0EAE1;
-            border-radius: 12px;
+            border: 1px solid transparent;
+            border-radius: 14px;
             padding: 15px;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
-            transition: 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
             .mini-stat-card:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 5px 15px rgba(192, 57, 43, 0.08);
+                transform: translateY(-4px);
+                background-color: #FFFFFF;
+                box-shadow: 0 10px 25px rgba(192, 57, 43, 0.08);
+                border: 1px solid #F0EAE1;
             }
 
         .mini-stat-icon {
             background: #fff;
             color: var(--gold);
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
             margin-right: 15px;
             font-size: 1.2rem;
-            box-shadow: 0 4px 10px rgba(212, 137, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(212, 137, 0, 0.15);
         }
     </style>
 </head>
@@ -163,13 +200,13 @@
 
     <div class="left-sidebar">
         <div class="brand-logo">
-            <i class="fas fa-book-open mr-2" style="color: var(--rust);"></i> eLibrary
+            <i class="fas fa-book-open mr-2" style="font-size: 1.8rem; -webkit-text-fill-color: var(--rust);"></i> eLibrary
         </div>
         <span class="brand-slogan">DİJİTAL KÜTÜPHANE</span>
 
         <p style="font-size: 0.75rem; color: #a89f91; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; padding-left: 10px;">DOKÜMANLAR</p>
 
-        <a href="/Home/Index" class="nav-item-custom">
+        <a href="/Home/Index" class="nav-item-custom active">
             <i class="fas fa-folder-tree"></i> Kütüphane
         </a>
         <a href="/Home/MyDocuments" class="nav-item-custom">
@@ -184,12 +221,25 @@
         <a href="/Home/ProfileSettings" class="nav-item-custom">
             <i class="fas fa-user-cog"></i> Profil Ayarları
         </a>
-        <a href="#" class="nav-item-custom text-danger mt-5">
+        <a href="/Auth/Logout" class="nav-item-custom text-danger mt-5">
             <i class="fas fa-sign-out-alt"></i> Güvenli Çıkış
         </a>
     </div>
 
     <div class="main-content">
+
+        <div class="top-greeting-bar">
+            <div>
+                <p class="text-muted small font-weight-bold mb-1 text-uppercase" style="letter-spacing: 1.2px;">Hoş Geldiniz</p>
+                <h3 class="font-weight-bold mb-0" style="color: var(--wood-dark); letter-spacing: -0.5px;">@userName 👋</h3>
+            </div>
+            <div class="text-right d-none d-md-block">
+                <span class="badge badge-light px-3 py-2 shadow-sm" style="color: var(--rust); border: 1px solid #F0EAE1; font-size: 0.85rem;">
+                    <i class="far fa-calendar-alt mr-1"></i> @DateTime.Now.ToString("dd MMMM yyyy, dddd")
+                </span>
+            </div>
+        </div>
+
         @RenderBody()
     </div>
 
@@ -197,19 +247,19 @@
 
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h6 class="font-weight-bold mb-0" style="color: var(--wood-medium);">Profiliniz</h6>
-            <i class="fas fa-ellipsis-v text-muted" style="cursor: pointer;"></i>
+            <i class="fas fa-ellipsis-v text-muted" style="cursor: pointer; transition: 0.2s;"></i>
         </div>
 
         <div class="profile-section">
             <div class="profile-img-ring">
-                <img src="https://ui-avatars.com/api/?name=Personel&background=D35400&color=fff&bold=true" alt="Profile">
+                <img src="https://ui-avatars.com/api/?name=@userName&background=D35400&color=fff&bold=true" alt="Profile">
             </div>
-            <h5 class="font-weight-bold mb-1" style="color: var(--wood-dark);">Standart Personel</h5>
-            <p class="small mb-3" style="color: #7F736A;">Şirket Çalışanı</p>
+            <h5 class="font-weight-bold mb-1" style="color: var(--wood-dark); letter-spacing: -0.3px;">@userName</h5>
+            <p class="small mb-3" style="color: #7F736A;">@role</p>
 
             <div class="d-flex justify-content-center">
-                <button class="btn btn-sm btn-light rounded-circle shadow-sm mx-1" style="width: 35px; height: 35px; color: var(--wood-medium); border: 1px solid #F0EAE1;"><i class="far fa-bell"></i></button>
-                <button class="btn btn-sm btn-light rounded-circle shadow-sm mx-1" style="width: 35px; height: 35px; color: var(--wood-medium); border: 1px solid #F0EAE1;"><i class="far fa-envelope"></i></button>
+                <button class="btn btn-sm btn-light rounded-circle shadow-sm mx-1" style="width: 35px; height: 35px; color: var(--wood-medium); border: 1px solid #F0EAE1; transition: 0.2s;"><i class="far fa-bell"></i></button>
+                <button class="btn btn-sm btn-light rounded-circle shadow-sm mx-1" style="width: 35px; height: 35px; color: var(--wood-medium); border: 1px solid #F0EAE1; transition: 0.2s;"><i class="far fa-envelope"></i></button>
             </div>
         </div>
 
@@ -229,7 +279,7 @@
             <div class="mini-stat-icon"><i class="fas fa-shield-alt"></i></div>
             <div>
                 <h6 class="mb-0 font-weight-bold" style="color: var(--wood-dark);">Erişim Yetkisi</h6>
-                <small class="font-weight-bold" style="color: #D48900;">Personel</small>
+                <small class="font-weight-bold" style="color: #D48900;">@role</small>
             </div>
         </div>
 
