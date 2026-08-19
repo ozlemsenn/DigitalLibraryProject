@@ -22,6 +22,8 @@ namespace DigitalLibrary.Models
         public Nullable<int> CategoryID { get; set; }
         public Nullable<System.DateTime> UploadDate { get; set; }
         public Nullable<int> UploadedBy { get; set; }
+        public Nullable<bool> IsPrivate { get; set; }
+        public Nullable<int> UserID { get; set; }
     
         public virtual Categories Categories { get; set; }
         public virtual Users Users { get; set; }

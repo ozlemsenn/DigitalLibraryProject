@@ -8,8 +8,17 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
+    :root {
+        --wood-dark: #2C1E16;
+        --wood-medium: #5C4033;
+        --rust: #C0392B;
+        --rust-light: #FDF3F2;
+        --bg-ivory: #FCF9F5;
+        --gold: #D48900;
+    }
+
     body {
-        background-color: #FCF9F5 !important;
+        background-color: var(--bg-ivory) !important;
     }
 
     .text-dark-wood {
@@ -272,6 +281,14 @@
                                     }
                                 }
                             }
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Görünürlük (Kimler Görebilir?)</label>
+                        <select name="Visibility" class="form-control" style="border-radius: 8px; border: 1px solid #F0EAE1; background-color: #FDFCFB;">
+                            <option value="Public"> Herkes (Tüm Personel Görebilir)</option>
+                            <option value="Private"> Sadece Ben (Özel Doküman)</option>
                         </select>
                     </div>
 

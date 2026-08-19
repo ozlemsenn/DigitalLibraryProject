@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System;
+using System.Linq;
 using System.Web.Mvc;
 
 using DigitalLibrary.Models;
@@ -11,30 +13,68 @@ namespace DigitalLibrary.Controllers
 
         public ActionResult Index()
         {
-            var kategoriler = db.Categories.ToList();
-            ViewBag.Documents = db.Documents.OrderByDescending(d => d.UploadDate).ToList();
+            string userRole = Session["Role"] != null ? Session["Role"].ToString() : "";
+            int aktifKullaniciID = Session["UserID"] != null ? Convert.ToInt32(Session["UserID"]) : 0;
+
+            List<Categories> kategoriler;
+
+            if (userRole == "Personel")
+            {
+                kategoriler = db.Categories.Where(c => c.IsAdminOnly == false || c.IsAdminOnly == null).ToList();
+
+                var izinVerilenKategoriIDleri = kategoriler.Select(k => k.ID).ToList();
+
+                ViewBag.Documents = db.Documents
+                                      .Where(d => d.CategoryID.HasValue &&
+                                                  izinVerilenKategoriIDleri.Contains(d.CategoryID.Value) &&
+                                                  (d.IsPrivate == false || d.IsPrivate == null || d.UserID == aktifKullaniciID))
+                                      .OrderByDescending(d => d.UploadDate)
+                                      .ToList();
+            }
+            else
+            {
+                kategoriler = db.Categories.ToList();
+                ViewBag.Documents = db.Documents.OrderByDescending(d => d.UploadDate).ToList();
+            }
 
             return View(kategoriler);
         }
+
         public ActionResult MyDocuments()
         {
             DigitalLibraryDBEntities1 db = new DigitalLibraryDBEntities1();
 
-            var myDocs = db.Documents.OrderByDescending(d => d.ID).ToList();
+            int aktifKullaniciID = Session["UserID"] != null ? Convert.ToInt32(Session["UserID"]) : 0;
 
-            ViewBag.Categories = db.Categories.ToList();
+            var myDocs = db.Documents.Where(d => d.UserID == aktifKullaniciID).OrderByDescending(d => d.ID).ToList();
+
+            string userRole = Session["Role"] != null ? Session["Role"].ToString() : "";
+
+            if (userRole == "Personel")
+            {
+                ViewBag.Categories = db.Categories.Where(c => c.IsAdminOnly == false || c.IsAdminOnly == null).ToList();
+            }
+            else
+            {
+                ViewBag.Categories = db.Categories.ToList();
+            }
 
             return View(myDocs);
         }
-
-        public ActionResult MyHistory()
+            public ActionResult MyHistory()
         {
             DigitalLibraryDBEntities1 db = new DigitalLibraryDBEntities1();
 
-            var myLogs = db.Logs.OrderByDescending(l => l.ID).Take(50).ToList();
+            int aktifKullaniciID = Session["UserID"] != null ? Convert.ToInt32(Session["UserID"]) : 0;
+
+            var myLogs = db.Logs
+                           .Where(l => l.UserID == aktifKullaniciID)
+                           .OrderByDescending(l => l.CreatedAt)
+                           .ToList();
 
             return View(myLogs);
         }
+        
         public ActionResult ProfileSettings()
         {
             DigitalLibraryDBEntities1 db = new DigitalLibraryDBEntities1();

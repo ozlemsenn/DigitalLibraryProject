@@ -19,5 +19,6 @@ namespace DigitalLibrary.Models
         public string Description { get; set; }
         public string IconClass { get; set; }
         public Nullable<System.DateTime> CreatedAt { get; set; }
+        public Nullable<int> UserID { get; set; }
     }
 }

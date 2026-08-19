@@ -4,23 +4,10 @@
     <EntitySetMapping Name="Categories">
       <EntityTypeMapping TypeName="DigitalLibraryDBModel.Categories">
         <MappingFragment StoreEntitySet="Categories">
+          <ScalarProperty Name="IsAdminOnly" ColumnName="IsAdminOnly" />
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="ParentID" ColumnName="ParentID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Documents">
-      <EntityTypeMapping TypeName="DigitalLibraryDBModel.Documents">
-        <MappingFragment StoreEntitySet="Documents">
-          <ScalarProperty Name="ID" ColumnName="ID" />
-          <ScalarProperty Name="Title" ColumnName="Title" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="FilePath" ColumnName="FilePath" />
-          <ScalarProperty Name="FileExtension" ColumnName="FileExtension" />
-          <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
-          <ScalarProperty Name="UploadDate" ColumnName="UploadDate" />
-          <ScalarProperty Name="UploadedBy" ColumnName="UploadedBy" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -40,6 +27,7 @@
     <EntitySetMapping Name="Logs">
       <EntityTypeMapping TypeName="DigitalLibraryDBModel.Logs">
         <MappingFragment StoreEntitySet="Logs">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
           <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
           <ScalarProperty Name="IconClass" ColumnName="IconClass" />
           <ScalarProperty Name="Description" ColumnName="Description" />
@@ -54,6 +42,22 @@
           <ScalarProperty Name="IsMaintenanceMode" ColumnName="IsMaintenanceMode" />
           <ScalarProperty Name="MaxUploadSizeMB" ColumnName="MaxUploadSizeMB" />
           <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Documents">
+      <EntityTypeMapping TypeName="DigitalLibraryDBModel.Documents">
+        <MappingFragment StoreEntitySet="Documents">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="IsPrivate" ColumnName="IsPrivate" />
+          <ScalarProperty Name="UploadedBy" ColumnName="UploadedBy" />
+          <ScalarProperty Name="UploadDate" ColumnName="UploadDate" />
+          <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+          <ScalarProperty Name="FileExtension" ColumnName="FileExtension" />
+          <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>

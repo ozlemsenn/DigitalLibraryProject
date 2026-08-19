@@ -3,18 +3,6 @@
   "WorkspaceRootPath": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|c:\\users\\pc\\onedrive\\desktop\\staj2\\digitallibrary\\digitallibrary\\views\\auth\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|solutionrelative:digitallibrary\\views\\auth\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|c:\\users\\pc\\onedrive\\desktop\\staj2\\digitallibrary\\digitallibrary\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|solutionrelative:digitallibrary\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|c:\\users\\pc\\onedrive\\desktop\\staj2\\digitallibrary\\digitallibrary\\views\\shared\\_adminlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|solutionrelative:digitallibrary\\views\\shared\\_adminlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\digitallibrary\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|solutionrelative:digitallibrary\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
@@ -23,16 +11,28 @@
       "RelativeMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|solutionrelative:digitallibrary\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|c:\\users\\pc\\onedrive\\desktop\\staj2\\digitallibrary\\digitallibrary\\views\\home\\mydocuments.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|solutionrelative:digitallibrary\\views\\home\\mydocuments.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|c:\\users\\pc\\onedrive\\desktop\\staj2\\digitallibrary\\digitallibrary\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|solutionrelative:digitallibrary\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|c:\\users\\pc\\onedrive\\desktop\\staj2\\digitallibrary\\digitallibrary\\views\\auth\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|solutionrelative:digitallibrary\\views\\auth\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\digitallibrary\\controllers\\documentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|solutionrelative:digitallibrary\\controllers\\documentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\digitallibrary\\views\\home\\mydocuments.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|solutionrelative:digitallibrary\\views\\home\\mydocuments.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\digitallibrary\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|solutionrelative:digitallibrary\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\digitallibrary\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|solutionrelative:digitallibrary\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\digitallibrary\\views\\shared\\_adminlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|solutionrelative:digitallibrary\\views\\shared\\_adminlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E05F3ACF-E092-4E61-80A4-403E32E64447}|DigitalLibrary\\DigitalLibrary.csproj|C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\digitallibrary\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -58,17 +58,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Login.cshtml",
               "DocumentMoniker": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Auth\\Login.cshtml",
               "RelativeDocumentMoniker": "DigitalLibrary\\Views\\Auth\\Login.cshtml",
               "ToolTip": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Auth\\Login.cshtml",
               "RelativeToolTip": "DigitalLibrary\\Views\\Auth\\Login.cshtml",
-              "ViewState": "AgIAAG4AAAAAAAAAAAASwNIAAABAAAAAAAAAAA==",
+              "ViewState": "AgIAABgAAAAAAAAAAAASwCYAAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-08-19T14:23:32.132Z",
               "IsPinned": true,
@@ -76,13 +76,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Home\\Index.cshtml",
               "RelativeDocumentMoniker": "DigitalLibrary\\Views\\Home\\Index.cshtml",
               "ToolTip": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Home\\Index.cshtml",
               "RelativeToolTip": "DigitalLibrary\\Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAAI0AAAAAAAAAAAAAAJoAAAAlAAAAAAAAAA==",
+              "ViewState": "AgIAABUBAAAAAAAAAAASwBsBAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-08-07T13:07:15.129Z",
               "IsPinned": true,
@@ -90,13 +90,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Admin\\Index.cshtml",
               "RelativeDocumentMoniker": "DigitalLibrary\\Views\\Admin\\Index.cshtml",
               "ToolTip": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Admin\\Index.cshtml",
               "RelativeToolTip": "DigitalLibrary\\Views\\Admin\\Index.cshtml",
-              "ViewState": "AgIAAGwAAAAAAAAAAAAAAIcAAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAIcAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-08-12T15:13:22.356Z",
               "IsPinned": true,
@@ -116,7 +116,45 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
+              "Title": "DocumentController.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Controllers\\DocumentController.cs",
+              "RelativeDocumentMoniker": "DigitalLibrary\\Controllers\\DocumentController.cs",
+              "ToolTip": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Controllers\\DocumentController.cs",
+              "RelativeToolTip": "DigitalLibrary\\Controllers\\DocumentController.cs",
+              "ViewState": "AgIAAAwBAAAAAAAAAAAIwCsBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-18T20:10:08.208Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MyDocuments.cshtml",
+              "DocumentMoniker": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Home\\MyDocuments.cshtml",
+              "RelativeDocumentMoniker": "DigitalLibrary\\Views\\Home\\MyDocuments.cshtml",
+              "ToolTip": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Home\\MyDocuments.cshtml",
+              "RelativeToolTip": "DigitalLibrary\\Views\\Home\\MyDocuments.cshtml",
+              "ViewState": "AgIAAJQAAAAAAAAAAAAiwLgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-08-19T14:11:25.788Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "DigitalLibrary\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "DigitalLibrary\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAYwC4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-19T21:32:29.125Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "DigitalLibrary\\Views\\Shared\\_Layout.cshtml",
@@ -124,12 +162,11 @@
               "RelativeToolTip": "DigitalLibrary\\Views\\Shared\\_Layout.cshtml",
               "ViewState": "AgIAAEcAAAAAAAAAAAAiwH8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-08-12T15:02:45.226Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-12T15:02:45.226Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 7,
               "Title": "_AdminLayout.cshtml",
               "DocumentMoniker": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Shared\\_AdminLayout.cshtml",
               "RelativeDocumentMoniker": "DigitalLibrary\\Views\\Shared\\_AdminLayout.cshtml",
@@ -137,46 +174,7 @@
               "RelativeToolTip": "DigitalLibrary\\Views\\Shared\\_AdminLayout.cshtml",
               "ViewState": "AgIAACYBAAAAAAAAAAAAABgBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-08-19T21:22:33.034Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "MyDocuments.cshtml",
-              "DocumentMoniker": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Home\\MyDocuments.cshtml",
-              "RelativeDocumentMoniker": "DigitalLibrary\\Views\\Home\\MyDocuments.cshtml",
-              "ToolTip": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Views\\Home\\MyDocuments.cshtml",
-              "RelativeToolTip": "DigitalLibrary\\Views\\Home\\MyDocuments.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-08-19T14:11:25.788Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "HomeController.cs",
-              "DocumentMoniker": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Controllers\\HomeController.cs",
-              "RelativeDocumentMoniker": "DigitalLibrary\\Controllers\\HomeController.cs",
-              "ToolTip": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Controllers\\HomeController.cs",
-              "RelativeToolTip": "DigitalLibrary\\Controllers\\HomeController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-19T14:06:53.106Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "DocumentController.cs",
-              "DocumentMoniker": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Controllers\\DocumentController.cs",
-              "RelativeDocumentMoniker": "DigitalLibrary\\Controllers\\DocumentController.cs",
-              "ToolTip": "C:\\Users\\pc\\OneDrive\\Desktop\\staj2\\DigitalLibrary\\DigitalLibrary\\Controllers\\DocumentController.cs",
-              "RelativeToolTip": "DigitalLibrary\\Controllers\\DocumentController.cs",
-              "ViewState": "AgIAAPIAAAAAAAAAAAAQwPkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-18T20:10:08.208Z"
+              "WhenOpened": "2026-08-19T21:22:33.034Z"
             },
             {
               "$type": "Document",

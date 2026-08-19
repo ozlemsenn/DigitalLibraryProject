@@ -9,22 +9,8 @@
     <Property Name="ParentID" Type="Int32" />
     <NavigationProperty Name="Categories1" Relationship="Self.FK__Categorie__Paren__49C3F6B7" FromRole="Categories" ToRole="Categories1" />
     <NavigationProperty Name="Categories2" Relationship="Self.FK__Categorie__Paren__49C3F6B7" FromRole="Categories1" ToRole="Categories" />
-    <NavigationProperty Name="Documents" Relationship="Self.FK__Documents__Categ__4D94879B" FromRole="Categories" ToRole="Documents" />
-  </EntityType>
-  <EntityType Name="Documents">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="FilePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="FileExtension" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-    <Property Name="CategoryID" Type="Int32" />
-    <Property Name="UploadDate" Type="DateTime" Precision="3" />
-    <Property Name="UploadedBy" Type="Int32" />
-    <NavigationProperty Name="Categories" Relationship="Self.FK__Documents__Categ__4D94879B" FromRole="Documents" ToRole="Categories" />
-    <NavigationProperty Name="Users" Relationship="Self.FK__Documents__Uploa__4E88ABD4" FromRole="Documents" ToRole="Users" />
+    <Property Name="IsAdminOnly" Type="Boolean" />
+    <NavigationProperty Name="Documents" Relationship="DigitalLibraryDBModel.FK__Documents__Categ__4D94879B" FromRole="Categories" ToRole="Documents" />
   </EntityType>
   <EntityType Name="Users">
     <Key>
@@ -34,10 +20,10 @@
     <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="Role" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Documents" Relationship="Self.FK__Documents__Uploa__4E88ABD4" FromRole="Users" ToRole="Documents" />
     <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="IsActive" Type="Boolean" Nullable="false" />
     <Property Name="DeactivationReason" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Documents" Relationship="DigitalLibraryDBModel.FK__Documents__Uploa__4E88ABD4" FromRole="Users" ToRole="Documents" />
   </EntityType>
   <Association Name="FK__Categorie__Paren__49C3F6B7">
     <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
@@ -51,48 +37,24 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK__Documents__Categ__4D94879B">
-    <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
-    <End Role="Documents" Type="Self.Documents" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Categories">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="Documents">
-        <PropertyRef Name="CategoryID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK__Documents__Uploa__4E88ABD4">
-    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
-    <End Role="Documents" Type="Self.Documents" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Users">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="Documents">
-        <PropertyRef Name="UploadedBy" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityContainer Name="DigitalLibraryDBEntities1" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Categories" EntityType="Self.Categories" />
-    <EntitySet Name="Documents" EntityType="Self.Documents" />
     <EntitySet Name="Users" EntityType="Self.Users" />
     <AssociationSet Name="FK__Categorie__Paren__49C3F6B7" Association="Self.FK__Categorie__Paren__49C3F6B7">
       <End Role="Categories" EntitySet="Categories" />
       <End Role="Categories1" EntitySet="Categories" />
     </AssociationSet>
-    <AssociationSet Name="FK__Documents__Categ__4D94879B" Association="Self.FK__Documents__Categ__4D94879B">
+    <EntitySet Name="Logs" EntityType="DigitalLibraryDBModel.Logs" />
+    <EntitySet Name="SystemSettings" EntityType="DigitalLibraryDBModel.SystemSettings" />
+    <EntitySet Name="Documents" EntityType="DigitalLibraryDBModel.Documents" />
+    <AssociationSet Name="FK__Documents__Categ__4D94879B" Association="DigitalLibraryDBModel.FK__Documents__Categ__4D94879B">
       <End Role="Categories" EntitySet="Categories" />
       <End Role="Documents" EntitySet="Documents" />
     </AssociationSet>
-    <AssociationSet Name="FK__Documents__Uploa__4E88ABD4" Association="Self.FK__Documents__Uploa__4E88ABD4">
+    <AssociationSet Name="FK__Documents__Uploa__4E88ABD4" Association="DigitalLibraryDBModel.FK__Documents__Uploa__4E88ABD4">
       <End Role="Users" EntitySet="Users" />
       <End Role="Documents" EntitySet="Documents" />
     </AssociationSet>
-    <EntitySet Name="Logs" EntityType="DigitalLibraryDBModel.Logs" />
-    <EntitySet Name="SystemSettings" EntityType="DigitalLibraryDBModel.SystemSettings" />
   </EntityContainer>
   <EntityType Name="Logs">
     <Key>
@@ -103,6 +65,7 @@
     <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
     <Property Name="IconClass" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+    <Property Name="UserID" Type="Int32" />
   </EntityType>
   <EntityType Name="SystemSettings">
     <Key>
@@ -113,4 +76,45 @@
     <Property Name="MaxUploadSizeMB" Type="Int32" />
     <Property Name="IsMaintenanceMode" Type="Boolean" />
   </EntityType>
+  <EntityType Name="Documents">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="FilePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="FileExtension" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="CategoryID" Type="Int32" />
+    <Property Name="UploadDate" Type="DateTime" Precision="3" />
+    <Property Name="UploadedBy" Type="Int32" />
+    <Property Name="IsPrivate" Type="Boolean" />
+    <Property Name="UserID" Type="Int32" />
+    <NavigationProperty Name="Categories" Relationship="DigitalLibraryDBModel.FK__Documents__Categ__4D94879B" FromRole="Documents" ToRole="Categories" />
+    <NavigationProperty Name="Users" Relationship="DigitalLibraryDBModel.FK__Documents__Uploa__4E88ABD4" FromRole="Documents" ToRole="Users" />
+  </EntityType>
+  <Association Name="FK__Documents__Categ__4D94879B">
+    <End Type="DigitalLibraryDBModel.Categories" Role="Categories" Multiplicity="0..1" />
+    <End Type="DigitalLibraryDBModel.Documents" Role="Documents" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Documents">
+        <PropertyRef Name="CategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Documents__Uploa__4E88ABD4">
+    <End Type="DigitalLibraryDBModel.Users" Role="Users" Multiplicity="0..1" />
+    <End Type="DigitalLibraryDBModel.Documents" Role="Documents" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Documents">
+        <PropertyRef Name="UploadedBy" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

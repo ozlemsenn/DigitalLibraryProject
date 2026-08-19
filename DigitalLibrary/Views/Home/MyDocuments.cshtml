@@ -32,7 +32,18 @@
                             { <i class="fas fa-file text-muted-warm fa-2x mr-3"></i>}
 
                             <div>
-                                <span class="font-weight-bold text-dark-wood" style="font-size: 1.1rem;">@doc.Title</span>
+                                <span class="font-weight-bold text-dark-wood" style="font-size: 1.1rem;">
+                                    @doc.Title
+                                    <!-- YENİ: GİZLİLİK ROZETİ -->
+                                    @if (doc.IsPrivate == true)
+                                    {
+                                        <span class="badge badge-light border ml-2" style="color: #D48900; font-size: 0.75rem;"><i class="fas fa-lock mr-1"></i> Özel</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-light border ml-2" style="color: #27ae60; font-size: 0.75rem;"><i class="fas fa-globe mr-1"></i> Herkes</span>
+                                    }
+                                </span>
                                 <small class="d-block mt-1 text-muted-warm">
                                     <i class="fas fa-calendar-alt mr-1"></i> @(doc.UploadDate.HasValue ? doc.UploadDate.Value.ToString("dd.MM.yyyy") : "-")
                                 </small>
@@ -89,6 +100,14 @@
                             }
                         </select>
                     </div>
+                    <!-- YENİ: GÖRÜNÜRLÜK SEÇENEĞİ -->
+                    <div class="form-group">
+                        <label class="font-weight-bold" style="color: #7F736A;">Görünürlük</label>
+                        <select id="EditVisibility" class="form-control" style="border-radius: 8px;">
+                            <option value="false">👁️ Herkes (Tüm Personel Görebilir)</option>
+                            <option value="true">🔒 Sadece Ben (Özel Doküman)</option>
+                        </select>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer border-0">
@@ -114,7 +133,8 @@
                     confirmButtonText: 'Evet, Sil!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        $.ajax({ url: '/Document/Delete/' + docId, type: 'POST',
+                        $.ajax({
+                            url: '/Document/Delete/' + docId, type: 'POST',
                             success: function (c) {
                                 if (c.success) Swal.fire('Silindi!', c.message, 'success').then(() => location.reload());
                                 else Swal.fire('Hata!', c.message, 'error');
@@ -126,12 +146,17 @@
 
             $('.btn-edit-trigger').click(function () {
                 var docId = $(this).data("id");
-                $.ajax({ url: '/Document/GetDocument/' + docId, type: 'GET',
+                $.ajax({
+                    url: '/Document/GetDocument/' + docId, type: 'GET',
                     success: function (c) {
-                        if(c.success) {
+                        if (c.success) {
                             $("#EditDocID").val(c.data.ID);
                             $("#EditTitle").val(c.data.Title);
                             $("#EditCategoryID").val(c.data.CategoryID);
+
+                            // YENİ: Gelen verideki gizlilik durumunu Modal'a yansıt
+                            $("#EditVisibility").val(c.data.IsPrivate === true ? "true" : "false");
+
                             $("#editModal").modal('show');
                         }
                     }
@@ -139,8 +164,16 @@
             });
 
             $("#btnUpdate").click(function () {
-                var veri = { id: $("#EditDocID").val(), title: $("#EditTitle").val(), categoryId: $("#EditCategoryID").val() };
-                $.ajax({ url: '/Document/Update', type: 'POST', data: veri,
+                // YENİ: Gizlilik durumunu da alıyoruz
+                var veri = {
+                    id: $("#EditDocID").val(),
+                    title: $("#EditTitle").val(),
+                    categoryId: $("#EditCategoryID").val(),
+                    isPrivate: $("#EditVisibility").val() === "true"
+                };
+
+                $.ajax({
+                    url: '/Document/Update', type: 'POST', data: veri,
                     success: function (c) {
                         if (c.success) Swal.fire('Başarılı!', c.message, 'success').then(() => location.reload());
                         else Swal.fire('Hata!', c.message, 'error');

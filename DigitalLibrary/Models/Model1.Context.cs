@@ -26,9 +26,9 @@ namespace DigitalLibrary.Models
         }
     
         public virtual DbSet<Categories> Categories { get; set; }
-        public virtual DbSet<Documents> Documents { get; set; }
         public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<Logs> Logs { get; set; }
         public virtual DbSet<SystemSettings> SystemSettings { get; set; }
+        public virtual DbSet<Documents> Documents { get; set; }
     }
 }

@@ -17,27 +17,35 @@ namespace DigitalLibrary.Controllers
         [HttpPost]
         public ActionResult Login(string Email, string Password)
         {
-            var user = db.Users.FirstOrDefault(u => u.Email == Email && u.Password == Password && u.IsActive == true);
+            var user = db.Users.FirstOrDefault(u => u.Email == Email && u.Password == Password);
 
             if (user != null)
             {
-                Session["UserID"] = user.ID;
-                Session["Role"] = user.Role;
-                Session["UserName"] = user.Name; 
-
-                if (user.Role == "Admin")
+                if (user.IsActive == true)
                 {
-                    return RedirectToAction("Documents", "Admin"); 
+                    Session["UserID"] = user.ID;
+                    Session["Role"] = user.Role;
+                    Session["UserName"] = user.Name;
+
+                    if (user.Role == "Admin")
+                    {
+                        return RedirectToAction("Index", "Admin");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
                 else
                 {
-                    return RedirectToAction("Index", "Home"); 
+                    TempData["Hata"] = "Hesabınız askıya alınmıştır. ";
+                    return View();
                 }
             }
             else
             {
-                TempData["Hata"] = "E-Posta adresi, şifre hatalı veya hesabınız pasif!";
-                return View(); 
+                TempData["Hata"] = "Girdiğiniz e-posta adresi veya şifre hatalı.";
+                return View();
             }
         }
 
