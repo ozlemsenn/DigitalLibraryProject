@@ -15,8 +15,8 @@
 
     .timeline {
         border-left: 2px solid #F0EAE1;
-        padding-left: 30px; 
-        margin-left: 15px; 
+        padding-left: 30px;
+        margin-left: 15px;
         list-style: none;
         margin-bottom: 0;
         position: relative;
@@ -33,9 +33,9 @@
 
     .timeline-icon {
         position: absolute;
-        left: -43px; 
+        left: -43px;
         background: #fff;
-        border: 2px solid #D35400; 
+        border: 2px solid #D35400;
         width: 24px;
         height: 24px;
         border-radius: 50%;
@@ -43,7 +43,7 @@
         align-items: center;
         justify-content: center;
         font-size: 0.65rem;
-        color: #D35400; 
+        color: #D35400;
     }
 </style>
 
@@ -60,11 +60,12 @@
 </div>
 
 <div class="row mt-4">
-    <div class="col-md-4 mb-3">
+    <!-- 4'LÜ KART YAPISINA GEÇİLDİ (col-md-3) -->
+    <div class="col-md-3 mb-3">
         <div class="card text-white shadow-sm border-0 premium-hover" style="border-radius: 15px; background: linear-gradient(135deg, #5C4033, #3b2a22);">
             <div class="card-body p-4 d-flex justify-content-between align-items-center">
                 <div>
-                    <h6 class="text-uppercase mb-1" style="opacity: 0.8; letter-spacing: 1px;">Toplam Doküman</h6>
+                    <h6 class="text-uppercase mb-1" style="opacity: 0.8; letter-spacing: 1px; font-size: 0.8rem;">Toplam Doküman</h6>
                     <h2 class="mb-0 font-weight-bold">@ViewBag.TotalDocuments</h2>
                 </div>
                 <i class="fas fa-file-alt fa-3x" style="opacity: 0.2;"></i>
@@ -72,11 +73,11 @@
         </div>
     </div>
 
-    <div class="col-md-4 mb-3">
+    <div class="col-md-3 mb-3">
         <div class="card text-white shadow-sm border-0 premium-hover" style="border-radius: 15px; background: linear-gradient(135deg, #D35400, #a84300);">
             <div class="card-body p-4 d-flex justify-content-between align-items-center">
                 <div>
-                    <h6 class="text-uppercase mb-1" style="opacity: 0.8; letter-spacing: 1px;">Sistem Kategorileri</h6>
+                    <h6 class="text-uppercase mb-1" style="opacity: 0.8; letter-spacing: 1px; font-size: 0.8rem;">Kategoriler</h6>
                     <h2 class="mb-0 font-weight-bold">@ViewBag.TotalCategories</h2>
                 </div>
                 <i class="fas fa-folder-open fa-3x" style="opacity: 0.2;"></i>
@@ -84,14 +85,27 @@
         </div>
     </div>
 
-    <div class="col-md-4 mb-3">
-        <div class="card text-white shadow-sm border-0 premium-hover" style="border-radius: 15px; background: linear-gradient(135deg, #8c7a6b, #6b5a4d);">
+    <!-- YENİ KART: KAYITLI PERSONEL -->
+    <div class="col-md-3 mb-3">
+        <div class="card text-white shadow-sm border-0 premium-hover" style="border-radius: 15px; background: linear-gradient(135deg, #2C3E50, #1a252f);">
             <div class="card-body p-4 d-flex justify-content-between align-items-center">
                 <div>
-                    <h6 class="text-uppercase mb-1" style="opacity: 0.8; letter-spacing: 1px;">Son Yüklenen</h6>
-                    <h4 class="mb-0 font-weight-bold" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px;">
+                    <h6 class="text-uppercase mb-1" style="opacity: 0.8; letter-spacing: 1px; font-size: 0.8rem;">Kayıtlı Personel</h6>
+                    <h2 class="mb-0 font-weight-bold">@ViewBag.TotalUsers</h2>
+                </div>
+                <i class="fas fa-users fa-3x" style="opacity: 0.2;"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 mb-3">
+        <div class="card text-white shadow-sm border-0 premium-hover" style="border-radius: 15px; background: linear-gradient(135deg, #8c7a6b, #6b5a4d);">
+            <div class="card-body p-4 d-flex justify-content-between align-items-center">
+                <div style="overflow: hidden;">
+                    <h6 class="text-uppercase mb-1" style="opacity: 0.8; letter-spacing: 1px; font-size: 0.8rem;">Son Yüklenen</h6>
+                    <h5 class="mb-0 font-weight-bold" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                         @ViewBag.LastDocument
-                    </h4>
+                    </h5>
                 </div>
                 <i class="fas fa-clock fa-3x" style="opacity: 0.2;"></i>
             </div>
@@ -99,8 +113,7 @@
     </div>
 </div>
 
-<div class="row align-items-stretch mt-5 pt-3 mb-5">
-
+<div class="row align-items-stretch mt-3 pt-3 mb-5">
     <div class="col-lg-5 col-md-12 mb-4 mb-lg-0 d-flex flex-column">
 
         <div class="card border-0 shadow-sm premium-card mb-4 flex-grow-1 d-flex flex-column justify-content-center">
@@ -119,7 +132,6 @@
             </div>
         </div>
 
-        <!--hızlı işlemler-->
         <div class="card border-0 shadow-sm premium-card">
             <div class="card-body p-4">
                 <h6 class="font-weight-bold mb-3" style="color: #5C4033;"><i class="fas fa-bolt mr-2" style="color: #f1c40f;"></i> Hızlı İşlemler</h6>
@@ -137,17 +149,14 @@
                 </div>
             </div>
         </div>
-
     </div>
 
-    <!--sistem hareketleri-->
     <div class="col-lg-7 col-md-12 d-flex flex-column">
         <div class="card border-0 shadow-sm premium-card flex-grow-1">
             <div class="card-body p-4 d-flex flex-column">
                 <h6 class="font-weight-bold mb-4" style="color: #5C4033;"><i class="fas fa-stream mr-2" style="color: #D35400;"></i> Son Sistem Hareketleri</h6>
 
                 <ul class="timeline mt-2 flex-grow-1">
-
                     @if (ViewBag.RecentLogs != null)
                     {
                         foreach (var log in ViewBag.RecentLogs)
@@ -155,10 +164,17 @@
                             <li class="timeline-item">
                                 <div class="timeline-icon"><i class="fas @log.IconClass"></i></div>
                                 <div class="d-flex justify-content-between align-items-center mb-1">
-                                    <span class="small font-weight-bold" style="color: #2C1E16;">@log.ActionType</span>
-
+                                    <span class="small font-weight-bold" style="color: #2C1E16;">
+                                        @log.ActionType
+                                        @if (log.Users != null)
+                                        {
+                                            <span style="color: #D35400;">
+                                                (@log.Users.Name <span class="text-muted" style="font-size: 0.7rem;">- @log.Users.Role</span>)
+                                            </span>
+                                        }
+                                    </span>
                                     <span class="text-muted" style="font-size: 0.75rem;">
-                                        <i class="far fa-clock mr-1"></i> @log.CreatedAt.ToString("dd MMM HH:mm")
+                                        <i class="far fa-clock mr-1"></i> @(log.CreatedAt != null ? log.CreatedAt.ToString("dd MMM HH:mm") : "-")
                                     </span>
                                 </div>
                                 <div class="text-muted" style="font-size: 0.85rem;">@log.Description</div>
@@ -171,7 +187,6 @@
                             <div class="text-muted small">Henüz sistemde bir hareket bulunmuyor...</div>
                         </li>
                     }
-
                 </ul>
             </div>
         </div>

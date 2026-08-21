@@ -8,11 +8,12 @@
         <EntityTypeShape EntityType="DigitalLibraryDBModel.Categories" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
         <EntityTypeShape EntityType="DigitalLibraryDBModel.Users" Width="1.5" PointX="5.125" PointY="1.5" IsExpanded="true" />
         <AssociationConnector Association="DigitalLibraryDBModel.FK__Categorie__Paren__49C3F6B7" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="DigitalLibraryDBModel.Logs" Width="1.5" PointX="3.875" PointY="2.875" />
+        <EntityTypeShape EntityType="DigitalLibraryDBModel.Logs" Width="1.5" PointX="4.5" PointY="3.375" />
         <EntityTypeShape EntityType="DigitalLibraryDBModel.SystemSettings" Width="1.5" PointX="1.625" PointY="3.5" />
         <EntityTypeShape EntityType="DigitalLibraryDBModel.Documents" Width="1.5" PointX="3" PointY="0.5" />
         <AssociationConnector Association="DigitalLibraryDBModel.FK__Documents__Categ__4D94879B" />
         <AssociationConnector Association="DigitalLibraryDBModel.FK__Documents__Uploa__4E88ABD4" />
+        <AssociationConnector Association="DigitalLibraryDBModel.FK_Logs_Users" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

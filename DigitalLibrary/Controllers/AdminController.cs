@@ -2,9 +2,11 @@
 using System.Linq;
 using System.Web.Mvc;
 using DigitalLibrary.Models;
+using DigitalLibrary.Filters;
 
 namespace DigitalLibrary.Controllers
 {
+    [AuthFilter]
     public class AdminController : Controller
     {
         DigitalLibraryDBEntities1 db = new DigitalLibraryDBEntities1();
@@ -13,6 +15,8 @@ namespace DigitalLibrary.Controllers
         {
             ViewBag.TotalDocuments = db.Documents.Count();
             ViewBag.TotalCategories = db.Categories.Count();
+
+            ViewBag.TotalUsers = db.Users.Count();
 
             var sonDokuman = db.Documents.OrderByDescending(d => d.ID).FirstOrDefault();
             if (sonDokuman != null)
@@ -34,11 +38,11 @@ namespace DigitalLibrary.Controllers
             }
 
             double kullanilanMB = toplamByte / 1048576.0;
-            double kapasiteMB = 1024.0; 
+            double kapasiteMB = 1024.0;
             double dolulukYuzdesi = (kullanilanMB / kapasiteMB) * 100;
 
-            ViewBag.KullanilanMB = Math.Round(kullanilanMB, 2); 
-            ViewBag.KapasiteMB = 1024; 
+            ViewBag.KullanilanMB = Math.Round(kullanilanMB, 2);
+            ViewBag.KapasiteMB = 1024;
             ViewBag.DolulukYuzdesi = Math.Round(dolulukYuzdesi, 1);
 
             ViewBag.RecentLogs = db.Logs.OrderByDescending(x => x.CreatedAt).Take(4).ToList();

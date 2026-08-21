@@ -6,9 +6,11 @@ using System.Web;
 using System.Web.Management;
 using System.Web.Mvc;
 using DigitalLibrary.Models;
+using DigitalLibrary.Filters;
 
 namespace DigitalLibrary.Controllers
 {
+    [AuthFilter]
     public class DocumentController : Controller
     {
         DigitalLibraryDBEntities1 db = new DigitalLibraryDBEntities1();

@@ -2,11 +2,13 @@
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using DigitalLibrary.Filters;
 
 using DigitalLibrary.Models;
 
 namespace DigitalLibrary.Controllers
 {
+    [AuthFilter] //filtremiz
     public class HomeController : Controller
     {
         DigitalLibraryDBEntities1 db = new DigitalLibraryDBEntities1();

@@ -18,6 +18,7 @@ namespace DigitalLibrary.Models
         public Users()
         {
             this.Documents = new HashSet<Documents>();
+            this.Logs = new HashSet<Logs>();
         }
     
         public int ID { get; set; }
@@ -30,5 +31,7 @@ namespace DigitalLibrary.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Documents> Documents { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Logs> Logs { get; set; }
     }
 }

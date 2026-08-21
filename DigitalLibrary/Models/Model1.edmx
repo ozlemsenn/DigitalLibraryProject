@@ -97,6 +97,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Logs_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Logs" Type="Self.Logs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Logs">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="DigitalLibraryDBModelStoreContainer">
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Documents" EntityType="Self.Documents" Schema="dbo" store:Type="Tables" />
@@ -114,6 +126,10 @@
           <AssociationSet Name="FK__Documents__Uploa__4E88ABD4" Association="Self.FK__Documents__Uploa__4E88ABD4">
             <End Role="Users" EntitySet="Users" />
             <End Role="Documents" EntitySet="Documents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Logs_Users" Association="Self.FK_Logs_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Logs" EntitySet="Logs" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -144,6 +160,7 @@
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
           <Property Name="DeactivationReason" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Documents" Relationship="DigitalLibraryDBModel.FK__Documents__Uploa__4E88ABD4" FromRole="Users" ToRole="Documents" />
+          <NavigationProperty Name="Logs" Relationship="DigitalLibraryDBModel.FK_Logs_Users" FromRole="Users" ToRole="Logs" />
         </EntityType>
         <Association Name="FK__Categorie__Paren__49C3F6B7">
           <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
@@ -175,6 +192,10 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="Documents" EntitySet="Documents" />
           </AssociationSet>
+          <AssociationSet Name="FK_Logs_Users" Association="DigitalLibraryDBModel.FK_Logs_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Logs" EntitySet="Logs" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Logs">
           <Key>
@@ -186,6 +207,7 @@
           <Property Name="IconClass" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreatedAt" Type="DateTime" Precision="3" />
           <Property Name="UserID" Type="Int32" />
+          <NavigationProperty Name="Users" Relationship="DigitalLibraryDBModel.FK_Logs_Users" FromRole="Logs" ToRole="Users" />
         </EntityType>
         <EntityType Name="SystemSettings">
           <Key>
@@ -234,6 +256,18 @@
             </Principal>
             <Dependent Role="Documents">
               <PropertyRef Name="UploadedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Logs_Users">
+          <End Type="DigitalLibraryDBModel.Users" Role="Users" Multiplicity="0..1" />
+          <End Type="DigitalLibraryDBModel.Logs" Role="Logs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Logs">
+              <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
