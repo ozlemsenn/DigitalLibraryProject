@@ -25,6 +25,7 @@
     <Property Name="DeactivationReason" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="Documents" Relationship="DigitalLibraryDBModel.FK__Documents__Uploa__4E88ABD4" FromRole="Users" ToRole="Documents" />
     <NavigationProperty Name="Logs" Relationship="DigitalLibraryDBModel.FK_Logs_Users" FromRole="Users" ToRole="Logs" />
+    <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
   <Association Name="FK__Categorie__Paren__49C3F6B7">
     <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />

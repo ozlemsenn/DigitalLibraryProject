@@ -26,6 +26,7 @@ namespace DigitalLibrary.Controllers
                     Session["UserID"] = user.ID;
                     Session["Role"] = user.Role;
                     Session["UserName"] = user.Name;
+                    Session["Department"] = user.Department;
 
                     if (user.Role == "Admin")
                     {

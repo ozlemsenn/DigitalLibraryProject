@@ -120,5 +120,98 @@ namespace DigitalLibrary.Controllers
 
             return RedirectToAction("ProfileSettings");
         }
+
+        [HttpGet]
+        public JsonResult GetMyNotifications()
+        {
+            try
+            {
+                int aktifKullaniciID = Session["UserID"] != null ? Convert.ToInt32(Session["UserID"]) : 0;
+
+                var latestLogsRaw = db.Logs
+                                      .Where(l => l.UserID == aktifKullaniciID)
+                                      .OrderByDescending(l => l.CreatedAt)
+                                      .Take(3)
+                                      .ToList();
+
+                var latestLogs = latestLogsRaw.Select(l => new {
+                    ActionType = l.ActionType,
+                    Description = l.Description,
+                    IconClass = l.IconClass ?? "fa-bolt",
+                    CreatedAt = l.CreatedAt.HasValue ? l.CreatedAt.Value.ToString("dd MMM HH:mm") : ""
+                }).ToList();
+
+                return Json(new { success = true, data = latestLogs }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpGet]
+        public JsonResult GetServerStatus()
+        {
+            try
+            {
+                string uploadPath = Server.MapPath("~/App_Data/Uploads/");
+                long toplamByte = 0;
+
+                if (System.IO.Directory.Exists(uploadPath))
+                {
+                    var dirInfo = new System.IO.DirectoryInfo(uploadPath);
+                    toplamByte = dirInfo.EnumerateFiles().Sum(file => file.Length);
+                }
+
+                double kullanilanMB = toplamByte / 1048576.0;
+                double kapasiteMB = 1024.0; 
+                double dolulukYuzdesi = (kullanilanMB / kapasiteMB) * 100;
+
+                return Json(new
+                {
+                    success = true,
+                    yuzde = Math.Round(dolulukYuzdesi, 1),
+                    kullanilan = Math.Round(kullanilanMB, 2)
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpGet]
+        public JsonResult GetLatestDocument()
+        {
+            try
+            {
+                int aktifKullaniciID = Session["UserID"] != null ? Convert.ToInt32(Session["UserID"]) : 0;
+                string userRole = Session["Role"] != null ? Session["Role"].ToString() : "";
+
+                var query = db.Documents.AsQueryable();
+
+                // Sadece personelin yetkisi olan (gizli olmayan) klasörlerdeki ve herkese açık belgeleri filtrele
+                if (userRole == "Personel")
+                {
+                    var izinliKategoriler = db.Categories.Where(c => c.IsAdminOnly == false || c.IsAdminOnly == null).Select(c => c.ID).ToList();
+                    query = query.Where(d => d.CategoryID.HasValue &&
+                                             izinliKategoriler.Contains(d.CategoryID.Value) &&
+                                             (d.IsPrivate == false || d.IsPrivate == null || d.UserID == aktifKullaniciID));
+                }
+
+                var sonBelge = query.OrderByDescending(d => d.ID).FirstOrDefault();
+
+                if (sonBelge != null)
+                {
+                    // Uzun başlıkları kırpmak için ufak bir dokunuş
+                    string kisaBaslik = sonBelge.Title.Length > 18 ? sonBelge.Title.Substring(0, 18) + "..." : sonBelge.Title;
+                    return Json(new { success = true, title = kisaBaslik + sonBelge.FileExtension }, JsonRequestBehavior.AllowGet);
+                }
+
+                return Json(new { success = false, title = "Henüz belge yok" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, title = "Hata oluştu" }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

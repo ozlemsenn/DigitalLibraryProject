@@ -204,6 +204,8 @@
                     <tr>
                         <th class="pl-4">Ad Soyad</th>
                         <th>Email Adresi</th>
+                        <!-- YENİ SÜTUN: DEPARTMAN -->
+                        <th>Departman</th>
                         <th>Rol (Yetki)</th>
                         <th>Durum</th>
                         <th class="text-right pr-4">İşlemler</th>
@@ -224,6 +226,17 @@
                                     </div>
                                 </td>
                                 <td>@user.Email</td>
+                                <!-- YENİ HÜCRE: DEPARTMAN -->
+                                <td>
+                                    @if (!string.IsNullOrEmpty(user.Department))
+                                    {
+                                        <span style="color: #7F736A;"><i class="fas fa-building mr-1"></i> @user.Department</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
                                 <td>
                                     @if (user.Role == "Admin")
                                     {
@@ -288,10 +301,19 @@
                         <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Ad Soyad</label>
                         <input type="text" id="Name" class="form-control" placeholder="Örn: Mehmet Yılmaz" style="border-radius: 8px; border: 1px solid #F0EAE1;">
                     </div>
-                    <div class="form-group">
-                        <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Email Adresi</label>
-                        <input type="email" id="Email" class="form-control" placeholder="ornek@sirket.com" style="border-radius: 8px; border: 1px solid #F0EAE1;">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Email Adresi</label>
+                            <input type="email" id="Email" class="form-control" placeholder="ornek@sirket.com" style="border-radius: 8px; border: 1px solid #F0EAE1;">
+                        </div>
+                        <!-- YENİ: DEPARTMAN ALANI -->
+                        <div class="form-group col-md-6">
+                            <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Departman</label>
+                            <input type="text" id="Department" class="form-control" placeholder="Örn: IT, IK, Muhasebe" style="border-radius: 8px; border: 1px solid #F0EAE1;">
+                        </div>
                     </div>
+
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Şifre (Geçici)</label>
@@ -339,14 +361,17 @@
                 "ordering": true,
                 "info": true,
                 "columnDefs": [
-                    { "orderable": false, "targets": 4 }, 
-                    { "width": "150px", "targets": 4 }
+                    // YENİ: Araya Departman sütunu girdiği için İşlemler hedefi 5 oldu
+                    { "orderable": false, "targets": 5 },
+                    { "width": "150px", "targets": 5 }
                 ]
             });
 
             $("[data-target='#userModal']").click(function () {
                 $("#userForm")[0].reset();
                 $("#UserID").val("");
+                // YENİ: Ekleme formunu sıfırlarken departmanı da sıfırlıyoruz
+                $("#Department").val("");
                 $("#pasifNedeniAlani").hide();
                 $(".modal-title").html('<i class="fas fa-user-plus mr-2" style="color: #C0392B;"></i> Personel Bilgileri');
             });
@@ -459,6 +484,9 @@
                         $("#Password").val(user.Password);
                         $("#Role").val(user.Role);
 
+                        // YENİ: JSON'dan gelen departman bilgisini modaldaki input'a basıyoruz
+                        $("#Department").val(user.Department);
+
                         if (user.DeactivationReason) {
                             $("#DeactivationReasonDisplay").val(user.DeactivationReason);
                             $("#pasifNedeniAlani").slideDown();
@@ -480,7 +508,9 @@
                     Name: $("#Name").val(),
                     Email: $("#Email").val(),
                     Password: $("#Password").val(),
-                    Role: $("#Role").val()
+                    Role: $("#Role").val(),
+                    // YENİ: Departman değerini de Controller'a gönderiyoruz
+                    Department: $("#Department").val()
                 };
 
                 var islemUrl = (!userId) ? '/Admin/AddUser' : '/Admin/EditUser';

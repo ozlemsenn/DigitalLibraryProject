@@ -57,7 +57,7 @@ namespace DigitalLibrary.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddUser(string Name, string Email, string Password, string Role)
+        public ActionResult AddUser(string Name, string Email, string Password, string Role, string Department)
         {
             try
             {
@@ -71,18 +71,25 @@ namespace DigitalLibrary.Controllers
                 yeniPersonel.Email = Email;
                 yeniPersonel.Password = Password;
                 yeniPersonel.Role = Role;
+
+                yeniPersonel.Department = Department;
+
                 yeniPersonel.IsActive = true;
 
                 db.Users.Add(yeniPersonel);
 
                 Logs log = new Logs();
                 log.ActionType = "Yeni Personel Eklendi";
-                log.Description = "'" + Name + "' isimli personel sisteme dahil edildi.";
+                string depBilgi = string.IsNullOrEmpty(Department) ? "" : " (" + Department + ")";
+                log.Description = "'" + Name + "'" + depBilgi + " isimli personel sisteme dahil edildi.";
                 log.IconClass = "fa-user-plus";
                 log.CreatedAt = DateTime.Now;
-                db.Logs.Add(log);
 
-                db.SaveChanges(); 
+                int aktifKullaniciID = Session["UserID"] != null ? Convert.ToInt32(Session["UserID"]) : 0;
+                if (aktifKullaniciID > 0) log.UserID = aktifKullaniciID;
+
+                db.Logs.Add(log);
+                db.SaveChanges();
 
                 return Json(new { success = true, message = "Yeni personel sisteme başarıyla eklendi." });
             }
@@ -129,6 +136,7 @@ namespace DigitalLibrary.Controllers
                     Email = user.Email,
                     Password = user.Password,
                     Role = user.Role,
+                    Department = user.Department,
                     DeactivationReason = user.DeactivationReason
                 }, JsonRequestBehavior.AllowGet);
             }
@@ -136,7 +144,7 @@ namespace DigitalLibrary.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditUser(int? ID, string Name, string Email, string Password, string Role)
+        public ActionResult EditUser(int? ID, string Name, string Email, string Password, string Role, string Department)
         {
             try
             {
@@ -153,13 +161,18 @@ namespace DigitalLibrary.Controllers
                     guncellenecekKullanici.Password = Password;
                     guncellenecekKullanici.Role = Role;
 
+                    guncellenecekKullanici.Department = Department;
+
                     Logs log = new Logs();
                     log.ActionType = "Personel Bilgileri Güncellendi";
                     log.Description = "'" + Name + "' isimli personelin bilgileri değiştirildi.";
                     log.IconClass = "fa-user-edit";
                     log.CreatedAt = DateTime.Now;
-                    db.Logs.Add(log);
 
+                    int aktifKullaniciID = Session["UserID"] != null ? Convert.ToInt32(Session["UserID"]) : 0;
+                    if (aktifKullaniciID > 0) log.UserID = aktifKullaniciID;
+
+                    db.Logs.Add(log);
                     db.SaveChanges();
 
                     return Json(new { success = true, message = "Personel bilgileri başarıyla güncellendi." });
@@ -384,6 +397,30 @@ namespace DigitalLibrary.Controllers
             catch (Exception ex)
             {
                 return Json(new { success = false, message = "Hata: " + ex.Message });
+            }
+        }
+        [HttpGet]
+        public JsonResult GetLatestNotifications()
+        {
+            try
+            {
+                // 1. Veritabanından son 3 logu çekiyoruz (Sondan başa doğru sıralayarak)
+                var latestLogsRaw = db.Logs.OrderByDescending(l => l.CreatedAt).Take(3).ToList();
+
+                // 2. JavaScript'in anlayacağı temiz bir JSON formatına (Anonim Obje) çeviriyoruz
+                var latestLogs = latestLogsRaw.Select(l => new {
+                    ActionType = l.ActionType,
+                    Description = l.Description,
+                    IconClass = l.IconClass ?? "fa-bolt", // İkon boşsa varsayılan ikon
+                    CreatedAt = l.CreatedAt.HasValue ? l.CreatedAt.Value.ToString("dd MMM HH:mm") : "",
+                    UserName = l.Users != null ? l.Users.Name : "Sistem"
+                }).ToList();
+
+                return Json(new { success = true, data = latestLogs }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
     }

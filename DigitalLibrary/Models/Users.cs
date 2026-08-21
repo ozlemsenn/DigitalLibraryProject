@@ -28,6 +28,7 @@ namespace DigitalLibrary.Models
         public string Password { get; set; }
         public bool IsActive { get; set; }
         public string DeactivationReason { get; set; }
+        public string Department { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Documents> Documents { get; set; }
