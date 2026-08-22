@@ -248,7 +248,7 @@ namespace DigitalLibrary.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddCategory(string Name, int? ParentID)
+        public ActionResult AddCategory(string Name, int? ParentID, bool IsAdminOnly = false)
         {
             try
             {
@@ -260,11 +260,13 @@ namespace DigitalLibrary.Controllers
                 Categories yeniKategori = new Categories();
                 yeniKategori.Name = Name;
                 yeniKategori.ParentID = ParentID; 
+                yeniKategori.IsAdminOnly = IsAdminOnly;
 
                 db.Categories.Add(yeniKategori);
 
                 Logs log = new Logs();
                 log.ActionType = ParentID == null ? "Yeni Ana Kategori Eklendi" : "Yeni Alt Kategori Eklendi";
+                string gizlilikDurumu = IsAdminOnly ? " (Gizli Klasör)" : "";
                 log.Description = "'" + Name + "' isimli kategori arşive eklendi.";
                 log.IconClass = ParentID == null ? "fa-folder-plus" : "fa-code-branch";
                 log.CreatedAt = DateTime.Now;
@@ -315,13 +317,13 @@ namespace DigitalLibrary.Controllers
             var kategori = db.Categories.Find(id);
             if (kategori != null)
             {
-                return Json(new { ID = kategori.ID, Name = kategori.Name, ParentID = kategori.ParentID }, JsonRequestBehavior.AllowGet);
+                return Json(new { ID = kategori.ID, Name = kategori.Name, ParentID = kategori.ParentID, IsAdminOnly = kategori.IsAdminOnly }, JsonRequestBehavior.AllowGet);
             }
             return HttpNotFound();
         }
 
         [HttpPost]
-        public ActionResult EditCategory(int ID, string Name, int? ParentID)
+        public ActionResult EditCategory(int ID, string Name, int? ParentID, bool IsAdminOnly = false) 
         {
             try
             {
@@ -331,12 +333,18 @@ namespace DigitalLibrary.Controllers
                     string eskiAd = kategori.Name;
                     kategori.Name = Name;
                     kategori.ParentID = ParentID;
+                    kategori.IsAdminOnly = IsAdminOnly; 
 
                     Logs log = new Logs();
                     log.ActionType = "Kategori Güncellendi";
-                    log.Description = "'" + eskiAd + "' kategorisi güncellendi.";
+                    string gizlilikDurumu = IsAdminOnly ? " (Gizli Klasör olarak ayarlandı)" : "";
+                    log.Description = "'" + eskiAd + "' kategorisi güncellendi" + gizlilikDurumu + ".";
                     log.IconClass = "fa-edit";
                     log.CreatedAt = DateTime.Now;
+
+                    int aktifKullaniciID = Session["UserID"] != null ? Convert.ToInt32(Session["UserID"]) : 0;
+                    if (aktifKullaniciID > 0) log.UserID = aktifKullaniciID;
+
                     db.Logs.Add(log);
 
                     db.SaveChanges();
@@ -404,14 +412,12 @@ namespace DigitalLibrary.Controllers
         {
             try
             {
-                // 1. Veritabanından son 3 logu çekiyoruz (Sondan başa doğru sıralayarak)
                 var latestLogsRaw = db.Logs.OrderByDescending(l => l.CreatedAt).Take(3).ToList();
 
-                // 2. JavaScript'in anlayacağı temiz bir JSON formatına (Anonim Obje) çeviriyoruz
                 var latestLogs = latestLogsRaw.Select(l => new {
                     ActionType = l.ActionType,
                     Description = l.Description,
-                    IconClass = l.IconClass ?? "fa-bolt", // İkon boşsa varsayılan ikon
+                    IconClass = l.IconClass ?? "fa-bolt", 
                     CreatedAt = l.CreatedAt.HasValue ? l.CreatedAt.Value.ToString("dd MMM HH:mm") : "",
                     UserName = l.Users != null ? l.Users.Name : "Sistem"
                 }).ToList();

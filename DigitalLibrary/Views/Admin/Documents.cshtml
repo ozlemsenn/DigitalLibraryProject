@@ -120,6 +120,17 @@
             background-color: #FDF3F2;
             color: #C0392B;
         }
+
+    .badge-private {
+        background-color: #FDF3F2;
+        color: #C0392B;
+        border: 1px solid #fae3db;
+        padding: 3px 8px;
+        font-size: 0.7rem;
+        border-radius: 6px;
+        font-weight: 600;
+        margin-left: 10px;
+    }
 </style>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -170,6 +181,11 @@
                                         { <i class="fas fa-file fa-2x mr-3" style="color: #7F736A;"></i>}
 
                                         <span class="font-weight-bold" style="font-size: 1.05rem;">@doc.Title</span>
+
+                                        @if (doc.IsPrivate == true)
+                                        {
+                                            <span class="badge-private" title="Sadece Yöneticiler Görebilir"><i class="fas fa-lock mr-1"></i> Gizli</span>
+                                        }
                                     </div>
                                 </td>
                                 <td>
@@ -223,6 +239,16 @@
                             }
                         </select>
                     </div>
+
+                    <div class="form-group mb-4 p-3" style="background-color: #FDF3F2; border: 1px solid #fae3db; border-radius: 8px;">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="UploadIsAdminOnly" name="IsAdminOnly" value="true">
+                            <label class="custom-control-label font-weight-bold" for="UploadIsAdminOnly" style="color: #C0392B; padding-top: 2px;">
+                                <i class="fas fa-lock mr-1"></i> Bu dokümanı Gizli yap (Sadece Yöneticiler)
+                            </label>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Dosya Seçin (PDF, DOCX, XLSX)</label>
                         <input type="file" name="uploadedFile" class="form-control-file" required accept=".pdf,.docx,.xlsx" style="padding: 10px; border: 1px dashed #C0392B; border-radius: 8px; background: #FDF3F2;">
@@ -264,9 +290,18 @@
                             }
                         </select>
                     </div>
+
+                    <div class="form-group mb-0 p-3" style="background-color: #FDF3F2; border: 1px solid #fae3db; border-radius: 8px;">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="EditIsAdminOnly">
+                            <label class="custom-control-label font-weight-bold" for="EditIsAdminOnly" style="color: #C0392B; padding-top: 2px;">
+                                <i class="fas fa-lock mr-1"></i> Bu dokümanı Gizli yap (Sadece Yöneticiler)
+                            </label>
+                        </div>
+                    </div>
                 </form>
             </div>
-            <div class="modal-footer border-0 pt-0">
+            <div class="modal-footer border-0 pt-0 mt-3">
                 <button type="button" class="btn btn-light font-weight-bold" data-dismiss="modal" style="border-radius: 8px;">İptal</button>
                 <button type="button" id="btnUpdate" class="btn font-weight-bold shadow-sm" style="background-color: #C0392B; color: white; border-radius: 8px;">Güncelle</button>
             </div>
@@ -291,9 +326,9 @@
                 "pageLength": 10,
                 "lengthChange": false,
                 "ordering": true,
-                "order": [[2, "desc"]], 
+                "order": [[2, "desc"]],
                 "columnDefs": [
-                    { "orderable": false, "targets": 4 } 
+                    { "orderable": false, "targets": 4 }
                 ]
             });
 
@@ -337,6 +372,9 @@
                             $("#EditDocID").val(cevap.data.ID);
                             $("#EditTitle").val(cevap.data.Title);
                             $("#EditCategoryID").val(cevap.data.CategoryID);
+
+                            $("#EditIsAdminOnly").prop("checked", cevap.data.IsAdminOnly === true);
+
                             $("#editModal").modal('show');
                         } else {
                             Swal.fire('Hata!', cevap.message, 'error');
@@ -349,7 +387,8 @@
                 var veri = {
                     id: $("#EditDocID").val(),
                     title: $("#EditTitle").val(),
-                    categoryId: $("#EditCategoryID").val()
+                    categoryId: $("#EditCategoryID").val(),
+                    isAdminOnly: $("#EditIsAdminOnly").is(":checked")
                 };
 
                 $.ajax({

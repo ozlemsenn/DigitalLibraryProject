@@ -76,32 +76,46 @@ namespace DigitalLibrary.Controllers
 
             return View(myLogs);
         }
-        
+
+        [HttpGet]
         public ActionResult ProfileSettings()
         {
-            DigitalLibraryDBEntities1 db = new DigitalLibraryDBEntities1();
+            if (Session["UserID"] == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
 
-            var aktifKullanici = db.Users.FirstOrDefault(u => u.Role == "Personel");
+            int aktifKullaniciID = Convert.ToInt32(Session["UserID"]);
+
+            var aktifKullanici = db.Users.Find(aktifKullaniciID);
 
             return View(aktifKullanici);
         }
 
         [HttpPost]
-        public ActionResult UpdateProfile(int ID, string FullName, string Email, string OldPassword, string NewPassword)
+        public ActionResult UpdateProfile(int ID, string Name, string Email, string OldPassword, string NewPassword, string Department)
         {
             DigitalLibraryDBEntities1 db = new DigitalLibraryDBEntities1();
             var user = db.Users.Find(ID);
 
             if (user != null)
             {
-                user.Name = FullName;
+                user.Name = Name;
                 user.Email = Email;
+
+                Session["UserName"] = Name;
+
+                if (Session["Role"] != null && Session["Role"].ToString() == "Admin" && !string.IsNullOrEmpty(Department))
+                {
+                    user.Department = Department;
+                    Session["Department"] = Department; 
+                }
 
                 if (!string.IsNullOrEmpty(OldPassword) && !string.IsNullOrEmpty(NewPassword))
                 {
                     if (user.Password == OldPassword)
                     {
-                        user.Password = NewPassword; 
+                        user.Password = NewPassword;
                     }
                     else
                     {
@@ -188,7 +202,6 @@ namespace DigitalLibrary.Controllers
 
                 var query = db.Documents.AsQueryable();
 
-                // Sadece personelin yetkisi olan (gizli olmayan) klasörlerdeki ve herkese açık belgeleri filtrele
                 if (userRole == "Personel")
                 {
                     var izinliKategoriler = db.Categories.Where(c => c.IsAdminOnly == false || c.IsAdminOnly == null).Select(c => c.ID).ToList();
@@ -201,7 +214,6 @@ namespace DigitalLibrary.Controllers
 
                 if (sonBelge != null)
                 {
-                    // Uzun başlıkları kırpmak için ufak bir dokunuş
                     string kisaBaslik = sonBelge.Title.Length > 18 ? sonBelge.Title.Substring(0, 18) + "..." : sonBelge.Title;
                     return Json(new { success = true, title = kisaBaslik + sonBelge.FileExtension }, JsonRequestBehavior.AllowGet);
                 }

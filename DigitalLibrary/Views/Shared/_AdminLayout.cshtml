@@ -243,9 +243,11 @@
         <a href="/Admin/Settings" class="nav-item-custom @(currentAction == "Settings" ? "active" : "")">
             <i class="fas fa-cog"></i> Sistem Ayarları
         </a>
-        <a href="/Home/Index" class="nav-item-custom mt-2">
-            <i class="fas fa-exchange-alt"></i> Personel Ekranı
+
+        <a href="/Home/ProfileSettings" class="nav-item-custom @(currentAction == "ProfileSettings" ? "active" : "")">
+            <i class="fas fa-user-cog"></i> Profil Ayarları
         </a>
+
         <a href="/Auth/Logout" class="nav-item-custom text-danger mt-3">
             <i class="fas fa-sign-out-alt"></i> Güvenli Çıkış
         </a>

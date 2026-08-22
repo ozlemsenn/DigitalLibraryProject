@@ -72,9 +72,21 @@
     .caret-icon {
         transition: transform 0.3s ease;
     }
+
     .actions-column {
         position: relative;
         z-index: 2;
+    }
+
+    .badge-private {
+        background-color: #FDF3F2;
+        color: #C0392B;
+        border: 1px solid #fae3db;
+        padding: 3px 8px;
+        font-size: 0.7rem;
+        border-radius: 6px;
+        font-weight: 600;
+        margin-left: 10px;
     }
 </style>
 
@@ -134,8 +146,21 @@
                                             <i class="fas fa-minus mr-3" style="color: #E5DCD3; font-size: 0.85rem;"></i>
                                         }
 
-                                        <i class="fas fa-folder mr-3" style="color: #D35400; font-size: 1.2rem;"></i>
+                                        @if (ana.IsAdminOnly == true)
+                                        {
+                                            <i class="fas fa-folder mr-3" style="color: #C0392B; font-size: 1.2rem;"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-folder mr-3" style="color: #D35400; font-size: 1.2rem;"></i>
+                                        }
+
                                         <span class="font-weight-bold" style="font-size: 1.05rem; color: #2C1E16;">@ana.Name</span>
+
+                                        @if (ana.IsAdminOnly == true)
+                                        {
+                                            <span class="badge-private" title="Sadece Yöneticiler Görebilir"><i class="fas fa-lock mr-1"></i> Gizli</span>
+                                        }
 
                                         @if (altVarMi)
                                         {
@@ -154,12 +179,26 @@
                                 foreach (var alt in altKategoriler)
                                 {
                                     <tr class="collapse sub-category-row sub-of-@ana.ID">
-                                        <td class="pl-4 text-center"></td> 
+                                        <td class="pl-4 text-center"></td>
                                         <td>
                                             <div class="d-flex align-items-center ml-5 pl-2" style="border-left: 2px dashed #E5DCD3; padding-top: 5px; padding-bottom: 5px;">
                                                 <i class="fas fa-level-up-alt fa-rotate-90 mr-3 ml-2" style="color: #bdc3c7; font-size: 1.1rem;"></i>
-                                                <i class="fas fa-folder-open mr-2" style="color: #f39c12; opacity: 0.8; font-size: 0.95rem;"></i>
+
+                                                @if (alt.IsAdminOnly == true)
+                                                {
+                                                    <i class="fas fa-folder-open mr-2" style="color: #e74c3c; opacity: 0.8; font-size: 0.95rem;"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="fas fa-folder-open mr-2" style="color: #f39c12; opacity: 0.8; font-size: 0.95rem;"></i>
+                                                }
+
                                                 <span class="font-weight-bold" style="color: #5C4033; font-size: 0.95rem;">@alt.Name</span>
+
+                                                @if (alt.IsAdminOnly == true)
+                                                {
+                                                    <span class="badge-private" style="padding: 2px 6px; font-size: 0.65rem;" title="Sadece Yöneticiler Görebilir"><i class="fas fa-lock"></i></span>
+                                                }
                                             </div>
                                         </td>
                                         <td class="text-right pr-4 actions-column">
@@ -214,13 +253,23 @@
                         <small class="text-muted mt-1 d-block">Eğer bu bir alt kategoriyse, ait olduğu ana klasörü seçin.</small>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group mb-4">
                         <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Kategori Adı</label>
                         <input type="text" id="Name" class="form-control" placeholder="Örn: Yazılım, Donanım..." style="border-radius: 8px; border: 1px solid #F0EAE1;">
                     </div>
+
+                    <div class="form-group mb-0 p-3" style="background-color: #FDF3F2; border: 1px solid #fae3db; border-radius: 8px;">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="IsAdminOnly">
+                            <label class="custom-control-label font-weight-bold" for="IsAdminOnly" style="color: #C0392B; padding-top: 2px;">
+                                <i class="fas fa-lock mr-1"></i> Bu klasörü Gizli yap (Sadece Yöneticiler)
+                            </label>
+                        </div>
+                        <small class="text-muted d-block mt-2" style="font-size: 0.8rem;">İşaretlerseniz, bu klasör ve içindeki tüm belgeler standart personellerden tamamen gizlenir.</small>
+                    </div>
                 </form>
             </div>
-            <div class="modal-footer border-0 pt-0">
+            <div class="modal-footer border-0 pt-0 mt-3">
                 <button type="button" class="btn btn-light font-weight-bold" data-dismiss="modal" style="border-radius: 8px;">İptal</button>
                 <button type="button" id="btnKaydet" class="btn font-weight-bold shadow-sm" style="background-color: #D35400; color: white; border-radius: 8px;">Kaydet</button>
             </div>
@@ -250,13 +299,13 @@
                     if (metin.indexOf(value) > -1) {
 
                         if ($(this).hasClass("category-row")) {
-                            $(this).show(); 
+                            $(this).show();
                             var parentId = $(this).find(".btn-edit-trigger").data("id");
                             $(".sub-of-" + parentId).show().addClass("show");
                             $(this).find(".caret-icon").removeClass("fa-chevron-right").addClass("fa-chevron-down");
                         }
                         else if ($(this).hasClass("sub-category-row")) {
-                            $(this).show(); 
+                            $(this).show();
                             var classList = $(this).attr('class').split(/\s+/);
                             var parentClass = classList.find(c => c.startsWith('sub-of-'));
                             if (parentClass) {
@@ -284,6 +333,7 @@
             $("[data-target='#categoryModal']").click(function () {
                 $("#categoryForm")[0].reset();
                 $("#CategoryID").val("");
+                $("#IsAdminOnly").prop("checked", false);
                 $(".modal-title").html('<i class="fas fa-folder-plus mr-2" style="color: #D35400;"></i> Yeni Kategori Ekle');
             });
 
@@ -293,7 +343,8 @@
 
                 var veriler = {
                     Name: $("#Name").val(),
-                    ParentID: parentId ? parentId : null
+                    ParentID: parentId ? parentId : null,
+                    IsAdminOnly: $("#IsAdminOnly").is(":checked")
                 };
 
                 var islemUrl = (!catId) ? '/Admin/AddCategory' : '/Admin/EditCategory';
@@ -314,7 +365,7 @@
             });
 
             $(".btn-edit-trigger").click(function (e) {
-                e.stopPropagation(); 
+                e.stopPropagation();
                 var id = $(this).data("id");
                 $.ajax({
                     url: '/Admin/GetCategory/' + id,
@@ -327,6 +378,9 @@
                         } else {
                             $("#ParentID").val("");
                         }
+
+                        $("#IsAdminOnly").prop("checked", data.IsAdminOnly === true);
+
                         $(".modal-title").html('<i class="fas fa-edit mr-2" style="color: #D35400;"></i> Kategori Düzenle');
                         $("#categoryModal").modal('show');
                     }
@@ -334,7 +388,7 @@
             });
 
             $(".btn-delete-trigger").click(function (e) {
-                e.stopPropagation(); 
+                e.stopPropagation();
                 var id = $(this).data("id");
                 Swal.fire({
                     title: 'Emin misiniz?',
@@ -342,6 +396,7 @@
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#C0392B',
+                    cancelButtonColor: '#7F736A',
                     confirmButtonText: 'Evet, Sil!',
                     cancelButtonText: 'İptal'
                 }).then((result) => {

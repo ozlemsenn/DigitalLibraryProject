@@ -16,7 +16,7 @@ namespace DigitalLibrary.Controllers
         DigitalLibraryDBEntities1 db = new DigitalLibraryDBEntities1();
 
         [HttpPost]
-        public ActionResult Upload(string Title, int CategoryID, HttpPostedFileBase uploadedFile, string Source = "", string Visibility = "Public")
+        public ActionResult Upload(string Title, int CategoryID, HttpPostedFileBase uploadedFile, string Source = "", string Visibility = "Public", bool IsAdminOnly = false)
         {
             int aktifKullaniciID = Session["UserID"] != null ? Convert.ToInt32(Session["UserID"]) : 0;
             string userRole = Session["Role"] != null ? Session["Role"].ToString() : "";
@@ -81,13 +81,18 @@ namespace DigitalLibrary.Controllers
                 newDoc.CategoryID = CategoryID;
                 newDoc.UploadDate = DateTime.Now;
                 newDoc.UserID = aktifKullaniciID;
-                newDoc.IsPrivate = (Visibility == "Private");
+
+                newDoc.IsPrivate = IsAdminOnly;
+
 
                 db.Documents.Add(newDoc);
 
                 Logs docLog = new Logs();
                 docLog.ActionType = "Yeni Doküman Yüklendi";
-                docLog.Description = "'" + Title + "' isimli belge sisteme eklendi.";
+
+                string gizlilikMesajı = IsAdminOnly ? " (Gizli Belge)" : "";
+                docLog.Description = "'" + Title + "' isimli belge" + gizlilikMesajı + " sisteme eklendi.";
+
                 docLog.IconClass = "fa-file-upload";
                 docLog.CreatedAt = DateTime.Now;
                 docLog.UserID = aktifKullaniciID;
@@ -240,21 +245,19 @@ namespace DigitalLibrary.Controllers
                 return Json(new { success = false, message = "Bu belgeyi düzenleme yetkiniz yok!" }, JsonRequestBehavior.AllowGet);
             }
 
-            // YENİ: IsPrivate verisini de Modal'a gönderiyoruz
             var data = new
             {
                 document.ID,
                 document.Title,
                 document.CategoryID,
-                IsPrivate = document.IsPrivate ?? false
+                IsAdminOnly = document.IsPrivate ?? false 
             };
 
             return Json(new { success = true, data = data }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        // YENİ: isPrivate parametresi eklendi
-        public JsonResult Update(int id, string title, int categoryId, bool isPrivate = false)
+        public JsonResult Update(int id, string title, int categoryId, bool isAdminOnly = false) 
         {
             try
             {
@@ -278,12 +281,14 @@ namespace DigitalLibrary.Controllers
                 document.Title = title;
                 document.CategoryID = categoryId;
 
-                // YENİ: Gizlilik durumunu güncelliyoruz
-                document.IsPrivate = isPrivate;
+                document.IsPrivate = isAdminOnly;
 
                 Logs updateLog = new Logs();
                 updateLog.ActionType = "Doküman Güncellendi";
-                updateLog.Description = "'" + title + "' isimli belgenin bilgileri güncellendi.";
+
+                string gizlilikMesajı = isAdminOnly ? " (Gizli Belge Yapıldı)" : "";
+                updateLog.Description = "'" + title + "' isimli belgenin bilgileri güncellendi" + gizlilikMesajı + ".";
+
                 updateLog.IconClass = "fa-file-signature";
                 updateLog.CreatedAt = DateTime.Now;
                 updateLog.UserID = aktifKullaniciID;
