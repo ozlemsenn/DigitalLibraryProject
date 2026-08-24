@@ -1,0 +1,13 @@
+﻿# Visual Studio / .NET Temporary files
+.vs/
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.cache
+_PublishScripts/
+packages/
+*.publishsettings
+*.sqlite

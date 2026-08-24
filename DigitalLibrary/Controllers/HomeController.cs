@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using DigitalLibrary.Filters;
-
 using DigitalLibrary.Models;
 
 namespace DigitalLibrary.Controllers
 {
-    [AuthFilter] //filtremiz
+    [AuthFilter] // filtremiz
     public class HomeController : Controller
     {
         DigitalLibraryDBEntities1 db = new DigitalLibraryDBEntities1();
@@ -44,38 +43,34 @@ namespace DigitalLibrary.Controllers
 
         public ActionResult MyDocuments()
         {
-            DigitalLibraryDBEntities1 db = new DigitalLibraryDBEntities1();
+            DigitalLibraryDBEntities1 localDb = new DigitalLibraryDBEntities1();
 
             int aktifKullaniciID = Session["UserID"] != null ? Convert.ToInt32(Session["UserID"]) : 0;
 
-            var myDocs = db.Documents.Where(d => d.UserID == aktifKullaniciID).OrderByDescending(d => d.ID).ToList();
+            
+            var myDocs = localDb.Documents.Where(d => d.UserID == aktifKullaniciID).OrderByDescending(d => d.ID).ToList();
 
             string userRole = Session["Role"] != null ? Session["Role"].ToString() : "";
 
             if (userRole == "Personel")
             {
-                ViewBag.Categories = db.Categories.Where(c => c.IsAdminOnly == false || c.IsAdminOnly == null).ToList();
+                ViewBag.Categories = localDb.Categories.Where(c => c.IsAdminOnly == false || c.IsAdminOnly == null).ToList();
             }
             else
             {
-                ViewBag.Categories = db.Categories.ToList();
+                ViewBag.Categories = localDb.Categories.ToList();
             }
+
+            
+            ViewBag.UserLogs = localDb.Logs
+                                      .Where(l => l.UserID == aktifKullaniciID)
+                                      .OrderByDescending(l => l.CreatedAt)
+                                      .Take(15)
+                                      .ToList();
 
             return View(myDocs);
         }
-            public ActionResult MyHistory()
-        {
-            DigitalLibraryDBEntities1 db = new DigitalLibraryDBEntities1();
 
-            int aktifKullaniciID = Session["UserID"] != null ? Convert.ToInt32(Session["UserID"]) : 0;
-
-            var myLogs = db.Logs
-                           .Where(l => l.UserID == aktifKullaniciID)
-                           .OrderByDescending(l => l.CreatedAt)
-                           .ToList();
-
-            return View(myLogs);
-        }
 
         [HttpGet]
         public ActionResult ProfileSettings()
@@ -86,7 +81,6 @@ namespace DigitalLibrary.Controllers
             }
 
             int aktifKullaniciID = Convert.ToInt32(Session["UserID"]);
-
             var aktifKullanici = db.Users.Find(aktifKullaniciID);
 
             return View(aktifKullanici);
@@ -95,8 +89,8 @@ namespace DigitalLibrary.Controllers
         [HttpPost]
         public ActionResult UpdateProfile(int ID, string Name, string Email, string OldPassword, string NewPassword, string Department)
         {
-            DigitalLibraryDBEntities1 db = new DigitalLibraryDBEntities1();
-            var user = db.Users.Find(ID);
+            DigitalLibraryDBEntities1 localDb = new DigitalLibraryDBEntities1();
+            var user = localDb.Users.Find(ID);
 
             if (user != null)
             {
@@ -108,7 +102,7 @@ namespace DigitalLibrary.Controllers
                 if (Session["Role"] != null && Session["Role"].ToString() == "Admin" && !string.IsNullOrEmpty(Department))
                 {
                     user.Department = Department;
-                    Session["Department"] = Department; 
+                    Session["Department"] = Department;
                 }
 
                 if (!string.IsNullOrEmpty(OldPassword) && !string.IsNullOrEmpty(NewPassword))
@@ -124,7 +118,7 @@ namespace DigitalLibrary.Controllers
                     }
                 }
 
-                db.SaveChanges();
+                localDb.SaveChanges();
                 TempData["Basari"] = "Profil bilgileriniz başarıyla güncellendi!";
             }
             else
@@ -162,6 +156,7 @@ namespace DigitalLibrary.Controllers
                 return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+
         [HttpGet]
         public JsonResult GetServerStatus()
         {
@@ -177,7 +172,7 @@ namespace DigitalLibrary.Controllers
                 }
 
                 double kullanilanMB = toplamByte / 1048576.0;
-                double kapasiteMB = 1024.0; 
+                double kapasiteMB = 1024.0;
                 double dolulukYuzdesi = (kullanilanMB / kapasiteMB) * 100;
 
                 return Json(new
@@ -192,6 +187,7 @@ namespace DigitalLibrary.Controllers
                 return Json(new { success = false }, JsonRequestBehavior.AllowGet);
             }
         }
+
         [HttpGet]
         public JsonResult GetLatestDocument()
         {

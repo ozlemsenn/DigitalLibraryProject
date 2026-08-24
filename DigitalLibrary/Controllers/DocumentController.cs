@@ -16,7 +16,7 @@ namespace DigitalLibrary.Controllers
         DigitalLibraryDBEntities1 db = new DigitalLibraryDBEntities1();
 
         [HttpPost]
-        public ActionResult Upload(string Title, int CategoryID, HttpPostedFileBase uploadedFile, string Source = "", string Visibility = "Public", bool IsAdminOnly = false)
+        public ActionResult Upload(string Title, int CategoryID, HttpPostedFileBase uploadedFile, string Source = "", string Visibility = "Public", string Description = "", bool IsAdminOnly = false)
         {
             int aktifKullaniciID = Session["UserID"] != null ? Convert.ToInt32(Session["UserID"]) : 0;
             string userRole = Session["Role"] != null ? Session["Role"].ToString() : "";
@@ -82,15 +82,16 @@ namespace DigitalLibrary.Controllers
                 newDoc.UploadDate = DateTime.Now;
                 newDoc.UserID = aktifKullaniciID;
 
-                newDoc.IsPrivate = IsAdminOnly;
+                newDoc.Description = Description;
 
+                newDoc.IsPrivate = (Visibility == "Private" || IsAdminOnly);
 
                 db.Documents.Add(newDoc);
 
                 Logs docLog = new Logs();
                 docLog.ActionType = "Yeni Doküman Yüklendi";
 
-                string gizlilikMesajı = IsAdminOnly ? " (Gizli Belge)" : "";
+                string gizlilikMesajı = newDoc.IsPrivate == true ? " (Özel Belge)" : "";
                 docLog.Description = "'" + Title + "' isimli belge" + gizlilikMesajı + " sisteme eklendi.";
 
                 docLog.IconClass = "fa-file-upload";
@@ -107,7 +108,11 @@ namespace DigitalLibrary.Controllers
                 TempData["Hata"] = "Lütfen yüklemek için bir dosya seçin!";
             }
 
-            if (Source == "Personel")
+            if (Source == "MyDocuments")
+            {
+                return RedirectToAction("MyDocuments", "Home");
+            }
+            else if (Source == "Personel")
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -148,13 +153,15 @@ namespace DigitalLibrary.Controllers
             }
 
             var hamVeri = query.OrderByDescending(d => d.UploadDate)
-                               .Select(d => new { d.ID, d.Title, d.FileExtension, d.UploadDate }).ToList();
+                               .Select(d => new { d.ID, d.Title, d.FileExtension, d.UploadDate, d.IsPrivate, d.UserID }).ToList();
 
             var sonuclar = hamVeri.Select(d => new {
                 d.ID,
                 d.Title,
                 d.FileExtension,
-                UploadDateFormated = d.UploadDate.HasValue ? d.UploadDate.Value.ToString("dd.MM.yyyy HH:mm") : ""
+                d.IsPrivate,
+                d.UserID,
+                UploadDate = d.UploadDate 
             }).ToList();
 
             return Json(sonuclar, JsonRequestBehavior.AllowGet);
@@ -175,13 +182,15 @@ namespace DigitalLibrary.Controllers
             }
 
             var hamVeri = query.OrderByDescending(d => d.UploadDate)
-                               .Select(d => new { d.ID, d.Title, d.FileExtension, d.UploadDate }).ToList();
+                               .Select(d => new { d.ID, d.Title, d.FileExtension, d.UploadDate, d.IsPrivate, d.UserID }).ToList();
 
             var sonuclar = hamVeri.Select(d => new {
                 d.ID,
                 d.Title,
                 d.FileExtension,
-                UploadDateFormated = d.UploadDate.HasValue ? d.UploadDate.Value.ToString("dd.MM.yyyy HH:mm") : ""
+                d.IsPrivate,
+                d.UserID,
+                UploadDate = d.UploadDate 
             }).ToList();
 
             return Json(sonuclar, JsonRequestBehavior.AllowGet);
@@ -293,7 +302,7 @@ namespace DigitalLibrary.Controllers
                 document.Title,
                 document.CategoryID,
                 CategoryName = catName,
-                document.Description,
+                document.Description, 
                 document.FileExtension,
                 UploadDate = document.UploadDate.HasValue ? document.UploadDate.Value.ToString("dd MMMM yyyy HH:mm") : "-",
                 UploaderName = uploaderName,
@@ -304,7 +313,7 @@ namespace DigitalLibrary.Controllers
         }
 
         [HttpPost]
-        public JsonResult Update(int id, string title, int categoryId, bool isAdminOnly = false) 
+        public JsonResult Update(int id, string title, int categoryId, string description = "", bool isPrivate = false)
         {
             try
             {
@@ -328,12 +337,13 @@ namespace DigitalLibrary.Controllers
                 document.Title = title;
                 document.CategoryID = categoryId;
 
-                document.IsPrivate = isAdminOnly;
+                document.Description = description;
+                document.IsPrivate = isPrivate;
 
                 Logs updateLog = new Logs();
                 updateLog.ActionType = "Doküman Güncellendi";
 
-                string gizlilikMesajı = isAdminOnly ? " (Gizli Belge Yapıldı)" : "";
+                string gizlilikMesajı = isPrivate ? " (Özel Belge Yapıldı)" : "";
                 updateLog.Description = "'" + title + "' isimli belgenin bilgileri güncellendi" + gizlilikMesajı + ".";
 
                 updateLog.IconClass = "fa-file-signature";
