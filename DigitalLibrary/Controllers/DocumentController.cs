@@ -240,9 +240,37 @@ namespace DigitalLibrary.Controllers
             int aktifKullaniciID = Session["UserID"] != null ? Convert.ToInt32(Session["UserID"]) : 0;
             string userRole = Session["Role"] != null ? Session["Role"].ToString() : "";
 
-            if (document.UserID != aktifKullaniciID && userRole != "Admin")
+            bool erisimIzniVarMi = false;
+
+            if (userRole == "Admin")
             {
-                return Json(new { success = false, message = "Bu belgeyi görüntüleme yetkiniz yok!" }, JsonRequestBehavior.AllowGet);
+                erisimIzniVarMi = true;
+            }
+            else if (document.UserID == aktifKullaniciID)
+            {
+                erisimIzniVarMi = true;
+            }
+            else if ((document.IsPrivate ?? false) == false)
+            {
+                bool kategoriGizliMi = false;
+                if (document.CategoryID.HasValue)
+                {
+                    var catCheck = db.Categories.Find(document.CategoryID.Value);
+                    if (catCheck != null && (catCheck.IsAdminOnly ?? false) == true)
+                    {
+                        kategoriGizliMi = true;
+                    }
+                }
+
+                if (!kategoriGizliMi)
+                {
+                    erisimIzniVarMi = true;
+                }
+            }
+
+            if (!erisimIzniVarMi)
+            {
+                return Json(new { success = false, message = "Bu belgeyi görüntüleme yetkiniz bulunmamaktadır!" }, JsonRequestBehavior.AllowGet);
             }
 
             string catName = "Kategorisiz";
@@ -264,11 +292,11 @@ namespace DigitalLibrary.Controllers
                 document.ID,
                 document.Title,
                 document.CategoryID,
-                CategoryName = catName, 
-                document.Description, 
-                document.FileExtension, 
-                UploadDate = document.UploadDate.HasValue ? document.UploadDate.Value.ToString("dd MMMM yyyy HH:mm") : "-", // Formatlı Tarih
-                UploaderName = uploaderName, 
+                CategoryName = catName,
+                document.Description,
+                document.FileExtension,
+                UploadDate = document.UploadDate.HasValue ? document.UploadDate.Value.ToString("dd MMMM yyyy HH:mm") : "-",
+                UploaderName = uploaderName,
                 IsAdminOnly = document.IsPrivate ?? false
             };
 
