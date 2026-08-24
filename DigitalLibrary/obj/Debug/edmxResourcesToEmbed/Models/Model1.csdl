@@ -82,6 +82,8 @@
     <Property Name="CompanyName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="MaxUploadSizeMB" Type="Int32" />
     <Property Name="IsMaintenanceMode" Type="Boolean" />
+    <Property Name="AllowRegistration" Type="Boolean" />
+    <Property Name="EnableAuditLogs" Type="Boolean" />
   </EntityType>
   <EntityType Name="Documents">
     <Key>

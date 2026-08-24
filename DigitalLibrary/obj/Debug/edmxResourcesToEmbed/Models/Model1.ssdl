@@ -43,6 +43,8 @@
     <Property Name="CompanyName" Type="nvarchar" MaxLength="100" />
     <Property Name="MaxUploadSizeMB" Type="int" />
     <Property Name="IsMaintenanceMode" Type="bit" />
+    <Property Name="AllowRegistration" Type="bit" />
+    <Property Name="EnableAuditLogs" Type="bit" />
   </EntityType>
   <EntityType Name="Users">
     <Key>

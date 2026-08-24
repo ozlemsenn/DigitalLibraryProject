@@ -242,7 +242,21 @@ namespace DigitalLibrary.Controllers
 
             if (document.UserID != aktifKullaniciID && userRole != "Admin")
             {
-                return Json(new { success = false, message = "Bu belgeyi düzenleme yetkiniz yok!" }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, message = "Bu belgeyi görüntüleme yetkiniz yok!" }, JsonRequestBehavior.AllowGet);
+            }
+
+            string catName = "Kategorisiz";
+            if (document.CategoryID.HasValue)
+            {
+                var cat = db.Categories.Find(document.CategoryID.Value);
+                if (cat != null) catName = cat.Name;
+            }
+
+            string uploaderName = "Bilinmeyen Kullanıcı";
+            if (document.UserID.HasValue)
+            {
+                var uploader = db.Users.Find(document.UserID.Value);
+                if (uploader != null) uploaderName = uploader.Name;
             }
 
             var data = new
@@ -250,7 +264,12 @@ namespace DigitalLibrary.Controllers
                 document.ID,
                 document.Title,
                 document.CategoryID,
-                IsAdminOnly = document.IsPrivate ?? false 
+                CategoryName = catName, 
+                document.Description, 
+                document.FileExtension, 
+                UploadDate = document.UploadDate.HasValue ? document.UploadDate.Value.ToString("dd MMMM yyyy HH:mm") : "-", // Formatlı Tarih
+                UploaderName = uploaderName, 
+                IsAdminOnly = document.IsPrivate ?? false
             };
 
             return Json(new { success = true, data = data }, JsonRequestBehavior.AllowGet);

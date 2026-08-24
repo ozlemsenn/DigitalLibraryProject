@@ -18,5 +18,7 @@ namespace DigitalLibrary.Models
         public string CompanyName { get; set; }
         public Nullable<int> MaxUploadSizeMB { get; set; }
         public Nullable<bool> IsMaintenanceMode { get; set; }
+        public Nullable<bool> AllowRegistration { get; set; }
+        public Nullable<bool> EnableAuditLogs { get; set; }
     }
 }

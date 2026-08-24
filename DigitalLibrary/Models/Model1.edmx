@@ -48,6 +48,8 @@
           <Property Name="CompanyName" Type="nvarchar" MaxLength="100" />
           <Property Name="MaxUploadSizeMB" Type="int" />
           <Property Name="IsMaintenanceMode" Type="bit" />
+          <Property Name="AllowRegistration" Type="bit" />
+          <Property Name="EnableAuditLogs" Type="bit" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -219,6 +221,8 @@
           <Property Name="CompanyName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="MaxUploadSizeMB" Type="Int32" />
           <Property Name="IsMaintenanceMode" Type="Boolean" />
+          <Property Name="AllowRegistration" Type="Boolean" />
+          <Property Name="EnableAuditLogs" Type="Boolean" />
         </EntityType>
         <EntityType Name="Documents">
           <Key>
@@ -318,6 +322,8 @@
           <EntitySetMapping Name="SystemSettings">
             <EntityTypeMapping TypeName="DigitalLibraryDBModel.SystemSettings">
               <MappingFragment StoreEntitySet="SystemSettings">
+                <ScalarProperty Name="EnableAuditLogs" ColumnName="EnableAuditLogs" />
+                <ScalarProperty Name="AllowRegistration" ColumnName="AllowRegistration" />
                 <ScalarProperty Name="IsMaintenanceMode" ColumnName="IsMaintenanceMode" />
                 <ScalarProperty Name="MaxUploadSizeMB" ColumnName="MaxUploadSizeMB" />
                 <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />

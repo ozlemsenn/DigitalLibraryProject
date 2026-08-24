@@ -39,15 +39,24 @@
         background-color: #FDFCFB;
     }
 
+    .actions-wrapper {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: nowrap;
+    }
+
     .btn-action {
-        width: 32px;
-        height: 32px;
+        width: 28px;
+        height: 28px;
+        flex: 0 0 auto;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        border-radius: 8px;
+        border-radius: 6px;
         transition: 0.2s;
         border: none;
+        font-size: 0.8rem;
     }
 
     .btn-action-edit {
@@ -82,6 +91,7 @@
 
     div.dataTables_wrapper div.dataTables_filter {
         text-align: left !important;
+        margin-bottom: 20px;
     }
 
         div.dataTables_wrapper div.dataTables_filter input {
@@ -103,6 +113,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            margin-bottom: 0;
         }
 
     .page-item.active .page-link {
@@ -131,6 +142,63 @@
         font-weight: 600;
         margin-left: 10px;
     }
+
+    .btn-details-trigger {
+        transition: 0.2s;
+    }
+
+        .btn-details-trigger:hover {
+            background-color: #D35400 !important;
+            color: white !important;
+            border-color: #D35400 !important;
+            transform: scale(1.1);
+        }
+
+    .filter-bar {
+        background-color: #FCF9F5;
+        border: 1px solid #F0EAE1;
+        border-radius: 10px;
+        padding: 15px 20px;
+        margin-bottom: 20px;
+    }
+
+    .privacy-btn {
+        background-color: white;
+        color: #7F736A;
+        border: 1px solid #F0EAE1;
+        font-weight: 600;
+        font-size: 0.85rem;
+        padding: 8px 16px;
+        transition: 0.2s;
+    }
+
+        .privacy-btn:hover {
+            background-color: #FDF3F2;
+            color: #C0392B;
+        }
+
+        .privacy-btn.active {
+            background-color: #C0392B;
+            color: white;
+            border-color: #C0392B;
+        }
+
+    .filter-select {
+        border-radius: 8px;
+        border: 1px solid #F0EAE1;
+        color: #2C1E16;
+        font-weight: 500;
+        font-size: 0.85rem;
+        padding: 8px 12px;
+        outline: none;
+        box-shadow: none;
+        cursor: pointer;
+        height: 38px;
+    }
+
+        .filter-select:focus {
+            border-color: #C0392B;
+        }
 </style>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -141,6 +209,50 @@
     <button class="btn font-weight-bold shadow-sm" data-toggle="modal" data-target="#uploadModal" style="background-color: #C0392B; color: white; border-radius: 8px; padding: 10px 20px;">
         <i class="fas fa-cloud-upload-alt mr-2"></i> Yeni Doküman Yükle
     </button>
+</div>
+
+<div class="filter-bar d-flex flex-wrap justify-content-between align-items-center shadow-sm">
+
+    <div class="btn-group" role="group" id="privacyFilterGroup">
+        <button type="button" class="btn privacy-btn active" data-filter="">Tümü</button>
+        <button type="button" class="btn privacy-btn" data-filter="PUBLIC_DOC">Herkese Açık</button>
+        <button type="button" class="btn privacy-btn" data-filter="PRIVATE_DOC"><i class="fas fa-lock mr-1"></i> Gizli Dosyalar</button>
+    </div>
+
+    <div class="d-flex align-items-center mt-3 mt-md-0 gap-3" style="gap: 15px;">
+
+        <div class="d-flex align-items-center">
+            <label class="mb-0 mr-2 font-weight-bold" style="color: #7F736A; font-size: 0.85rem;">Tür:</label>
+            <select id="typeFilter" class="form-control filter-select" style="width: 130px;">
+                <option value="">Tümü</option>
+                <option value=".pdf">PDF (.pdf)</option>
+                <option value=".docx">Word (.docx)</option>
+                <option value=".xlsx">Excel (.xlsx)</option>
+            </select>
+        </div>
+
+        <div class="d-flex align-items-center">
+            <label class="mb-0 mr-2 font-weight-bold" style="color: #7F736A; font-size: 0.85rem;"><i class="fas fa-folder-open mr-1"></i> Kategori:</label>
+            <select id="categoryFilter" class="form-control filter-select" style="width: 180px;">
+                <option value="">Tüm Kategoriler</option>
+                <option value="Kategorisiz">Kategorisiz</option>
+                @if (kategoriler != null)
+                {
+                    var anaKats = kategoriler.Where(k => k.ParentID == null).ToList();
+                    foreach (var ana in anaKats)
+                    {
+                        <option value="@ana.Name" style="font-weight: bold; color: #2C1E16;">@ana.Name</option>
+
+                        var altKats = kategoriler.Where(k => k.ParentID == ana.ID).ToList();
+                        foreach (var alt in altKats)
+                        {
+                            <option value="@alt.Name" style="color: #7F736A;">&nbsp;&nbsp;&nbsp;— @alt.Name</option>
+                        }
+                    }
+                }
+            </select>
+        </div>
+    </div>
 </div>
 
 <div class="card premium-card">
@@ -170,6 +282,8 @@
 
                             <tr>
                                 <td class="pl-4">
+                                    <span class="d-none">@(doc.IsPrivate == true ? "PRIVATE_DOC" : "PUBLIC_DOC")</span>
+
                                     <div class="d-flex align-items-center">
                                         @if (doc.FileExtension == ".pdf")
                                         {<i class="fas fa-file-pdf fa-2x mr-3" style="color: #e74c3c;"></i> }
@@ -181,6 +295,10 @@
                                         { <i class="fas fa-file fa-2x mr-3" style="color: #7F736A;"></i>}
 
                                         <span class="font-weight-bold" style="font-size: 1.05rem;">@doc.Title</span>
+
+                                        <button class="btn btn-sm btn-light rounded-circle btn-details-trigger shadow-sm ml-2" data-id="@doc.ID" title="Belgeyi İncele" style="width: 24px; height: 24px; padding: 0; color: #7F736A; border: 1px solid #F0EAE1;">
+                                            <i class="fas fa-eye" style="font-size: 0.65rem;"></i>
+                                        </button>
 
                                         @if (doc.IsPrivate == true)
                                         {
@@ -200,15 +318,50 @@
                                     <span class="font-weight-bold text-uppercase" style="color: #7F736A;">@doc.FileExtension</span>
                                 </td>
                                 <td class="text-right pr-4">
-                                    <a href="/Document/Download/@doc.ID" class="btn-action btn-action-download mr-1" title="İndir"><i class="fas fa-download"></i></a>
-                                    <button class="btn-action btn-action-edit mr-1 btn-edit-trigger" title="Düzenle" data-id="@doc.ID"><i class="fas fa-pen"></i></button>
-                                    <button class="btn-action btn-action-delete btn-delete-trigger" title="Sil" data-id="@doc.ID"><i class="fas fa-trash"></i></button>
+                                    <div class="actions-wrapper justify-content-end">
+                                        <a href="/Document/Download/@doc.ID" class="btn-action btn-action-download" title="İndir"><i class="fas fa-download"></i></a>
+                                        <button class="btn-action btn-action-edit btn-edit-trigger" title="Düzenle" data-id="@doc.ID"><i class="fas fa-pen"></i></button>
+                                        <button class="btn-action btn-action-delete btn-delete-trigger" title="Sil" data-id="@doc.ID"><i class="fas fa-trash"></i></button>
+                                    </div>
                                 </td>
                             </tr>
                         }
                     }
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="documentDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
+            <div class="modal-header" style="background-color: #FCF9F5; border-bottom: 1px solid #F0EAE1; border-radius: 15px 15px 0 0;">
+                <h5 class="modal-title font-weight-bold" style="color: #2C1E16;"><i class="fas fa-info-circle mr-2" style="color: #D35400;"></i> Belge Künyesi</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body p-4 text-center">
+                <div id="DetailDocIcon" class="mb-3"></div>
+                <h4 class="font-weight-bold mb-1" id="DetailDocTitle" style="color: #2C1E16;">-</h4>
+                <div id="DetailDocPrivacy" class="mb-4"></div>
+
+                <div class="text-left bg-light p-3 shadow-sm" style="border-radius: 10px; border: 1px solid #F0EAE1;">
+                    <p class="mb-2"><i class="fas fa-folder-open mr-2" style="color: #D48900; width: 16px;"></i> <strong style="color: #5C4033;">Kategori:</strong> <span id="DetailDocCategory" class="text-muted float-right font-weight-bold">-</span></p>
+                    <hr style="margin: 8px 0; border-color: #E5DCD3;">
+                    <p class="mb-2"><i class="fas fa-user-edit mr-2" style="color: #7F736A; width: 16px;"></i> <strong style="color: #5C4033;">Yükleyen:</strong> <span id="DetailDocUploader" class="text-muted float-right">-</span></p>
+                    <hr style="margin: 8px 0; border-color: #E5DCD3;">
+                    <p class="mb-0"><i class="far fa-calendar-alt mr-2" style="color: #7F736A; width: 16px;"></i> <strong style="color: #5C4033;">Tarih:</strong> <span id="DetailDocDate" class="text-muted float-right">-</span></p>
+                </div>
+
+                <div class="mt-3 p-3 text-left shadow-sm" style="background-color: #FCF9F5; border: 1px solid #F0EAE1; border-radius: 10px;">
+                    <p class="mb-1 font-weight-bold" style="color: #5C4033;"><i class="fas fa-align-left mr-1"></i> Açıklama:</p>
+                    <p class="mb-0 text-muted" id="DetailDocDesc" style="font-size: 0.9rem; line-height: 1.5;">-</p>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0 justify-content-center mt-2">
+                <a href="#" id="DetailDownloadBtn" class="btn font-weight-bold px-4 shadow-sm" style="background-color: #27ae60; color: white; border-radius: 8px;"><i class="fas fa-download mr-2"></i> İndir</a>
+                <button type="button" class="btn btn-light font-weight-bold px-4" data-dismiss="modal" style="border-radius: 8px; border: 1px solid #F0EAE1;">Kapat</button>
+            </div>
         </div>
     </div>
 </div>
@@ -232,14 +385,24 @@
                             <option value="">-- Kategori Seçin --</option>
                             @if (kategoriler != null)
                             {
-                                foreach (var kat in kategoriler)
+                                var anaKats = kategoriler.Where(k => k.ParentID == null).ToList();
+                                foreach (var ana in anaKats)
                                 {
-                                    <option value="@kat.ID">@kat.Name</option>
+                                    <option value="@ana.ID" style="font-weight: bold; color: #2C1E16;">@ana.Name</option>
+
+                                    var altKats = kategoriler.Where(k => k.ParentID == ana.ID).ToList();
+                                    foreach (var alt in altKats)
+                                    {
+                                        <option value="@alt.ID" style="color: #7F736A;">&nbsp;&nbsp;&nbsp;— @alt.Name</option>
+                                    }
                                 }
                             }
                         </select>
                     </div>
-
+                    <div class="form-group">
+                        <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Doküman Açıklaması (İsteğe Bağlı)</label>
+                        <textarea name="Description" class="form-control" rows="3" placeholder="Bu belge ne hakkında? İçeriği özetleyen kısa bir not düşebilirsiniz..." style="border-radius: 8px; border: 1px solid #F0EAE1;"></textarea>
+                    </div>
                     <div class="form-group mb-4 p-3" style="background-color: #FDF3F2; border: 1px solid #fae3db; border-radius: 8px;">
                         <div class="custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="UploadIsAdminOnly" name="IsAdminOnly" value="true">
@@ -248,7 +411,6 @@
                             </label>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Dosya Seçin (PDF, DOCX, XLSX)</label>
                         <input type="file" name="uploadedFile" class="form-control-file" required accept=".pdf,.docx,.xlsx" style="padding: 10px; border: 1px dashed #C0392B; border-radius: 8px; background: #FDF3F2;">
@@ -283,14 +445,24 @@
                             <option value="">-- Kategori Seçin --</option>
                             @if (kategoriler != null)
                             {
-                                foreach (var kat in kategoriler)
+                                var anaKats = kategoriler.Where(k => k.ParentID == null).ToList();
+                                foreach (var ana in anaKats)
                                 {
-                                    <option value="@kat.ID">@kat.Name</option>
+                                    <option value="@ana.ID" style="font-weight: bold; color: #2C1E16;">@ana.Name</option>
+
+                                    var altKats = kategoriler.Where(k => k.ParentID == ana.ID).ToList();
+                                    foreach (var alt in altKats)
+                                    {
+                                        <option value="@alt.ID" style="color: #7F736A;">&nbsp;&nbsp;&nbsp;— @alt.Name</option>
+                                    }
                                 }
                             }
                         </select>
                     </div>
-
+                    <div class="form-group">
+                        <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">Doküman Açıklaması</label>
+                        <textarea id="EditDescription" class="form-control" rows="3" placeholder="Bu belge ne hakkında?" style="border-radius: 8px; border: 1px solid #F0EAE1;"></textarea>
+                    </div>
                     <div class="form-group mb-0 p-3" style="background-color: #FDF3F2; border: 1px solid #fae3db; border-radius: 8px;">
                         <div class="custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="EditIsAdminOnly">
@@ -330,6 +502,101 @@
                 "columnDefs": [
                     { "orderable": false, "targets": 4 }
                 ]
+            });
+
+            $('.privacy-btn').on('click', function () {
+                $('.privacy-btn').removeClass('active');
+                $(this).addClass('active');
+
+                var filterValue = $(this).data('filter');
+                if (filterValue) {
+                    table.column(0).search(filterValue).draw();
+                } else {
+                    table.column(0).search('').draw();
+                }
+            });
+
+            // DÜZELTİLDİ: KAPSAYICI KATEGORİ FİLTRELEME
+            $('#categoryFilter').on('change', function () {
+                var filterValue = $(this).val();
+
+                if (filterValue) {
+                    if (filterValue === "Kategorisiz") {
+                        table.column(1).search('Kategorisiz').draw();
+                    } else {
+                        var selectedOption = $(this).find("option:selected");
+                        var text = selectedOption.text();
+
+                        if (text.indexOf("—") !== -1) {
+                            var cleanValue = filterValue.trim();
+                            table.column(1).search(cleanValue).draw();
+                        }
+                        else {
+                            var searchTerms = [filterValue];
+
+                            selectedOption.nextAll().each(function () {
+                                if ($(this).text().indexOf("—") === -1) {
+                                    return false; 
+                                }
+                                searchTerms.push($(this).val());
+                            });
+
+                            var regexQuery = searchTerms.join('|');
+
+                            table.column(1).search(regexQuery, true, false).draw();
+                        }
+                    }
+                } else {
+                    table.column(1).search('').draw(); 
+                }
+            });
+
+            $('#typeFilter').on('change', function () {
+                var filterValue = $(this).val();
+                if (filterValue) {
+                    table.column(3).search(filterValue).draw();
+                } else {
+                    table.column(3).search('').draw();
+                }
+            });
+
+            $('#documentsTable tbody').on('click', '.btn-details-trigger', function () {
+                var docId = $(this).data("id");
+
+                $.ajax({
+                    url: '/Document/GetDocument/' + docId,
+                    type: 'GET',
+                    success: function (cevap) {
+                        if(cevap.success) {
+                            var data = cevap.data;
+
+                            $("#DetailDocTitle").text(data.Title);
+                            $("#DetailDocCategory").text(data.CategoryName ? data.CategoryName : "Kategorisiz");
+                            $("#DetailDocUploader").text(data.UploaderName ? data.UploaderName : "Bilinmiyor");
+                            $("#DetailDocDate").text(data.UploadDate ? data.UploadDate : "-");
+                            $("#DetailDocDesc").text(data.Description ? data.Description : "Bu belge için henüz bir açıklama girilmemiş.");
+
+                            $("#DetailDownloadBtn").attr("href", "/Document/Download/" + data.ID);
+
+                            if (data.IsAdminOnly) {
+                                $("#DetailDocPrivacy").html('<span class="badge-private" style="font-size:0.8rem; padding:5px 12px;"><i class="fas fa-lock mr-1"></i> Sadece Yöneticilere Özel</span>');
+                            } else {
+                                $("#DetailDocPrivacy").html('<span class="badge badge-success" style="background-color: #e8f8f5; color: #27ae60; border: 1px solid #c8e6c9; padding: 5px 12px; border-radius: 6px;"><i class="fas fa-globe mr-1"></i> Herkese Açık</span>');
+                            }
+
+                            var ext = data.FileExtension;
+                            var iconHtml = '<i class="fas fa-file fa-3x" style="color: #7F736A;"></i>';
+                            if (ext === '.pdf') iconHtml = '<i class="fas fa-file-pdf fa-3x" style="color: #e74c3c;"></i>';
+                            else if (ext === '.docx') iconHtml = '<i class="fas fa-file-word fa-3x" style="color: #2980b9;"></i>';
+                            else if (ext === '.xlsx') iconHtml = '<i class="fas fa-file-excel fa-3x" style="color: #27ae60;"></i>';
+                            $("#DetailDocIcon").html(iconHtml);
+
+                            $("#documentDetailsModal").modal('show');
+                        } else {
+                            Swal.fire('Hata!', cevap.message, 'error');
+                        }
+                    }
+                });
             });
 
             $('#documentsTable tbody').on('click', '.btn-delete-trigger', function () {
@@ -372,7 +639,7 @@
                             $("#EditDocID").val(cevap.data.ID);
                             $("#EditTitle").val(cevap.data.Title);
                             $("#EditCategoryID").val(cevap.data.CategoryID);
-
+                            $("#EditDescription").val(cevap.data.Description);
                             $("#EditIsAdminOnly").prop("checked", cevap.data.IsAdminOnly === true);
 
                             $("#editModal").modal('show');
@@ -388,7 +655,8 @@
                     id: $("#EditDocID").val(),
                     title: $("#EditTitle").val(),
                     categoryId: $("#EditCategoryID").val(),
-                    isAdminOnly: $("#EditIsAdminOnly").is(":checked")
+                    isAdminOnly: $("#EditIsAdminOnly").is(":checked"),
+                    description: $("#EditDescription").val()
                 };
 
                 $.ajax({

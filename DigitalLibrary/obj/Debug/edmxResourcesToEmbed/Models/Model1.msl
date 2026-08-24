@@ -40,6 +40,8 @@
     <EntitySetMapping Name="SystemSettings">
       <EntityTypeMapping TypeName="DigitalLibraryDBModel.SystemSettings">
         <MappingFragment StoreEntitySet="SystemSettings">
+          <ScalarProperty Name="EnableAuditLogs" ColumnName="EnableAuditLogs" />
+          <ScalarProperty Name="AllowRegistration" ColumnName="AllowRegistration" />
           <ScalarProperty Name="IsMaintenanceMode" ColumnName="IsMaintenanceMode" />
           <ScalarProperty Name="MaxUploadSizeMB" ColumnName="MaxUploadSizeMB" />
           <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />

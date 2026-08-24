@@ -43,7 +43,7 @@
     }
 
     .custom-switch .custom-control-input:checked ~ .custom-control-label::before {
-        background-color: #C0392B; 
+        background-color: #C0392B;
     }
 
     .custom-switch .custom-control-input:checked ~ .custom-control-label::after {
@@ -55,6 +55,10 @@
         padding-top: 0.15rem;
         font-weight: bold;
         color: #2C1E16;
+    }
+
+    .switch-success .custom-control-input:checked ~ .custom-control-label::before {
+        background-color: #27ae60 !important;
     }
 </style>
 
@@ -72,6 +76,8 @@
 
                 <form id="settingsForm">
                     <input type="hidden" id="SettingID" value="@Model.ID" />
+
+                    <h6 class="font-weight-bold mb-4 text-uppercase" style="color: #B9AFA6; font-size: 0.8rem; letter-spacing: 1px;">Temel Parametreler</h6>
 
                     <div class="setting-group row align-items-center">
                         <div class="col-md-5">
@@ -98,24 +104,52 @@
                         </div>
                     </div>
 
-                    <div class="setting-group row align-items-center bg-light p-4" style="border-radius: 12px; border-bottom: none;">
+                    <h6 class="font-weight-bold mb-4 mt-5 text-uppercase" style="color: #B9AFA6; font-size: 0.8rem; letter-spacing: 1px;">Güvenlik ve İzinler</h6>
+
+                    <div class="setting-group row align-items-center">
+                        <div class="col-md-8">
+                            <h6 class="font-weight-bold" style="color: #5C4033;"><i class="fas fa-user-plus mr-2 text-muted"></i> Dışarıdan Kayıt (Register) İzni</h6>
+                            <small class="text-muted d-block">Sisteme yabancıların kayıt olmasını kapatın. Kapalıysa sadece Admin kullanıcı ekleyebilir.</small>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <div class="custom-control custom-switch switch-success d-inline-block">
+                                <input type="checkbox" class="custom-control-input" id="AllowRegistration" checked>
+                                <label class="custom-control-label" for="AllowRegistration" id="registerLabel" style="color: #27ae60;">Açık</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-group row align-items-center">
+                        <div class="col-md-8">
+                            <h6 class="font-weight-bold" style="color: #5C4033;"><i class="fas fa-history mr-2 text-muted"></i> Sistem Loglarını Tut (Audit Trail)</h6>
+                            <small class="text-muted d-block">Kullanıcıların sisteme giriş çıkışlarını ve dosya indirme kayıtlarını veritabanına yazar.</small>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <div class="custom-control custom-switch switch-success d-inline-block">
+                                <input type="checkbox" class="custom-control-input" id="EnableAuditLogs" checked>
+                                <label class="custom-control-label" for="EnableAuditLogs" id="auditLabel" style="color: #27ae60;">Açık</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-group row align-items-center bg-light p-4 mt-4" style="border-radius: 12px; border: 1px solid #fae3db; background-color: #FDF3F2 !important;">
                         <div class="col-md-8">
                             <h6 class="font-weight-bold" style="color: #C0392B;"><i class="fas fa-exclamation-triangle mr-2"></i> Sistem Bakım Modu</h6>
-                            <small class="text-muted d-block">Aktif edildiğinde standart personellerin sisteme girişi engellenir. Sadece Yöneticiler (Admin) giriş yapabilir.</small>
+                            <small class="text-muted d-block">Aktif edildiğinde personellerin sisteme girişi engellenir. Sadece Yöneticiler (Admin) giriş yapabilir.</small>
                         </div>
                         <div class="col-md-4 text-right">
                             <div class="custom-control custom-switch d-inline-block">
                                 <input type="checkbox" class="custom-control-input" id="IsMaintenanceMode" @(Model.IsMaintenanceMode == true ? "checked" : "")>
-                                <label class="custom-control-label" for="IsMaintenanceMode" id="maintenanceLabel">
+                                <label class="custom-control-label" for="IsMaintenanceMode" id="maintenanceLabel" style="color: @(Model.IsMaintenanceMode == true ? "#C0392B" : "#2C1E16");">
                                     @(Model.IsMaintenanceMode == true ? "Aktif" : "Pasif")
                                 </label>
                             </div>
                         </div>
                     </div>
 
-                    <div class="text-right mt-5">
-                        <button type="button" id="btnSaveSettings" class="btn font-weight-bold px-5 py-2 shadow-sm" style="background-color: #27ae60; color: white; border-radius: 8px;">
-                            <i class="fas fa-save mr-2"></i> Ayarları Kaydet
+                    <div class="text-right mt-5 pt-3" style="border-top: 1px solid #F0EAE1;">
+                        <button type="button" id="btnSaveSettings" class="btn font-weight-bold px-5 py-3 shadow-sm" style="background-color: #27ae60; color: white; border-radius: 8px; font-size: 1.05rem;">
+                            <i class="fas fa-save mr-2"></i> Ayarları ve Değişiklikleri Kaydet
                         </button>
                     </div>
                 </form>
@@ -125,19 +159,39 @@
     </div>
 
     <div class="col-lg-4 mt-4 mt-lg-0">
-        <div class="card premium-card" style="background: linear-gradient(135deg, #5C4033, #3b2a22); color: white;">
+
+        <div class="card premium-card mb-4" style="background: linear-gradient(135deg, #5C4033, #3b2a22); color: white; border: none;">
             <div class="card-body p-4">
                 <i class="fas fa-shield-alt fa-3x mb-3" style="color: rgba(255,255,255,0.2);"></i>
-                <h5 class="font-weight-bold mb-3">Güvenlik Uyarısı</h5>
+                <h5 class="font-weight-bold mb-3">Güvenlik Politikaları</h5>
                 <p style="font-size: 0.9rem; opacity: 0.9; line-height: 1.6;">
-                    Bu alandaki konfigürasyonlar sistemin omurgasını oluşturur.
+                    Bu alandaki konfigürasyonlar sistemin omurgasını oluşturur ve anında yürürlüğe girer.
                 </p>
                 <ul class="pl-3 mt-3 mb-0" style="font-size: 0.85rem; opacity: 0.9; line-height: 1.6;">
-                    <li class="mb-2"><strong>Maksimum Dosya Boyutu:</strong> Sunucu maliyetlerini artırmamak için 20MB üzerinde tutulması önerilmez.</li>
-                    <li><strong>Bakım Modu:</strong> Acil bir siber güncelleme sırasında personeli anında devre dışı bırakmak için kullanılır.</li>
+                    <li class="mb-2"><strong>Maks. Dosya Boyutu:</strong> Sunucu maliyetlerini artırmamak ve bant genişliğini korumak için 20MB üzerinde tutulması önerilmez.</li>
+                    <li><strong>Bakım Modu:</strong> Acil bir siber güncelleme sırasında yetkisiz personeli anında devre dışı bırakmak için kullanılır.</li>
                 </ul>
             </div>
         </div>
+
+        <div class="card premium-card">
+            <div class="card-body p-4">
+                <h6 class="font-weight-bold mb-3" style="color: #5C4033;"><i class="fas fa-server mr-2 text-muted"></i> Sistem Durumu</h6>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted" style="font-size: 0.9rem;">Sunucu Versiyonu:</span>
+                    <span class="font-weight-bold" style="color: #2C1E16; font-size: 0.9rem;">v1.0.4 Beta</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted" style="font-size: 0.9rem;">Son Güncelleme:</span>
+                    <span class="font-weight-bold" style="color: #2C1E16; font-size: 0.9rem;">@DateTime.Now.ToString("dd.MM.yyyy")</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="text-muted" style="font-size: 0.9rem;">Veritabanı Durumu:</span>
+                    <span class="font-weight-bold text-success" style="font-size: 0.9rem;"><i class="fas fa-circle mr-1" style="font-size: 0.6rem;"></i> Bağlı</span>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -145,23 +199,43 @@
     <script>
         $(document).ready(function () {
 
-            $("#IsMaintenanceMode").change(function() {
-                if(this.checked) {
+            // Bakım Modu Switch Renk Değişimi
+            $("#IsMaintenanceMode").change(function () {
+                if (this.checked) {
                     $("#maintenanceLabel").text("Aktif").css("color", "#C0392B");
                 } else {
                     $("#maintenanceLabel").text("Pasif").css("color", "#2C1E16");
                 }
             });
 
+            $("#AllowRegistration").change(function () {
+                if (this.checked) {
+                    $("#registerLabel").text("Açık").css("color", "#27ae60");
+                } else {
+                    $("#registerLabel").text("Kapalı").css("color", "#7F736A");
+                }
+            });
+
+            $("#EnableAuditLogs").change(function () {
+                if (this.checked) {
+                    $("#auditLabel").text("Açık").css("color", "#27ae60");
+                } else {
+                    $("#auditLabel").text("Kapalı").css("color", "#7F736A");
+                }
+            });
+
             $("#btnSaveSettings").click(function () {
                 var btn = $(this);
                 btn.html('<i class="fas fa-spinner fa-spin mr-2"></i> Kaydediliyor...');
+                btn.prop('disabled', true);
 
                 var veriler = {
                     ID: $("#SettingID").val(),
                     CompanyName: $("#CompanyName").val(),
                     MaxUploadSizeMB: $("#MaxUploadSizeMB").val(),
-                    IsMaintenanceMode: $("#IsMaintenanceMode").is(":checked")
+                    IsMaintenanceMode: $("#IsMaintenanceMode").is(":checked"),
+                    AllowRegistration: $("#AllowRegistration").is(":checked"),
+                    EnableAuditLogs: $("#EnableAuditLogs").is(":checked")
                 };
 
                 $.ajax({
@@ -169,18 +243,24 @@
                     type: 'POST',
                     data: veriler,
                     success: function (cevap) {
-                        btn.html('<i class="fas fa-save mr-2"></i> Ayarları Kaydet');
+                        btn.html('<i class="fas fa-save mr-2"></i> Ayarları ve Değişiklikleri Kaydet');
+                        btn.prop('disabled', false);
 
                         if (cevap.success) {
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Kayıt Başarılı!',
+                                title: 'Sistem Güncellendi!',
                                 text: cevap.message,
                                 confirmButtonColor: '#27ae60'
                             });
                         } else {
                             Swal.fire('Hata!', cevap.message, 'error');
                         }
+                    },
+                    error: function () {
+                        btn.html('<i class="fas fa-save mr-2"></i> Ayarları ve Değişiklikleri Kaydet');
+                        btn.prop('disabled', false);
+                        Swal.fire('Bağlantı Hatası!', 'Sunucuya ulaşılamadı.', 'error');
                     }
                 });
             });
