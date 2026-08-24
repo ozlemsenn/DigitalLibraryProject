@@ -1,6 +1,15 @@
-﻿@{
+﻿@using DigitalLibrary.Models;
+@{
     ViewBag.Title = "Yönetici Özeti (Dashboard)";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    bool isMaintenance = ViewBag.IsMaintenanceMode != null ? (bool)ViewBag.IsMaintenanceMode : false;
+    string alertColor = isMaintenance ? "#C0392B" : "#27ae60";
+    string alertIcon = isMaintenance ? "fas fa-tools" : "fas fa-check-circle";
+    string alertTitle = isMaintenance ? "Sistem Bakım Modunda!" : "Sistem Durumu: Stabil ve Güvenli";
+    string alertMessage = isMaintenance
+        ? "Şu anda Bakım Modu aktif. Standart personeller sisteme giriş yapamaz. Sadece yöneticiler erişebilir."
+        : "Premium Yönetim Paneline hoş geldiniz. Tüm sistem servisleri sorunsuz çalışmaktadır.";
 }
 
 <style>
@@ -9,8 +18,8 @@
     }
 
         .premium-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(92, 64, 51, 0.15) !important;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(92, 64, 51, 0.12) !important;
         }
 
     .timeline {
@@ -24,7 +33,7 @@
 
     .timeline-item {
         position: relative;
-        margin-bottom: 1.8rem;
+        margin-bottom: 1.5rem;
     }
 
         .timeline-item:last-child {
@@ -45,22 +54,57 @@
         font-size: 0.65rem;
         color: #D35400;
     }
+
+    .mini-doc-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .mini-doc-item {
+        padding: 12px 0;
+        border-bottom: 1px solid #F0EAE1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .mini-doc-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
 </style>
 
-<div class="row">
-    <div class="col-12">
-        <div class="alert border-0 shadow-sm d-flex align-items-center" style="border-radius: 15px; background-color: #fff; border-left: 5px solid #D35400 !important;">
-            <i class="fas fa-crown fa-2x mr-3" style="color: #D35400;"></i>
+<div class="row align-items-center">
+    <div class="col-lg-8 col-md-12 mb-3 mb-lg-0">
+        <div class="alert border-0 shadow-sm d-flex align-items-center premium-hover mb-0" style="border-radius: 15px; background-color: #fff; border-left: 5px solid @alertColor !important; height: 100%;">
+            <i class="@alertIcon fa-2x mr-3" style="color: @alertColor;"></i>
             <div>
-                <h5 class="alert-heading font-weight-bold mb-1" style="color: #5C4033;">Premium Yönetim Paneline Hoş Geldiniz!</h5>
-                <p class="mb-0 text-muted">Burası kütüphanenin kalbi. Sol menüyü kullanarak sistemi yönetebilir ve istatistikleri takip edebilirsiniz.</p>
+                <h5 class="alert-heading font-weight-bold mb-1" style="color: #2C1E16;">@alertTitle</h5>
+                <p class="mb-0 text-muted" style="font-size: 0.9rem;">@alertMessage</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-12">
+        <div class="card border-0 shadow-sm premium-card bg-white p-3" style="border-radius: 15px;">
+            <div class="row align-items-center">
+                <div class="col-6 pr-1">
+                    <a href="/Admin/Documents" class="btn btn-block font-weight-bold premium-hover py-2 shadow-sm" style="background-color: #FDF3F2; color: #D35400; border: 1px solid #fae3db; border-radius: 10px; font-size: 0.85rem;">
+                        <i class="fas fa-cloud-upload-alt mr-1"></i> Dosya Yükle
+                    </a>
+                </div>
+                <div class="col-6 pl-1">
+                    <a href="/Admin/Users" class="btn btn-block font-weight-bold premium-hover py-2 shadow-sm" style="background-color: #F0EAE1; color: #5C4033; border: 1px solid #e3dbce; border-radius: 10px; font-size: 0.85rem;">
+                        <i class="fas fa-user-plus mr-1"></i> Personel Ekle
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <div class="row mt-4">
-    <!-- 4'LÜ KART YAPISINA GEÇİLDİ (col-md-3) -->
     <div class="col-md-3 mb-3">
         <div class="card text-white shadow-sm border-0 premium-hover" style="border-radius: 15px; background: linear-gradient(135deg, #5C4033, #3b2a22);">
             <div class="card-body p-4 d-flex justify-content-between align-items-center">
@@ -85,7 +129,6 @@
         </div>
     </div>
 
-    <!-- YENİ KART: KAYITLI PERSONEL -->
     <div class="col-md-3 mb-3">
         <div class="card text-white shadow-sm border-0 premium-hover" style="border-radius: 15px; background: linear-gradient(135deg, #2C3E50, #1a252f);">
             <div class="card-body p-4 d-flex justify-content-between align-items-center">
@@ -99,64 +142,60 @@
     </div>
 
     <div class="col-md-3 mb-3">
-        <div class="card text-white shadow-sm border-0 premium-hover" style="border-radius: 15px; background: linear-gradient(135deg, #8c7a6b, #6b5a4d);">
+        <div class="card text-white shadow-sm border-0 premium-hover" style="border-radius: 15px; background: linear-gradient(135deg, #27ae60, #1e8449);">
             <div class="card-body p-4 d-flex justify-content-between align-items-center">
-                <div style="overflow: hidden;">
-                    <h6 class="text-uppercase mb-1" style="opacity: 0.8; letter-spacing: 1px; font-size: 0.8rem;">Son Yüklenen</h6>
-                    <h5 class="mb-0 font-weight-bold" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        @ViewBag.LastDocument
-                    </h5>
+                <div>
+                    <h6 class="text-uppercase mb-1" style="opacity: 0.8; letter-spacing: 1px; font-size: 0.8rem;">Aktif Personel</h6>
+                    <h2 class="mb-0 font-weight-bold">@ViewBag.ActiveUsers <span style="font-size: 1rem; opacity:0.8;">/ @ViewBag.TotalUsers</span></h2>
                 </div>
-                <i class="fas fa-clock fa-3x" style="opacity: 0.2;"></i>
+                <i class="fas fa-user-check fa-3x" style="opacity: 0.2;"></i>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row align-items-stretch mt-3 pt-3 mb-5">
-    <div class="col-lg-5 col-md-12 mb-4 mb-lg-0 d-flex flex-column">
+<div class="row mt-2 pt-2 mb-5">
 
-        <div class="card border-0 shadow-sm premium-card mb-4 flex-grow-1 d-flex flex-column justify-content-center">
-            <div class="card-body p-4">
-                <h6 class="font-weight-bold mb-3" style="color: #5C4033;"><i class="fas fa-server mr-2" style="color: #D35400;"></i> Sunucu Depolama Durumu</h6>
-                <p class="text-muted small mb-4">Sisteme yüklenen belgelerin fiziksel sunucuda kapladığı anlık alan.</p>
+    <div class="col-lg-6 col-md-12 mb-4 mb-lg-0">
+        <div class="card border-0 shadow-sm premium-card h-100">
+            <div class="card-body p-4 d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="font-weight-bold mb-0" style="color: #5C4033;"><i class="fas fa-file-invoice mr-2" style="color: #2980b9;"></i> Son Eklenen Dosyalar</h6>
+                    <a href="/Admin/Documents" class="small font-weight-bold" style="color: #D35400;">Tümünü Gör</a>
+                </div>
 
-                <div class="d-flex justify-content-between small mb-1 font-weight-bold" style="color: #7F736A;">
-                    <span>Kullanılan: @ViewBag.KullanilanMB MB</span>
-                    <span>Kapasite: @ViewBag.KapasiteMB MB</span>
-                </div>
-                <div class="progress mb-2" style="height: 10px; border-radius: 10px; background-color: #F0EAE1;">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: @(ViewBag.DolulukYuzdesi)%; background-color: #D35400; border-radius: 10px;"></div>
-                </div>
-                <p class="text-right small mb-0" style="color: #27ae60; font-weight: 600;">Durum: Kapasitenin %@ViewBag.DolulukYuzdesi kadarı dolu</p>
-            </div>
-        </div>
-
-        <div class="card border-0 shadow-sm premium-card">
-            <div class="card-body p-4">
-                <h6 class="font-weight-bold mb-3" style="color: #5C4033;"><i class="fas fa-bolt mr-2" style="color: #f1c40f;"></i> Hızlı İşlemler</h6>
-                <div class="row">
-                    <div class="col-6">
-                        <a href="/Admin/Documents" class="btn btn-block font-weight-bold premium-hover py-2" style="background-color: #FDF3F2; color: #D35400; border: 1px solid #fae3db; border-radius: 8px;">
-                            <i class="fas fa-upload mb-1 d-block" style="font-size: 1.2rem;"></i> Yükle
-                        </a>
-                    </div>
-                    <div class="col-6">
-                        <a href="/Admin/Users" class="btn btn-block font-weight-bold premium-hover py-2" style="background-color: #F0EAE1; color: #5C4033; border: 1px solid #e3dbce; border-radius: 8px;">
-                            <i class="fas fa-user-plus mb-1 d-block" style="font-size: 1.2rem;"></i> Personel
-                        </a>
-                    </div>
-                </div>
+                <ul class="mini-doc-list flex-grow-1">
+                    @if (ViewBag.RecentDocuments != null)
+                    {
+                        foreach (var doc in ViewBag.RecentDocuments)
+                        {
+                            <li class="mini-doc-item">
+                                <div class="d-flex align-items-center" style="max-width: 75%; overflow: hidden;">
+                                    <i class="fas fa-file-alt mr-2" style="color: #7F736A;"></i>
+                                    <div class="text-truncate">
+                                        <span class="font-weight-bold" style="color: #2C1E16; font-size: 0.9rem;">@doc.Title</span>
+                                        <small class="d-block text-muted">@doc.UploadDate.ToString("dd MMM HH:mm")</small>
+                                    </div>
+                                </div>
+                                <a href="/Document/Download/@doc.ID" class="btn btn-sm" style="background-color: #e8f8f5; color: #27ae60; border-radius: 6px;"><i class="fas fa-download"></i></a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="mini-doc-item text-muted small">Henüz doküman yüklenmemiş.</li>
+                    }
+                </ul>
             </div>
         </div>
     </div>
 
-    <div class="col-lg-7 col-md-12 d-flex flex-column">
-        <div class="card border-0 shadow-sm premium-card flex-grow-1">
+    <div class="col-lg-6 col-md-12">
+        <div class="card border-0 shadow-sm premium-card h-100">
             <div class="card-body p-4 d-flex flex-column">
-                <h6 class="font-weight-bold mb-4" style="color: #5C4033;"><i class="fas fa-stream mr-2" style="color: #D35400;"></i> Son Sistem Hareketleri</h6>
+                <h6 class="font-weight-bold mb-4" style="color: #5C4033;"><i class="fas fa-stream mr-2" style="color: #D35400;"></i> Son Sistem Hareketleri (Loglar)</h6>
 
-                <ul class="timeline mt-2 flex-grow-1">
+                <ul class="timeline mt-2 mb-4 flex-grow-1">
                     @if (ViewBag.RecentLogs != null)
                     {
                         foreach (var log in ViewBag.RecentLogs)
@@ -188,7 +227,77 @@
                         </li>
                     }
                 </ul>
+
+                <div class="text-center pt-3 mt-auto" style="border-top: 1px dashed #F0EAE1;">
+                    <a href="javascript:void(0);" id="btnViewAllLogs" class="font-weight-bold" style="color: #D35400; text-decoration: none; font-size: 0.9rem;">
+                        <i class="fas fa-history mr-1"></i> Tüm Sistem Hareketlerini Gör
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="allLogsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
+            <div class="modal-header" style="background-color: #FCF9F5; border-bottom: 1px solid #F0EAE1; border-radius: 15px 15px 0 0;">
+                <h5 class="modal-title font-weight-bold" style="color: #2C1E16;"><i class="fas fa-history mr-2" style="color: #D35400;"></i> Tüm Sistem Hareketleri</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body p-4" style="background-color: #FCFAF7;">
+                <ul class="timeline" id="allLogsContainer">
+                </ul>
+            </div>
+            <div class="modal-footer border-0 pt-0 justify-content-center mt-2" style="background-color: #FCFAF7;">
+                <button type="button" class="btn btn-light font-weight-bold px-5" data-dismiss="modal" style="border-radius: 8px; border: 1px solid #F0EAE1;">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+
+            $('#btnViewAllLogs').on('click', function () {
+                $("#allLogsModal").modal('show');
+                $("#allLogsContainer").html('<li class="timeline-item text-center"><i class="fas fa-spinner fa-spin fa-2x text-muted mb-2"></i><p class="text-muted">Kayıtlar yükleniyor...</p></li>');
+
+                $.ajax({
+                    url: '/Admin/GetAllLogs',
+                    type: 'GET',
+                    success: function (cevap) {
+                        if (cevap.success) {
+                            var html = '';
+                            if (cevap.data.length > 0) {
+                                $.each(cevap.data, function (index, log) {
+                                    var userText = log.UserName !== "Sistem" ? '<span style="color: #D35400;">(' + log.UserName + ')</span>' : '';
+
+                                    html += '<li class="timeline-item">';
+                                    html += '    <div class="timeline-icon"><i class="fas ' + log.IconClass + '"></i></div>';
+                                    html += '    <div class="d-flex justify-content-between align-items-center mb-1">';
+                                    html += '        <span class="small font-weight-bold" style="color: #2C1E16;">' + log.ActionType + ' ' + userText + '</span>';
+                                    html += '        <span class="text-muted" style="font-size: 0.75rem;"><i class="far fa-clock mr-1"></i> ' + log.CreatedAt + '</span>';
+                                    html += '    </div>';
+                                    html += '    <div class="text-muted" style="font-size: 0.85rem;">' + log.Description + '</div>';
+                                    html += '</li>';
+                                });
+                            } else {
+                                html = '<li class="timeline-item"><div class="text-muted small text-center">Sistemde henüz kayıtlı hareket bulunmuyor.</div></li>';
+                            }
+
+                            $("#allLogsContainer").html(html);
+                        } else {
+                            $("#allLogsContainer").html('<li class="timeline-item text-center text-danger"><i class="fas fa-exclamation-circle fa-2x mb-2"></i><br>Loglar yüklenemedi: ' + cevap.message + '</li>');
+                        }
+                    },
+                    error: function () {
+                        $("#allLogsContainer").html('<li class="timeline-item text-center text-danger"><i class="fas fa-exclamation-circle fa-2x mb-2"></i><br>Sunucu ile iletişim kurulamadı!</li>');
+                    }
+                });
+            });
+
+        });
+    </script>
+}

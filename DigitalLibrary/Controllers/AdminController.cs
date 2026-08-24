@@ -13,11 +13,15 @@ namespace DigitalLibrary.Controllers
 
         public ActionResult Index()
         {
+            // 1. TEMEL İSTATİSTİKLER
             ViewBag.TotalDocuments = db.Documents.Count();
             ViewBag.TotalCategories = db.Categories.Count();
-
             ViewBag.TotalUsers = db.Users.Count();
 
+            // YENİ: Aktif Personel Sayısı
+            ViewBag.ActiveUsers = db.Users.Count(u => u.IsActive == true);
+
+            // 2. SON DOKÜMAN (Senin mevcut kodun korundu)
             var sonDokuman = db.Documents.OrderByDescending(d => d.ID).FirstOrDefault();
             if (sonDokuman != null)
             {
@@ -28,6 +32,7 @@ namespace DigitalLibrary.Controllers
                 ViewBag.LastDocument = "Henüz döküman yok.";
             }
 
+            // 3. SUNUCU DEPOLAMA DURUMU (Senin mevcut kodun korundu)
             string uploadPath = Server.MapPath("~/App_Data/Uploads/");
             long toplamByte = 0;
 
@@ -45,7 +50,18 @@ namespace DigitalLibrary.Controllers
             ViewBag.KapasiteMB = 1024;
             ViewBag.DolulukYuzdesi = Math.Round(dolulukYuzdesi, 1);
 
-            ViewBag.RecentLogs = db.Logs.OrderByDescending(x => x.CreatedAt).Take(4).ToList();
+            // 4. YENİ: SON YÜKLENEN 5 DOKÜMAN LİSTESİ (Dashboard'daki mini liste için)
+            ViewBag.RecentDocuments = db.Documents
+                                        .OrderByDescending(d => d.UploadDate)
+                                        .Take(5)
+                                        .ToList();
+
+            // 5. SON 5 SİSTEM HAREKETİ (Mevcut kodun 4 olan limiti 5 yapıldı)
+            ViewBag.RecentLogs = db.Logs.OrderByDescending(x => x.CreatedAt).Take(5).ToList();
+
+            // 6. YENİ: SİSTEM BAKIM MODU DURUMU (Smart Alerts için)
+            var settings = db.SystemSettings.FirstOrDefault();
+            ViewBag.IsMaintenanceMode = settings != null ? settings.IsMaintenanceMode : false;
 
             return View();
         }
@@ -378,7 +394,8 @@ namespace DigitalLibrary.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateSettings(int ID, string CompanyName, int MaxUploadSizeMB, bool IsMaintenanceMode)
+        // YENİ: Metot parametrelerine AllowRegistration ve EnableAuditLogs eklendi
+        public ActionResult UpdateSettings(int ID, string CompanyName, int MaxUploadSizeMB, bool IsMaintenanceMode, bool AllowRegistration = true, bool EnableAuditLogs = true)
         {
             try
             {
@@ -389,13 +406,23 @@ namespace DigitalLibrary.Controllers
                     ayar.MaxUploadSizeMB = MaxUploadSizeMB;
                     ayar.IsMaintenanceMode = IsMaintenanceMode;
 
+                    // Not: Eğer SystemSettings modeline bu iki alanı henüz eklemediysen
+                    // bu iki satırı (ayar.AllowRegistration = AllowRegistration;) // yorum satırına alabilirsin.
+                    // Visual Studio hata vermemesi için Modelini (SystemSettings.cs) güncellemen gerekir.
+                    // ayar.AllowRegistration = AllowRegistration;
+                    // ayar.EnableAuditLogs = EnableAuditLogs;
+
                     Logs log = new Logs();
                     log.ActionType = "Sistem Ayarları Güncellendi";
                     log.Description = "Sistem yapılandırma konfigürasyonları yönetici tarafından değiştirildi.";
-                    log.IconClass = "fa-cogs"; 
+                    log.IconClass = "fa-cogs";
                     log.CreatedAt = DateTime.Now;
-                    db.Logs.Add(log);
 
+                    // YENİ EKLENTİ: İşlemi yapan Admin'in ID'sini loglara kaydet
+                    int aktifKullaniciID = Session["UserID"] != null ? Convert.ToInt32(Session["UserID"]) : 0;
+                    if (aktifKullaniciID > 0) log.UserID = aktifKullaniciID;
+
+                    db.Logs.Add(log);
                     db.SaveChanges();
 
                     return Json(new { success = true, message = "Sistem ayarları başarıyla güncellendi." });
@@ -407,6 +434,7 @@ namespace DigitalLibrary.Controllers
                 return Json(new { success = false, message = "Hata: " + ex.Message });
             }
         }
+
         [HttpGet]
         public JsonResult GetLatestNotifications()
         {
@@ -423,6 +451,29 @@ namespace DigitalLibrary.Controllers
                 }).ToList();
 
                 return Json(new { success = true, data = latestLogs }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetAllLogs()
+        {
+            try
+            {
+                var tumLoglarRaw = db.Logs.OrderByDescending(l => l.CreatedAt).Take(100).ToList();
+
+                var formatliLoglar = tumLoglarRaw.Select(l => new {
+                    ActionType = l.ActionType,
+                    Description = l.Description,
+                    IconClass = l.IconClass ?? "fa-bolt",
+                    CreatedAt = l.CreatedAt.HasValue ? l.CreatedAt.Value.ToString("dd MMM yyyy HH:mm") : "",
+                    UserName = l.Users != null ? l.Users.Name : "Sistem"
+                }).ToList();
+
+                return Json(new { success = true, data = formatliLoglar }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
