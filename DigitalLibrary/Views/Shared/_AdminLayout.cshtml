@@ -366,18 +366,18 @@
 
                         $.each(res.data, function (index, log) {
                             html += `
-                                    <a class="dropdown-item py-3 px-3 d-flex align-items-center" href="#" style="border-bottom: 1px solid #FCF9F5; white-space: normal;">
-                                        <div class="rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 35px; height: 35px; background-color: #FDF3F2; color: var(--rust); flex-shrink: 0;">
-                                            <i class="fas ${log.IconClass}"></i>
-                                        </div>
-                                        <div style="width: 100%; overflow: hidden;">
-                                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                                <span class="font-weight-bold d-block text-truncate" style="color: var(--wood-dark); font-size: 0.85rem; max-width: 150px;">${log.ActionType}</span>
-                                                <span class="text-muted" style="font-size: 0.65rem;">${log.CreatedAt}</span>
+                                        <a class="dropdown-item py-3 px-3 d-flex align-items-center" href="#" style="border-bottom: 1px solid #FCF9F5; white-space: normal;">
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 35px; height: 35px; background-color: #FDF3F2; color: var(--rust); flex-shrink: 0;">
+                                                <i class="fas ${log.IconClass}"></i>
                                             </div>
-                                            <span class="text-muted d-block text-truncate" style="font-size: 0.75rem;" title="${log.UserName}: ${log.Description}">${log.UserName}: ${log.Description}</span>
-                                        </div>
-                                    </a>`;
+                                            <div style="width: 100%; overflow: hidden;">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <span class="font-weight-bold d-block text-truncate" style="color: var(--wood-dark); font-size: 0.85rem; max-width: 150px;">${log.ActionType}</span>
+                                                    <span class="text-muted" style="font-size: 0.65rem;">${log.CreatedAt}</span>
+                                                </div>
+                                                <span class="text-muted d-block text-truncate" style="font-size: 0.75rem;" title="${log.UserName}: ${log.Description}">${log.UserName}: ${log.Description}</span>
+                                            </div>
+                                        </a>`;
                         });
 
                         $("#notificationList").html(html);
@@ -405,5 +405,23 @@
             });
         });
     </script>
+    @if (TempData["GeciciSifreUyarisi"] != null)
+    {
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Geçici Şifre Uyarısı',
+                    html: '@Html.Raw(TempData["GeciciSifreUyarisi"])',
+                    confirmButtonText: '<i class="fas fa-user-cog mr-1"></i> Anladım',
+                    confirmButtonColor: '#D48900',
+                    customClass: {
+                        popup: 'rounded-lg'
+                    }
+                });
+            });
+        </script>
+    }
 </body>
 </html>
