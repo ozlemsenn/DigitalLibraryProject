@@ -161,6 +161,7 @@
                                         </span>
                                     </div>
                                 </div>
+                                <small class="form-text text-muted mt-1" style="font-size: 0.75rem;"><i class="fas fa-info-circle mr-1"></i>En az 8 karakter, 1 harf ve 1 rakam içermelidir.</small>
                             </div>
 
                             <div class="col-md-6 form-group mb-4">
@@ -207,38 +208,65 @@
                 }
             });
 
-            $('#profileForm').on('submit', function(e) {
+            $('#profileForm').on('submit', function (e) {
+                var oldPass = $('input[name="OldPassword"]').val();
                 var newPass = $('#NewPassword').val();
                 var confirmPass = $('#ConfirmPassword').val();
 
-                if (newPass !== "" && newPass !== confirmPass) {
-                    e.preventDefault(); 
+                if (newPass !== "") {
+                    if (newPass !== confirmPass) {
+                        e.preventDefault();
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Şifreler Eşleşmiyor!',
+                            text: 'Lütfen girdiğiniz yeni şifrelerin birbiriyle aynı olduğundan emin olun.',
+                            confirmButtonColor: '#C0392B'
+                        });
+                        return;
+                    }
 
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Şifreler Eşleşmiyor!',
-                        text: 'Lütfen girdiğiniz yeni şifrelerin birbiriyle aynı olduğundan emin olun.',
-                        confirmButtonColor: '#C0392B'
-                    });
+                    if (oldPass !== "" && oldPass === newPass) {
+                        e.preventDefault();
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Hatalı Seçim!',
+                            text: 'Yeni şifreniz eski şifrenizle aynı olamaz. Lütfen farklı bir şifre belirleyin.',
+                            confirmButtonColor: '#C0392B'
+                        });
+                        return;
+                    }
+
+                    var passRegex = /^(?=.*[a-zA-ZğüşıöçĞÜŞİÖÇ])(?=.*\d).{8,}$/;
+                    if (!passRegex.test(newPass)) {
+                        e.preventDefault();
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Zayıf Şifre!',
+                            text: 'Şifreniz kurallara uymuyor. En az 8 karakter uzunluğunda olmalı, en az bir harf ve bir rakam içermelidir.',
+                            confirmButtonColor: '#C0392B'
+                        });
+                        return;
+                    }
                 }
             });
 
-            @if(TempData["Basari"] != null) {
+           @if(TempData["Basari"] != null) {
                 <text>
                     Swal.fire({
                         icon: 'success',
                         title: 'Harika!',
-                        text: '@TempData["Basari"]',
+                        html: '@Html.Raw(TempData["Basari"])',
                         confirmButtonColor: '#27ae60'
                     });
                 </text>
             }
+
             @if(TempData["Hata"] != null) {
                 <text>
                     Swal.fire({
                         icon: 'error',
                         title: 'Hata!',
-                        text: '@TempData["Hata"]',
+                        html: '@Html.Raw(TempData["Hata"])',
                         confirmButtonColor: '#C0392B'
                     });
                 </text>

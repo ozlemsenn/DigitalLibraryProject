@@ -11,101 +11,106 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
-        body {
+        :root {
+            --wood-dark: #2C1E16;
+            --wood-medium: #5C4033;
+            --rust: #C0392B;
+            --rust-light: #FDF3F2;
+            --bg-ivory: #FCF9F5;
+            --gold: #D48900;
+        }
+
+        body, html {
             margin: 0;
             padding: 0;
+            height: 100%;
             font-family: 'Inter', sans-serif;
-            background-color: #FFFFFF;
-            overflow-x: hidden;
         }
 
-        .split-layout {
-            display: flex;
+        .auth-background {
+            position: relative;
             min-height: 100vh;
-        }
-
-        .split-left {
-            flex: 1.2;
-            background: linear-gradient(135deg, rgba(44, 30, 22, 0.85) 0%, rgba(192, 57, 43, 0.85) 100%), url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 50px;
-            color: #FFFFFF;
-        }
-
-        .brand-logo-large {
-            display: flex;
-            align-items: center;
-            font-size: 1.8rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .brand-motto {
-            max-width: 450px;
-        }
-
-            .brand-motto h1 {
-                font-weight: 700;
-                font-size: 3rem;
-                line-height: 1.2;
-                margin-bottom: 20px;
-            }
-
-            .brand-motto p {
-                font-size: 1.1rem;
-                font-weight: 300;
-                opacity: 0.85;
-                line-height: 1.6;
-            }
-
-        .split-right {
-            flex: 1;
-            background-color: #FFFFFF;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 40px;
+            background: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat;
+            padding: 20px;
         }
 
-        .login-wrapper {
+        .auth-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 400px;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(44, 30, 22, 0.85) 0%, rgba(192, 57, 43, 0.7) 100%);
+            z-index: 1;
         }
 
-        .login-header {
-            margin-bottom: 40px;
+        .floating-auth-card {
+            position: relative;
+            z-index: 2;
+            background: #FFFFFF;
+            width: 100%;
+            max-width: 440px;
+            border-radius: 24px;
+            padding: 50px 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-            .login-header h3 {
-                color: #2C1E16;
-                font-weight: 700;
-                font-size: 1.8rem;
-                margin-bottom: 8px;
-                letter-spacing: -0.5px;
+        @@keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
             }
 
-            .login-header p {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .brand-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+            .brand-header i {
+                font-size: 2.5rem;
+                color: var(--gold);
+                margin-bottom: 15px;
+            }
+
+            .brand-header h3 {
+                font-weight: 800;
+                color: var(--wood-dark);
+                letter-spacing: -0.5px;
+                margin-bottom: 5px;
+                font-size: 1.8rem;
+            }
+
+            .brand-header p {
                 color: #7F736A;
                 font-size: 0.95rem;
             }
 
         .form-group label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #5C4033;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--wood-medium);
             margin-bottom: 8px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .premium-input-group {
             position: relative;
+            margin-bottom: 25px;
         }
 
             .premium-input-group i {
@@ -113,19 +118,20 @@
                 left: 18px;
                 top: 50%;
                 transform: translateY(-50%);
-                color: #D48900;
+                color: var(--gold);
                 font-size: 1.1rem;
                 transition: 0.3s;
             }
 
         .premium-input {
             width: 100%;
-            background-color: #FCF9F5;
+            background-color: var(--bg-ivory);
             border: 2px solid transparent;
             border-radius: 12px;
-            padding: 16px 16px 16px 45px;
+            padding: 16px 16px 16px 48px;
             font-size: 1rem;
-            color: #2C1E16;
+            font-weight: 500;
+            color: var(--wood-dark);
             transition: all 0.3s ease;
         }
 
@@ -137,40 +143,39 @@
             .premium-input:focus {
                 outline: none;
                 background-color: #FFFFFF;
-                border-color: #C0392B;
+                border-color: var(--rust);
                 box-shadow: 0 0 0 4px rgba(192, 57, 43, 0.1);
             }
 
                 .premium-input:focus + i {
-                    color: #C0392B;
+                    color: var(--rust);
                 }
 
         .btn-premium {
             width: 100%;
-            background: linear-gradient(135deg, #C0392B, #9b291f);
+            background: linear-gradient(to right, var(--rust), #9b291f);
             color: #FFFFFF;
             border: none;
             border-radius: 12px;
             padding: 16px;
             font-size: 1.05rem;
-            font-weight: 600;
+            font-weight: 700;
             letter-spacing: 0.5px;
-            margin-top: 20px;
+            margin-top: 10px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(192, 57, 43, 0.25);
-            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(192, 57, 43, 0.25);
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
             .btn-premium:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 25px rgba(192, 57, 43, 0.35);
+                transform: translateY(-3px);
+                box-shadow: 0 12px 25px rgba(192, 57, 43, 0.35);
             }
 
             .btn-premium i {
-                margin-left: 10px;
+                margin-left: 8px;
                 transition: transform 0.3s ease;
             }
 
@@ -178,118 +183,117 @@
                 transform: translateX(5px);
             }
 
-        .login-footer {
-            margin-top: 40px;
-            text-align: center;
-            color: #7F736A;
+        .forgot-link {
+            color: var(--gold);
             font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            float: right;
+            transition: 0.2s;
         }
 
-        @@media (max-width: 991px) {
-            .split-left {
-                display: none;
+            .forgot-link:hover {
+                color: var(--rust);
+                text-decoration: none;
             }
 
-            .split-right {
-                padding: 20px;
-            }
+        .system-footer {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            z-index: 2;
+            letter-spacing: 1px;
+        }
+
+        .modal-content {
+            border-radius: 20px;
+            border: 0;
+        }
+
+        .modal-header {
+            background-color: var(--bg-ivory);
+            border-bottom: 1px solid #F0EAE1;
+            border-radius: 20px 20px 0 0;
         }
     </style>
 </head>
 <body>
 
-    <div class="split-layout">
+    <div class="auth-background">
+        <div class="auth-overlay"></div>
 
-        <div class="split-left">
-            <div class="brand-logo-large">
-                <i class="fas fa-book-open mr-3" style="color: #D48900;"></i>
-                eLibrary <span style="font-weight: 300; margin-left: 5px; opacity: 0.8;">Workspace</span>
+        <div class="floating-auth-card">
+
+            <div class="brand-header">
+                <i class="fas fa-book-open"></i>
+                <h3>eLibrary</h3>
+                <p>Kurumsal Arşiv Yönetim Sistemi</p>
             </div>
 
-            <div class="brand-motto">
-                <h1>Dijital<br>Geleceğinize<br>Yön Verin.</h1>
-                <p>Kurumsal dokümanlarınızı güvenle saklayın, aradığınıza saniyeler içinde ulaşın ve tüm süreçlerinizi tek merkezden yönetin.</p>
-            </div>
+            <form action="/Auth/Login" method="POST">
 
-            <div style="font-size: 0.85rem; opacity: 0.6;">
-                &copy; 2026 Tüm Hakları Saklıdır. Kurumsal Dosya Sistemi.
-            </div>
-        </div>
-
-        <div class="split-right">
-            <div class="login-wrapper">
-
-                <div class="login-header">
-                    <h3>Giriş Yap</h3>
-                    <p>Devam etmek için hesap bilgilerinizi girin.</p>
+                <div class="form-group">
+                    <label>E-Posta Adresi</label>
+                    <div class="premium-input-group">
+                        <input type="email" name="Email" class="premium-input" required placeholder="ornek@sirket.com" autocomplete="off">
+                        <i class="fas fa-envelope"></i>
+                    </div>
                 </div>
 
-                <form action="/Auth/Login" method="POST">
-
-                    <div class="form-group mb-4">
-                        <label>E-Posta Adresi</label>
-                        <div class="premium-input-group">
-                            <input type="email" name="Email" class="premium-input" required placeholder="ornek@sirket.com" autocomplete="off">
-                            <i class="fas fa-envelope"></i>
-                        </div>
+                <div class="form-group mb-1">
+                    <label>Erişim Şifresi</label>
+                    <div class="premium-input-group mb-2">
+                        <input type="password" name="Password" class="premium-input" required placeholder="••••••••">
+                        <i class="fas fa-lock"></i>
                     </div>
-
-                    <div class="form-group mb-2">
-                        <label>Şifre</label>
-                        <div class="premium-input-group">
-                            <input type="password" name="Password" class="premium-input" required placeholder="••••••••">
-                            <i class="fas fa-lock"></i>
-                        </div>
-                    </div>
-
-                    <div class="text-right mb-3">
-                        <a href="#" data-toggle="modal" data-target="#forgotPasswordModal" style="color: #D48900; font-size: 0.85rem; font-weight: 600;">Şifremi mi unuttum?</a>
-                    </div>
-
-                    <button type="submit" class="btn-premium">
-                        Oturum Aç <i class="fas fa-arrow-right"></i>
-                    </button>
-
-                </form>
-
-                <div class="login-footer">
-                    Yetkisiz erişim sistem tarafından kayıt altına alınmaktadır. <br> Yardıma mı ihtiyacınız var? <a href="#" style="color: #C0392B; font-weight: 600;">IT Destek</a>
                 </div>
 
-            </div>
+                <div class="clearfix mb-4">
+                    <a href="#" data-toggle="modal" data-target="#forgotPasswordModal" class="forgot-link">Şifremi mi unuttum?</a>
+                </div>
+
+                <button type="submit" class="btn-premium">
+                    Oturum Aç <i class="fas fa-arrow-right"></i>
+                </button>
+
+            </form>
+
         </div>
 
+        <div class="system-footer">
+            &copy; 2026 eLibrary Workspace | Tüm Yetkili Girişleri Kayıt Altındadır.
+        </div>
     </div>
+
     <div class="modal fade" id="forgotPasswordModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: 15px;">
-                <div class="modal-header" style="background-color: #FCF9F5; border-bottom: 1px solid #F0EAE1; border-radius: 15px 15px 0 0;">
-                    <h5 class="modal-title font-weight-bold" style="color: #2C1E16;"><i class="fas fa-key mr-2" style="color: #C0392B;"></i> Şifremi Unuttum</h5>
+            <div class="modal-content shadow-lg">
+                <div class="modal-header">
+                    <h5 class="modal-title font-weight-bold" style="color: var(--wood-dark);"><i class="fas fa-key mr-2" style="color: var(--rust);"></i> Şifremi Unuttum</h5>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <form action="/Auth/ForgotPassword" method="POST">
                     <div class="modal-body p-4 text-center">
-                        <div class="icon-circle mx-auto mb-3" style="width: 70px; height: 70px; background-color: #FDF3F2; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                            <i class="fas fa-envelope-open-text fa-2x" style="color: #D48900;"></i>
+                        <div class="mx-auto mb-3" style="width: 70px; height: 70px; background-color: var(--rust-light); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-envelope-open-text fa-2x" style="color: var(--gold);"></i>
                         </div>
                         <p class="text-muted mb-4" style="font-size: 0.95rem;">Hesabınıza kayıtlı e-posta adresini girin, size geçici bir şifre oluşturalım.</p>
 
                         <div class="form-group text-left mb-0">
-                            <label class="font-weight-bold" style="color: #7F736A; font-size: 0.9rem;">E-Posta Adresiniz</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text bg-transparent" style="border-right: none; border-color: #F0EAE1; color: #D48900;">
-                                        <i class="fas fa-envelope"></i>
-                                    </span>
-                                </div>
-                                <input type="email" name="Email" class="form-control" required placeholder="ornek@sirket.com" style="border-left: none; border-color: #F0EAE1; border-radius: 0 8px 8px 0;">
+                            <label style="color: var(--wood-medium);">E-Posta Adresiniz</label>
+                            <div class="premium-input-group mb-0">
+                                <input type="email" name="Email" class="premium-input" required placeholder="ornek@sirket.com">
+                                <i class="fas fa-envelope"></i>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer border-0 pt-0 justify-content-center pb-4">
-                        <button type="button" class="btn btn-light font-weight-bold px-4 shadow-sm" data-dismiss="modal" style="border-radius: 8px;">İptal</button>
-                        <button type="submit" class="btn font-weight-bold px-4 shadow-sm" style="background-color: #C0392B; color: white; border-radius: 8px;">Yeni Şifre Gönder</button>
+                        <button type="button" class="btn btn-light font-weight-bold px-4" data-dismiss="modal" style="border-radius: 12px;">İptal</button>
+                        <button type="submit" class="btn font-weight-bold px-4 shadow-sm" style="background-color: var(--rust); color: white; border-radius: 12px;">Yeni Şifre Gönder</button>
                     </div>
                 </form>
             </div>
@@ -297,10 +301,8 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
@@ -314,9 +316,7 @@
                     title: 'Hata',
                     html: '@Html.Raw(TempData["Hata"])',
                     confirmButtonColor: '#C0392B',
-                    customClass: {
-                        popup: 'rounded-lg'
-                    }
+                    customClass: { popup: 'rounded-lg' }
                 });
                 </text>
             }
@@ -329,9 +329,7 @@
                     title: 'İşlem Başarılı!',
                     html: '@Html.Raw(TempData["SifreSifirlandi"])',
                     confirmButtonColor: '#27ae60',
-                    customClass: {
-                        popup: 'rounded-lg'
-                    }
+                    customClass: { popup: 'rounded-lg' }
                 });
                 </text>
             }

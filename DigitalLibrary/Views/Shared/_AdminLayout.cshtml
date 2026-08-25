@@ -46,6 +46,8 @@
             padding: 20px 15px;
             z-index: 1000;
             box-shadow: 5px 0 15px rgba(0,0,0,0.01);
+            display: flex;
+            flex-direction: column;
         }
 
         .brand-logo {
@@ -214,42 +216,68 @@
             font-size: 1.1rem;
             box-shadow: 0 4px 12px rgba(192, 57, 43, 0.15);
         }
+
+        .btn-logout-sidebar {
+            background-color: var(--rust);
+            color: white;
+            border-radius: 10px;
+            font-weight: 600;
+            padding: 12px 15px;
+            transition: 0.3s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            margin-top: auto; 
+            border: none;
+        }
+
+            .btn-logout-sidebar:hover {
+                background-color: #9b291f;
+                color: white;
+                text-decoration: none;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(192, 57, 43, 0.3);
+            }
     </style>
 </head>
 <body>
 
     <div class="left-sidebar">
-        <div class="brand-logo">
-            <i class="fas fa-book-open mr-2" style="-webkit-text-fill-color: var(--rust);"></i> eLibrary
+        <div>
+            <div class="brand-logo">
+                <i class="fas fa-book-open mr-2" style="-webkit-text-fill-color: var(--rust);"></i> eLibrary
+            </div>
+
+            <p style="font-size: 0.75rem; color: #a89f91; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; padding-left: 10px;">YÖNETİM PANELİ</p>
+
+            <a href="/Admin/Index" class="nav-item-custom @(currentAction == "Index" ? "active" : "")">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </a>
+            <a href="/Admin/Documents" class="nav-item-custom @(currentAction == "Documents" ? "active" : "")">
+                <i class="fas fa-file-alt"></i> Dokümanlar
+            </a>
+            <a href="/Admin/Categories" class="nav-item-custom @(currentAction == "Categories" ? "active" : "")">
+                <i class="fas fa-folder-open"></i> Kategoriler
+            </a>
+            <a href="/Admin/Users" class="nav-item-custom @(currentAction == "Users" ? "active" : "")">
+                <i class="fas fa-users"></i> Kullanıcılar
+            </a>
+
+            <p style="font-size: 0.75rem; color: #a89f91; font-weight: 700; letter-spacing: 1px; margin-top: 40px; margin-bottom: 10px; padding-left: 10px;">SİSTEM</p>
+
+            <a href="/Admin/Settings" class="nav-item-custom @(currentAction == "Settings" ? "active" : "")">
+                <i class="fas fa-cog"></i> Sistem Ayarları
+            </a>
+
+            <a href="/Home/ProfileSettings" class="nav-item-custom @(currentAction == "ProfileSettings" ? "active" : "")">
+                <i class="fas fa-user-cog"></i> Profil Ayarları
+            </a>
         </div>
 
-        <p style="font-size: 0.75rem; color: #a89f91; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; padding-left: 10px;">YÖNETİM PANELİ</p>
-
-        <a href="/Admin/Index" class="nav-item-custom @(currentAction == "Index" ? "active" : "")">
-            <i class="fas fa-chart-line"></i> Dashboard
-        </a>
-        <a href="/Admin/Documents" class="nav-item-custom @(currentAction == "Documents" ? "active" : "")">
-            <i class="fas fa-file-alt"></i> Dokümanlar
-        </a>
-        <a href="/Admin/Categories" class="nav-item-custom @(currentAction == "Categories" ? "active" : "")">
-            <i class="fas fa-folder-open"></i> Kategoriler
-        </a>
-        <a href="/Admin/Users" class="nav-item-custom @(currentAction == "Users" ? "active" : "")">
-            <i class="fas fa-users"></i> Kullanıcılar
-        </a>
-
-        <p style="font-size: 0.75rem; color: #a89f91; font-weight: 700; letter-spacing: 1px; margin-top: 40px; margin-bottom: 10px; padding-left: 10px;">SİSTEM</p>
-
-        <a href="/Admin/Settings" class="nav-item-custom @(currentAction == "Settings" ? "active" : "")">
-            <i class="fas fa-cog"></i> Sistem Ayarları
-        </a>
-
-        <a href="/Home/ProfileSettings" class="nav-item-custom @(currentAction == "ProfileSettings" ? "active" : "")">
-            <i class="fas fa-user-cog"></i> Profil Ayarları
-        </a>
-
-        <a href="/Auth/Logout" class="nav-item-custom text-danger mt-3">
-            <i class="fas fa-sign-out-alt"></i> Güvenli Çıkış
+        <a href="#" onclick="confirmLogout(event)" class="btn-logout-sidebar">
+            <i class="fas fa-power-off mr-2"></i> Çıkış Yap
         </a>
     </div>
 
@@ -351,9 +379,27 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    @RenderSection("scripts", required: false)
 
     <script>
+        function confirmLogout(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Çıkış Yapıyorsunuz',
+                text: "Sistemden güvenli bir şekilde çıkış yapmak istediğinize emin misiniz?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#C0392B',
+                cancelButtonColor: '#7F736A',
+                confirmButtonText: 'Evet, Çıkış Yap',
+                cancelButtonText: 'İptal',
+                customClass: { popup: 'rounded-lg' }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/Auth/Logout';
+                }
+            });
+        }
+
         $(document).ready(function () {
             $.ajax({
                 url: '/Admin/GetLatestNotifications',
@@ -366,18 +412,18 @@
 
                         $.each(res.data, function (index, log) {
                             html += `
-                                        <a class="dropdown-item py-3 px-3 d-flex align-items-center" href="#" style="border-bottom: 1px solid #FCF9F5; white-space: normal;">
-                                            <div class="rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 35px; height: 35px; background-color: #FDF3F2; color: var(--rust); flex-shrink: 0;">
-                                                <i class="fas ${log.IconClass}"></i>
-                                            </div>
-                                            <div style="width: 100%; overflow: hidden;">
-                                                <div class="d-flex justify-content-between align-items-center mb-1">
-                                                    <span class="font-weight-bold d-block text-truncate" style="color: var(--wood-dark); font-size: 0.85rem; max-width: 150px;">${log.ActionType}</span>
-                                                    <span class="text-muted" style="font-size: 0.65rem;">${log.CreatedAt}</span>
+                                            <a class="dropdown-item py-3 px-3 d-flex align-items-center" href="#" style="border-bottom: 1px solid #FCF9F5; white-space: normal;">
+                                                <div class="rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 35px; height: 35px; background-color: #FDF3F2; color: var(--rust); flex-shrink: 0;">
+                                                    <i class="fas ${log.IconClass}"></i>
                                                 </div>
-                                                <span class="text-muted d-block text-truncate" style="font-size: 0.75rem;" title="${log.UserName}: ${log.Description}">${log.UserName}: ${log.Description}</span>
-                                            </div>
-                                        </a>`;
+                                                <div style="width: 100%; overflow: hidden;">
+                                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                                        <span class="font-weight-bold d-block text-truncate" style="color: var(--wood-dark); font-size: 0.85rem; max-width: 150px;">${log.ActionType}</span>
+                                                        <span class="text-muted" style="font-size: 0.65rem;">${log.CreatedAt}</span>
+                                                    </div>
+                                                    <span class="text-muted d-block text-truncate" style="font-size: 0.75rem;" title="${log.UserName}: ${log.Description}">${log.UserName}: ${log.Description}</span>
+                                                </div>
+                                            </a>`;
                         });
 
                         $("#notificationList").html(html);
@@ -391,6 +437,7 @@
                 }
             });
         });
+
         $(document).ready(function () {
             $.ajax({
                 url: '/Home/GetServerStatus',
@@ -405,9 +452,11 @@
             });
         });
     </script>
+
+    @RenderSection("scripts", required: false)
+
     @if (TempData["GeciciSifreUyarisi"] != null)
     {
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 Swal.fire({

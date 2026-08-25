@@ -109,6 +109,19 @@ namespace DigitalLibrary.Controllers
                 {
                     if (user.Password == OldPassword)
                     {
+                        if (OldPassword == NewPassword)
+                        {
+                            TempData["Hata"] = "Yeni şifreniz eski şifrenizle aynı olamaz!";
+                            return RedirectToAction("ProfileSettings");
+                        }
+
+                        var regex = new System.Text.RegularExpressions.Regex(@"^(?=.*[a-zA-ZğüşıöçĞÜŞİÖÇ])(?=.*\d).{8,}$");
+                        if (!regex.IsMatch(NewPassword))
+                        {
+                            TempData["Hata"] = "Şifreniz en az 8 karakter olmalı, en az bir harf ve bir sayı içermelidir!";
+                            return RedirectToAction("ProfileSettings");
+                        }
+
                         user.Password = NewPassword;
                     }
                     else
