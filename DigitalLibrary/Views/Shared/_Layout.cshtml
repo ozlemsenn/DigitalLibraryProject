@@ -66,20 +66,21 @@
             filter: drop-shadow(0px 4px 6px rgba(192,57,43,0.15));
         }
 
+        .brand-slogan {
+            font-size: 0.7rem;
+            color: var(--gold);
+            font-weight: 800;
+            letter-spacing: 3px;
+            padding-left: 42px;
+            margin-top: -5px;
+            margin-bottom: 35px;
+            display: block;
+        }
+
         @@keyframes shine {
             to {
                 background-position: 200% center;
             }
-        }
-
-        .brand-slogan {
-            font-size: 0.65rem;
-            color: #7F736A;
-            font-weight: 700;
-            letter-spacing: 1.2px;
-            padding-left: 40px;
-            margin-bottom: 40px;
-            display: block;
         }
 
         .nav-item-custom {
@@ -130,6 +131,32 @@
             justify-content: space-between;
             align-items: flex-end;
         }
+
+        .top-search-bar {
+            background: #FFFFFF;
+            border-radius: 12px;
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+            margin-bottom: 30px;
+            border: 1px solid #F0EAE1;
+            transition: 0.3s;
+        }
+
+            .top-search-bar:focus-within {
+                border-color: var(--rust);
+                box-shadow: 0 5px 20px rgba(192, 57, 43, 0.08);
+            }
+
+            .top-search-bar input {
+                border: none;
+                outline: none;
+                width: 100%;
+                margin-left: 15px;
+                font-size: 1rem;
+                color: var(--wood-dark);
+            }
 
         .right-panel {
             width: 260px;
@@ -247,6 +274,40 @@
                 transform: translateY(-2px);
                 box-shadow: 0 5px 15px rgba(192, 57, 43, 0.3);
             }
+
+        @@media (max-width: 1199px) {
+            .right-panel {
+                display: none !important; 
+            }
+            .main-content {
+                margin-right: 0 !important; 
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .left-sidebar {
+                position: relative !important;
+                width: 100% !important; 
+                height: auto !important; 
+                border-right: none !important;
+                border-bottom: 2px solid #F0EAE1;
+                padding-bottom: 25px;
+            }
+            .main-content {
+                margin-left: 0 !important; 
+                padding: 20px 15px !important;
+            }
+            .btn-logout-sidebar {
+                margin-top: 30px !important; 
+            }
+            .top-greeting-bar {
+                flex-direction: column;
+                align-items: flex-start !important;
+            }
+            .top-greeting-bar .d-flex {
+                margin-top: 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -256,7 +317,7 @@
             <div class="brand-logo">
                 <i class="fas fa-book-open mr-2" style="-webkit-text-fill-color: var(--rust);"></i> eLibrary
             </div>
-            <span class="brand-slogan">DİJİTAL KÜTÜPHANE</span>
+            <span class="brand-slogan">WORKSPACE</span>
 
             <p style="font-size: 0.75rem; color: #a89f91; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; padding-left: 10px;">DOKÜMANLAR</p>
 
@@ -452,7 +513,6 @@
 
     @if (TempData["GeciciSifreUyarisi"] != null)
     {
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 Swal.fire({

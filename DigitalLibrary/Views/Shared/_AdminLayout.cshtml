@@ -61,9 +61,20 @@
             animation: shine 4s linear infinite;
             display: flex;
             align-items: center;
-            margin-bottom: 40px;
+            margin-bottom: 2px;
             padding-left: 5px;
             filter: drop-shadow(0px 4px 6px rgba(192,57,43,0.15));
+        }
+
+        .brand-slogan {
+            font-size: 0.7rem;
+            color: var(--gold);
+            font-weight: 800;
+            letter-spacing: 3px;
+            padding-left: 42px;
+            margin-top: -5px;
+            margin-bottom: 35px;
+            display: block;
         }
 
         @@keyframes shine {
@@ -229,7 +240,7 @@
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            margin-top: auto; 
+            margin-top: auto;
             border: none;
         }
 
@@ -240,6 +251,40 @@
                 transform: translateY(-2px);
                 box-shadow: 0 5px 15px rgba(192, 57, 43, 0.3);
             }
+
+        @@media (max-width: 1199px) {
+            .right-panel {
+                display: none !important; 
+            }
+            .main-content {
+                margin-right: 0 !important; 
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .left-sidebar {
+                position: relative !important; 
+                width: 100% !important; 
+                height: auto !important; 
+                border-right: none !important;
+                border-bottom: 2px solid #F0EAE1;
+                padding-bottom: 25px;
+            }
+            .main-content {
+                margin-left: 0 !important; 
+                padding: 20px 15px !important;
+            }
+            .btn-logout-sidebar {
+                margin-top: 30px !important;
+            }
+            .top-greeting-bar {
+                flex-direction: column;
+                align-items: flex-start !important;
+            }
+            .top-greeting-bar .d-flex {
+                margin-top: 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -249,6 +294,8 @@
             <div class="brand-logo">
                 <i class="fas fa-book-open mr-2" style="-webkit-text-fill-color: var(--rust);"></i> eLibrary
             </div>
+            <span class="brand-slogan">WORKSPACE</span>
+
 
             <p style="font-size: 0.75rem; color: #a89f91; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; padding-left: 10px;">YÖNETİM PANELİ</p>
 
@@ -285,7 +332,7 @@
 
         <div class="top-greeting-bar">
             <div>
-                <p class="text-muted small font-weight-bold mb-1 text-uppercase" style="letter-spacing: 1px;">Yönetici Kontrol Paneli</p>
+                <p class="text-muted small font-weight-bold mb-1 text-uppercase" style="letter-spacing: 1.2px;">Hoş Geldiniz</p>
                 <h3 class="font-weight-bold mb-0" style="color: var(--wood-dark); letter-spacing: -0.5px;">@userName 👋</h3>
             </div>
 
@@ -412,18 +459,18 @@
 
                         $.each(res.data, function (index, log) {
                             html += `
-                                            <a class="dropdown-item py-3 px-3 d-flex align-items-center" href="#" style="border-bottom: 1px solid #FCF9F5; white-space: normal;">
-                                                <div class="rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 35px; height: 35px; background-color: #FDF3F2; color: var(--rust); flex-shrink: 0;">
-                                                    <i class="fas ${log.IconClass}"></i>
-                                                </div>
-                                                <div style="width: 100%; overflow: hidden;">
-                                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                                        <span class="font-weight-bold d-block text-truncate" style="color: var(--wood-dark); font-size: 0.85rem; max-width: 150px;">${log.ActionType}</span>
-                                                        <span class="text-muted" style="font-size: 0.65rem;">${log.CreatedAt}</span>
+                                                <a class="dropdown-item py-3 px-3 d-flex align-items-center" href="#" style="border-bottom: 1px solid #FCF9F5; white-space: normal;">
+                                                    <div class="rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 35px; height: 35px; background-color: #FDF3F2; color: var(--rust); flex-shrink: 0;">
+                                                        <i class="fas ${log.IconClass}"></i>
                                                     </div>
-                                                    <span class="text-muted d-block text-truncate" style="font-size: 0.75rem;" title="${log.UserName}: ${log.Description}">${log.UserName}: ${log.Description}</span>
-                                                </div>
-                                            </a>`;
+                                                    <div style="width: 100%; overflow: hidden;">
+                                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                                            <span class="font-weight-bold d-block text-truncate" style="color: var(--wood-dark); font-size: 0.85rem; max-width: 150px;">${log.ActionType}</span>
+                                                            <span class="text-muted" style="font-size: 0.65rem;">${log.CreatedAt}</span>
+                                                        </div>
+                                                        <span class="text-muted d-block text-truncate" style="font-size: 0.75rem;" title="${log.UserName}: ${log.Description}">${log.UserName}: ${log.Description}</span>
+                                                    </div>
+                                                </a>`;
                         });
 
                         $("#notificationList").html(html);
