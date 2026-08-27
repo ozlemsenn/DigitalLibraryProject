@@ -42,33 +42,13 @@ Bu proje, kurum içi doküman trafiğini dijitalleştirmek, rol bazlı yetkilend
 
 <img width="1907" height="912" alt="Ekran görüntüsü 2026-08-27 232810" src="https://github.com/user-attachments/assets/25137d6c-03fe-4c32-9e5f-aa5dbee2cf52" />
 
-##  Kurulum ve Çalıştırma (Adım Adım)
+##  Kurulum ve Çalıştırma
 
-Projeyi kendi bilgisayarınızda (Localhost) çalıştırmak için aşağıdaki adımları sırasıyla izlemeniz yeterlidir:
+Projeyi yerel geliştirme ortamınızda (Localhost) çalıştırmak için aşağıdaki adımları izleyebilirsiniz:
 
-**1. Projeyi Bilgisayarınıza İndirin:**
-Kodları bilgisayarınıza almak için terminale şu komutu yazın:
-`git clone https://github.com/ozlemsenn/elibrary-workspace.git`
-
-**2. Projeyi Visual Studio'da Açın:**
-İndirdiğiniz klasörün içindeki `.sln` uzantılı Solution (Çözüm) dosyasına çift tıklayarak projeyi Visual Studio'da açın.
-* *Neden yapıyoruz?* Visual Studio'nun projedeki tüm dosyaları ve ayarları derli toplu bir paket olarak algılaması için.
-
-**3. Veritabanı Bağlantısını (Connection String) Ayarlayın:**
-Sağ menüden `Web.config` dosyasını açın. `connectionStrings` bölümündeki "Server=" kısmına kendi SQL Server adınızı yazın.
-* *Neden yapıyoruz?* Web sitemizin kullanıcıları ve dosyaları kaydedebilmesi için bilgisayarınızdaki SQL veritabanıyla iletişim kurması gerekir.
-
-**4. Veritabanını ve Tabloları Oluşturun:**
-SQL Server Management Studio (SSMS) programını açın ve proje klasöründe bulunan `.sql` uzantılı veritabanı yedeğini çalıştırarak tabloları oluşturun.
-* *Neden yapıyoruz?* Kodların verileri yazıp okuyabilmesi için o tabloların fiziksel olarak var olması gerekir.
-
-**5. Mail Gönderme (SMTP) Ayarlarını Girin:**
-`Controllers` klasörünün içindeki `AuthController.cs` dosyasını açın. `gondericiMail` ve `gondericiSifre` kısmına kendi Gmail adresinizi ve "Uygulama Şifresi"ni yazın.
-* *Neden yapıyoruz?* Sistemin "Şifremi Unuttum" diyen kullanıcılara yeni şifre maili atabilmesi için bir gönderici hesabına ihtiyacı vardır.
-
-**6. Projeyi Çalıştırın (Build & Run):**
-Visual Studio'da klavyeden `F5` tuşuna basın. 
-* *Neden yapıyoruz?* Kodların derlenip sanal bir sunucu ayağa kaldırılarak uygulamanın tarayıcıda açılması için.
+**1. Projeyi Klonlayın:**
+```bash
+git clone [https://github.com/ozlemsenn/elibrary-workspace.git](https://github.com/ozlemsenn/elibrary-workspace.git)
 
 ##  Geliştirici
 **Özlem Şen**  
