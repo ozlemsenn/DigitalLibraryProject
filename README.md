@@ -42,14 +42,11 @@ Bu proje, kurum içi doküman trafiğini dijitalleştirmek, rol bazlı yetkilend
 
 <img width="1907" height="912" alt="Ekran görüntüsü 2026-08-27 232810" src="https://github.com/user-attachments/assets/25137d6c-03fe-4c32-9e5f-aa5dbee2cf52" />
 
-##  Kurulum ve Çalıştırma
+##  Kurulum ve Çalıştırma Rehberi
 
-Projeyi yerel geliştirme ortamınızda (Localhost) çalıştırmak için aşağıdaki adımları izleyebilirsiniz:
+Projeyi kendi bilgisayarınızda (Localhost) sorunsuz bir şekilde ayağa kaldırmak için aşağıdaki adımları sırasıyla uygulayabilirsiniz:
 
-**1. Projeyi Klonlayın:**
+**1. Projeyi Bilgisayarınıza İndirin:**
+Terminal veya Komut İstemi'ni (CMD) açarak projeyi bilgisayarınıza klonlayın:
 ```bash
 git clone [https://github.com/ozlemsenn/elibrary-workspace.git](https://github.com/ozlemsenn/elibrary-workspace.git)
-
-##  Geliştirici
-**Özlem Şen**  
-*Computer Engineering Student*
